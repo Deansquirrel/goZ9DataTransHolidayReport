@@ -1,0 +1,31 @@
+[total]
+# 控制台日志输出
+stdOut=false
+# 日志输出级别 debug、info、warn、error
+logLevel="warn"
+
+[onLineDb]
+# 线上库连接信息
+db=""
+# 数据库类型，0-非2000,1-2000
+type=0
+
+[localDb]
+# 本地库连接信息
+server=""
+port=1433
+dbName=""
+user=""
+pwd=""
+
+[task]
+# 运行时间cron表达式
+cron=""
+# 运行模式,0-门店、1-公司、2-工厂、3-电子券
+runMode=0
+
+[service]
+# 安装为服务时所需配置
+name=""
+displayName=""
+description=""
