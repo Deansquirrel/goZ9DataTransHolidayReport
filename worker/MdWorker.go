@@ -1,6 +1,10 @@
 package worker
 
-import log "github.com/Deansquirrel/goToolLog"
+import (
+	"fmt"
+	log "github.com/Deansquirrel/goToolLog"
+	"github.com/Deansquirrel/goZ9DataTransHolidayReport/repository"
+)
 
 type mdWorker struct {
 }
@@ -11,7 +15,41 @@ func NewMdWorker() *mdWorker {
 
 //门店销售出库z3xsckt主表和z3xsckdt明细表
 func (w *mdWorker) Z3XsCkt() {
-	log.Debug("Z3XsCkt")
+	repMd := repository.NewRepMd()
+	repOnLine, err := repository.NewRepZxZc()
+	if err != nil {
+		errMsg := fmt.Sprintf("Z3XsCkt get rep online err: %s", err.Error())
+		log.Error(errMsg)
+		return
+	}
+	counter := 0
+	for {
+		rList, err := repMd.GetZ3XsCkDt()
+		if err != nil {
+			return
+		}
+		if len(rList) == 0 {
+			break
+		}
+		for _, d := range rList {
+			err = repOnLine.UpdateMdZ3XsCkDt(d)
+			if err != nil {
+				errMsg := fmt.Sprintf("update online Z3XsCkt ckmxhh[%s] err: %s", d.CkdMxHh, err.Error())
+				log.Error(errMsg)
+				return
+			}
+		}
+		err = repMd.DeleteZ3XsCkDtSy(rList[0].CkdLsh)
+		if err != nil {
+			errMsg := fmt.Sprintf("del md Z3XsCkt ckmxhh[%s] err: %s", rList[0].CkdMxHh, err.Error())
+			log.Error(errMsg)
+			return
+		}
+		counter = counter + 1
+	}
+	if counter > 0 {
+		log.Info(fmt.Sprintf("md Z3XsCkt Update %d", counter))
+	}
 }
 
 //门店：门店销售退货z3xstht表和z3xsthhpdt明细表

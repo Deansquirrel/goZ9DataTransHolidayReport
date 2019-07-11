@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/Deansquirrel/goToolMSSql"
 	"github.com/Deansquirrel/goToolMSSql2000"
+	"github.com/Deansquirrel/goToolSecret"
 	"github.com/Deansquirrel/goZ9DataTransHolidayReport/global"
 	"strconv"
 	"strings"
@@ -21,14 +22,25 @@ func NewCommon() *common {
 	return &common{}
 }
 
-//获取门店库连接配置
-func (c *common) GetYwDbConfig() *goToolMSSql.MSSqlConfig {
+//获取在线支撑库连接配置
+func (c *common) GetOnLineDbConfig() (*goToolMSSql.MSSqlConfig, error) {
+	configStr, err := goToolSecret.DecryptFromBase64Format(global.SysConfig.OnLineDb.Db, global.SecretKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("get online dbconfig str err: %s", err.Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return c.getDBConfigByStr(configStr)
+}
+
+//获取本地库连接配置
+func (c *common) GetLocalDbConfig() *goToolMSSql.MSSqlConfig {
 	return &goToolMSSql.MSSqlConfig{
-		Server: global.SysConfig.YwDB.Server,
-		Port:   global.SysConfig.YwDB.Port,
-		DbName: global.SysConfig.YwDB.DbName,
-		User:   global.SysConfig.YwDB.User,
-		Pwd:    global.SysConfig.YwDB.Pwd,
+		Server: global.SysConfig.LocalDb.Server,
+		Port:   global.SysConfig.LocalDb.Port,
+		DbName: global.SysConfig.LocalDb.DbName,
+		User:   global.SysConfig.LocalDb.User,
+		Pwd:    global.SysConfig.LocalDb.Pwd,
 	}
 }
 

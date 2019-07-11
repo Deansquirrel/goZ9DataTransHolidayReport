@@ -7,8 +7,6 @@ logLevel="warn"
 [onLineDb]
 # 线上库连接信息
 db=""
-# 数据库类型，0-非2000,1-2000
-type=0
 
 [localDb]
 # 本地库连接信息

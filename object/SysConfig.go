@@ -64,15 +64,11 @@ func (t *systemConfigTotal) checkLogLevel(level string) string {
 
 //线上库
 type systemConfigOnLineDB struct {
-	Db   string `toml:"db"`
-	Type int    `toml:"type"`
+	Db string `toml:"db"`
 }
 
 func (sc *systemConfigOnLineDB) FormatConfig() {
 	sc.Db = strings.Trim(sc.Db, " ")
-	if sc.Type != 0 && sc.Type != 1 {
-		sc.Type = 0
-	}
 }
 
 //本地库配置库
@@ -102,7 +98,7 @@ type systemConfigTask struct {
 
 func (sc *systemConfigTask) FormatConfig() {
 	if sc.Cron == "" {
-		sc.Cron = "0 * * * * ?"
+		sc.Cron = "0/30 * * * * ?"
 	}
 	if sc.RunMode > 2 || sc.RunMode < 0 {
 		sc.RunMode = 0
