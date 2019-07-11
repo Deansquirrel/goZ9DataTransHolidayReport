@@ -23,3 +23,23 @@ type Z3XsCkDt struct {
 	CkBz     string
 	CkZdzSj  time.Time
 }
+
+type Z3XsTht struct {
+	ThHpMxHh   string
+	ThDjh      string
+	ThLsh      string
+	ThYyRq     time.Time
+	ThMdid     int
+	ThQtCkId   int
+	ThHpId     int
+	ThJlDwId   int
+	ThZhl      float64
+	ThJmSl     float64
+	ThBqjJeXj  float64
+	ThZzCjJeXj float64
+	ThHpFjXx   string
+	ThZdrId    int
+	ThKhId     int
+	ThBz       string
+	ThZdzSj    time.Time
+}

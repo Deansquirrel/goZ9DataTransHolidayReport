@@ -13,7 +13,7 @@ import log "github.com/Deansquirrel/goToolLog"
 const (
 	sqlGetZ3XsCkDt = "" +
 		"declare @lsh varchar(255) " +
-		"select top 1 @lsh=cklsh from z3xscksyt order by cklsh " +
+		"select top 1 @lsh=cklsh from z3xscksyt order by cklsh asc " +
 		"select ckdmxhh,ckdjh,ckdlsh,ckdbj,ckdcxbj, " +
 		"	ckdyyr,ckdmdid,ckdckid,ckdhpid,ckddwid, " +
 		"	ckdhsl,ckdjmsl,ckdbqjxj,ckdcjjxj,ckdfjxx, " +
@@ -39,6 +39,16 @@ const (
 	sqlDeleteZ3XsCkDtSy = "" +
 		"delete from z3xscksyt " +
 		"where cklsh = ?"
+
+	sqlGetZ3XsTht = "" +
+		"declare @lsh varchar(255) " +
+		"select top 1 @lsh=thlsh from z3xsthsyt order by thlsh asc " +
+		"select a.thhpmxhh,b.thdjh,b.thlsh,a.thyyrq,a.thmdid, " +
+		"	a.thqtckid,a.thhpid,a.thjldwid,a.thzhl,a.thjmsl, " +
+		"	a.thbqjjexj,a.thzzcjjexj,a.thhpfjxx,b.thzdrid,b.thkhid," +
+		"	b.thbz,b.thzdjzsj " +
+		"from z3xsthhpdt a " +
+		"inner join z3xstht b on left(a.thhpmxhh,12) = b.thlsh and b.thlsh = @lsh"
 )
 
 type repMd struct {
@@ -52,7 +62,7 @@ func NewRepMd() *repMd {
 	}
 }
 
-//销售出库货品明细
+//获取销售出库货品明细
 func (r *repMd) GetZ3XsCkDt() ([]*object.Z3XsCkDt, error) {
 	comm := NewCommon()
 	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3XsCkDt)
@@ -107,8 +117,68 @@ func (r *repMd) GetZ3XsCkDt() ([]*object.Z3XsCkDt, error) {
 	return rList, nil
 }
 
-//销售出库货品明细
-func (r *repMd) DeleteZ3XsCkDtSy(id string) error {
+//删除销售出库货品明细索引
+func (r *repMd) DelZ3XsCkDtSy(id string) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL2000(r.dbConfig, sqlDeleteZ3XsCkDtSy, id)
+}
+
+//获取门店销售退货明细
+// z3xstht表和z3xsthhpdt明细表
+func (r *repMd) GetZ3XsTht() ([]*object.Z3XsTht, error) {
+	comm := NewCommon()
+	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3XsCkDt)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	var thhpmxhh, thdjh, thlsh, thhpfjxx, thbz string
+	var thyyrq, thzdzsj time.Time
+	var thmdid, thqtckid, thhpid, thjldwid, thzdrid, thkhid int
+	var thzhl, thjmsl, thbqjjexj, thzzcjjexj float64
+	rList := make([]*object.Z3XsTht, 0)
+	for rows.Next() {
+		err := rows.Scan(&thhpmxhh, &thdjh, &thlsh, &thyyrq, &thmdid,
+			&thqtckid, &thhpid, &thjldwid, &thzhl, &thjmsl,
+			&thbqjjexj, &thzzcjjexj, &thhpfjxx, &thzdrid, &thkhid,
+			&thbz, &thzdzsj)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3XsTht", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.Z3XsTht{
+			ThHpMxHh:   thhpmxhh,
+			ThDjh:      thdjh,
+			ThLsh:      thlsh,
+			ThYyRq:     thyyrq,
+			ThMdid:     thmdid,
+			ThQtCkId:   thqtckid,
+			ThHpId:     thhpid,
+			ThJlDwId:   thjldwid,
+			ThZhl:      thzhl,
+			ThJmSl:     thjmsl,
+			ThBqjJeXj:  thbqjjexj,
+			ThZzCjJeXj: thzzcjjexj,
+			ThHpFjXx:   thhpfjxx,
+			ThZdrId:    thzdrid,
+			ThKhId:     thkhid,
+			ThBz:       thbz,
+			ThZdzSj:    thzdzsj,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3XsTht", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+
+//删除门店销售退货明细索引
+func (r *repMd) DelZ3XsTht(id string) error {
+	//TODO
+	return nil
 }

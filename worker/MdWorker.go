@@ -28,6 +28,11 @@ func (w *mdWorker) Z3XsCkt() {
 		if err != nil {
 			return
 		}
+		if rList == nil {
+			errMsg := fmt.Sprintf("Z3XsCkt get data error: return list can not be nil")
+			log.Error(errMsg)
+			return
+		}
 		if len(rList) == 0 {
 			break
 		}
@@ -39,7 +44,7 @@ func (w *mdWorker) Z3XsCkt() {
 				return
 			}
 		}
-		err = repMd.DeleteZ3XsCkDtSy(rList[0].CkdLsh)
+		err = repMd.DelZ3XsCkDtSy(rList[0].CkdLsh)
 		if err != nil {
 			errMsg := fmt.Sprintf("del md Z3XsCkt ckmxhh[%s] err: %s", rList[0].CkdMxHh, err.Error())
 			log.Error(errMsg)
