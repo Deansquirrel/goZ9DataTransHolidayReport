@@ -2,6 +2,7 @@ package worker
 
 import (
 	"fmt"
+	"github.com/Deansquirrel/goToolCommon"
 	log "github.com/Deansquirrel/goToolLog"
 	"github.com/Deansquirrel/goZ9DataTransHolidayReport/repository"
 )
@@ -15,6 +16,9 @@ func NewMdWorker() *mdWorker {
 
 //门店销售出库z3xsckt主表和z3xsckdt明细表
 func (w *mdWorker) Z3XsCkt() {
+	id := goToolCommon.Guid()
+	log.Info(fmt.Sprintf("Z3XsCkt %s start", id))
+	defer log.Info(fmt.Sprintf("Z3XsCkt %s complete", id))
 	repMd := repository.NewRepMd()
 	repOnLine, err := repository.NewRepZxZc()
 	if err != nil {
@@ -46,11 +50,12 @@ func (w *mdWorker) Z3XsCkt() {
 		}
 		err = repMd.DelZ3XsCkDtSy(rList[0].CkdLsh)
 		if err != nil {
-			errMsg := fmt.Sprintf("del md Z3XsCkt ckmxhh[%s] err: %s", rList[0].CkdMxHh, err.Error())
+			errMsg := fmt.Sprintf("del md Z3XsCkt CkdLsh[%s] err: %s", rList[0].CkdLsh, err.Error())
 			log.Error(errMsg)
 			return
 		}
 		counter = counter + 1
+		log.Debug(fmt.Sprintf("md Z3XsCkt[%s] Updated ", rList[0].CkdLsh))
 	}
 	if counter > 0 {
 		log.Info(fmt.Sprintf("md Z3XsCkt Update %d", counter))
@@ -59,12 +64,98 @@ func (w *mdWorker) Z3XsCkt() {
 
 //门店：门店销售退货z3xstht表和z3xsthhpdt明细表
 func (w *mdWorker) Z3XsTht() {
-	log.Debug("Z3XsTht")
+	id := goToolCommon.Guid()
+	log.Info(fmt.Sprintf("Z3XsTht %s start", id))
+	defer log.Info(fmt.Sprintf("Z3XsTht %s complete", id))
+	repMd := repository.NewRepMd()
+	repOnLine, err := repository.NewRepZxZc()
+	if err != nil {
+		errMsg := fmt.Sprintf("Z3XsTht get rep online err: %s", err.Error())
+		log.Error(errMsg)
+		return
+	}
+	counter := 0
+	for {
+		rList, err := repMd.GetZ3XsTht()
+		if err != nil {
+			return
+		}
+		if rList == nil {
+			errMsg := fmt.Sprintf("Z3XsTht get data error: return list can not be nil")
+			log.Error(errMsg)
+			return
+		}
+		if len(rList) == 0 {
+			break
+		}
+		for _, d := range rList {
+			err = repOnLine.UpdateMdZ3XsTht(d)
+			if err != nil {
+				errMsg := fmt.Sprintf("update online Z3XsTht ThHpMxHh[%s] err: %s", d.ThHpMxHh, err.Error())
+				log.Error(errMsg)
+				return
+			}
+		}
+		err = repMd.DelZ3XsThtSy(rList[0].ThLsh)
+		if err != nil {
+			errMsg := fmt.Sprintf("del md Z3XsTht ThLsh[%s] err: %s", rList[0].ThLsh, err.Error())
+			log.Error(errMsg)
+			return
+		}
+		counter = counter + 1
+		log.Debug(fmt.Sprintf("md Z3XsTht[%s] Updated ", rList[0].ThLsh))
+	}
+	if counter > 0 {
+		log.Info(fmt.Sprintf("md Z3XsTht Update %d", counter))
+	}
 }
 
 //门店：门店调拨出库z3mddbckt和z3mddbckdt明细表
 func (w *mdWorker) Z3MdDbCkt() {
-	log.Debug("Z3MdDbCkt")
+	id := goToolCommon.Guid()
+	log.Info(fmt.Sprintf("Z3MdDbCkt %s start", id))
+	defer log.Info(fmt.Sprintf("Z3MdDbCkt %s complete", id))
+	repMd := repository.NewRepMd()
+	repOnLine, err := repository.NewRepZxZc()
+	if err != nil {
+		errMsg := fmt.Sprintf("Z3MdDbCkt get rep online err: %s", err.Error())
+		log.Error(errMsg)
+		return
+	}
+	counter := 0
+	for {
+		rList, err := repMd.GetZ3MdDbCkDt()
+		if err != nil {
+			return
+		}
+		if rList == nil {
+			errMsg := fmt.Sprintf("Z3MdDbCkt get data error: return list can not be nil")
+			log.Error(errMsg)
+			return
+		}
+		if len(rList) == 0 {
+			break
+		}
+		for _, d := range rList {
+			err = repOnLine.UpdateMdZ3MdDbCkDt(d)
+			if err != nil {
+				errMsg := fmt.Sprintf("update online Z3MdDbCkt DbdMxHh[%s] err: %s", d.DbdMxHh, err.Error())
+				log.Error(errMsg)
+				return
+			}
+		}
+		err = repMd.DelZ3MdDbCkDtSy(rList[0].DbdLsh)
+		if err != nil {
+			errMsg := fmt.Sprintf("del md Z3MdDbCkt ThLsh[%s] err: %s", rList[0].DbdLsh, err.Error())
+			log.Error(errMsg)
+			return
+		}
+		counter = counter + 1
+		log.Debug(fmt.Sprintf("md Z3MdDbCkt[%s] Updated ", rList[0].DbdLsh))
+	}
+	if counter > 0 {
+		log.Info(fmt.Sprintf("md Z3MdDbCkt Update %d", counter))
+	}
 }
 
 //门店：门店调拨调整z3dbtzt和z3dbtzdt明细表

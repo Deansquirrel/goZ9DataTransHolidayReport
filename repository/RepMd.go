@@ -49,6 +49,22 @@ const (
 		"	b.thbz,b.thzdjzsj " +
 		"from z3xsthhpdt a " +
 		"inner join z3xstht b on left(a.thhpmxhh,12) = b.thlsh and b.thlsh = @lsh"
+	sqlDelZ3XsThtSy = "" +
+		"delete from z3xsthsyt " +
+		"where thlsh = ?"
+
+	sqlGetZ3MdDbCkDt = "" +
+		"declare @lsh varchar(255) " +
+		"select top 1 @lsh=dbdlsh from z3mddbcksyt order by dbdlsh asc " +
+		"select a.dbdmxhh,b.dbdjh,b.dblsh,a.dbdckr,a.dbddcjgid, " +
+		"	a.dbddcckid,b.dbrkshjgid,b.dbrkppid,a.dbdhpid,a.dbddwid, " +
+		"	a.dbdhsl,a.dbdjmsl,a.dbdlsj,a.dbddhj,b.dbshrid, " +
+		"	b.dbbz,b.dbshsj " +
+		"from z3mddbckdt a " +
+		"inner join z3mddbckt b on left(a.dbdmxhh,12) = b.dblsh and b.dblsh = @lsh"
+	sqlDelZ3MdDbCkDtSy = "" +
+		"delete from z3mddbcksyt " +
+		"where dbdlsh = ?"
 )
 
 type repMd struct {
@@ -124,10 +140,9 @@ func (r *repMd) DelZ3XsCkDtSy(id string) error {
 }
 
 //获取门店销售退货明细
-// z3xstht表和z3xsthhpdt明细表
 func (r *repMd) GetZ3XsTht() ([]*object.Z3XsTht, error) {
 	comm := NewCommon()
-	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3XsCkDt)
+	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3XsTht)
 	if err != nil {
 		return nil, err
 	}
@@ -178,7 +193,67 @@ func (r *repMd) GetZ3XsTht() ([]*object.Z3XsTht, error) {
 }
 
 //删除门店销售退货明细索引
-func (r *repMd) DelZ3XsTht(id string) error {
-	//TODO
-	return nil
+func (r *repMd) DelZ3XsThtSy(id string) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3XsThtSy, id)
+}
+
+//获取调拨出库明细
+func (r *repMd) GetZ3MdDbCkDt() ([]*object.Z3MdDbCkDt, error) {
+	comm := NewCommon()
+	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3MdDbCkDt)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+
+	var dbdMxHh, dbdDjh, dbdLsh, dbdBz string
+	var dbdCkr, dbdShSj time.Time
+	var dbdDcJgId, dbdDcCkId, dbrKShJgId, dbrKPpId, dbdHpId, dbdDwId, dbdZdrId int
+	var dbdHsl, dbdJmSl, dbdLsj, dbdDhj float64
+	rList := make([]*object.Z3MdDbCkDt, 0)
+	for rows.Next() {
+		err := rows.Scan(&dbdMxHh, &dbdDjh, &dbdLsh, &dbdCkr, &dbdDcJgId,
+			&dbdDcCkId, &dbrKShJgId, &dbrKPpId, &dbdHpId, &dbdDwId,
+			&dbdHsl, &dbdJmSl, &dbdLsj, &dbdDhj, &dbdZdrId,
+			&dbdBz, &dbdShSj)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3MdDbCkDt", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.Z3MdDbCkDt{
+			DbdMxHh:    dbdMxHh,
+			DbdDjh:     dbdDjh,
+			DbdLsh:     dbdLsh,
+			DbdCkr:     dbdCkr,
+			DbdDcJgId:  dbdDcJgId,
+			DbdDcCkId:  dbdDcCkId,
+			DbrKShJgId: dbrKShJgId,
+			DbrKPpId:   dbrKPpId,
+			DbdHpId:    dbdHpId,
+			DbdDwId:    dbdDwId,
+			DbdHsl:     dbdHsl,
+			DbdJmSl:    dbdJmSl,
+			DbdLsj:     dbdLsj,
+			DbdDhj:     dbdDhj,
+			DbdZdrId:   dbdZdrId,
+			DbdBz:      dbdBz,
+			DbdShSj:    dbdShSj,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3MdDbCkDt", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+
+//删除调拨出库索引
+func (r *repMd) DelZ3MdDbCkDtSy(id string) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3MdDbCkDtSy, id)
 }

@@ -29,6 +29,54 @@ const (
 		"			?,?,?,?,?, " +
 		"			?,?,?,?) " +
 		"	END"
+
+	sqlUpdateMdZ3XsTht = "" +
+		"IF EXISTS (SELECT * FROM [z3xsthdt] WHERE [thhpmxhh] = ?) " +
+		"	BEGIN " +
+		"		UPDATE [z3xsthdt] " +
+		"		SET [thhpmxhh] = ?,[thdjh] = ?,[thlsh] = ?,[thyyrq] = ?,[thmdid] = ?, " +
+		"		   [thhpid] = ?,[thjldwid] = ?,[thzhl] = ?,[thjmsl] = ?,[thhpfjxx] = ?, " +
+		"		   [thzdrid] = ?,[thkhid] = ?,[thbz] = ?,[thzdzsj] = ?,[thqtckid] = ?, " +
+		"		   [thbqjjexj] = ?,[thzzcjjexj] = ? " +
+		"		WHERE [thhpmxhh] = ? " +
+		"	END " +
+		"ELSE " +
+		"	BEGIN " +
+		"		INSERT INTO [z3xsthdt]( " +
+		"			[thhpmxhh],[thdjh],[thlsh],[thyyrq],[thmdid], " +
+		"			[thhpid],[thjldwid],[thzhl],[thjmsl],[thhpfjxx], " +
+		"			[thzdrid],[thkhid],[thbz],[thzdzsj],[thqtckid], " +
+		"			[thbqjjexj],[thzzcjjexj]) " +
+		"		VALUES ( " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?) " +
+		"	END"
+
+	sqlUpdateMdZ3MdDbCkDt = "" +
+		"IF EXISTS (SELECT * FROM [z3mddbckdt] WHERE [dbdmxhh]=?) " +
+		"	BEGIN " +
+		"		UPDATE [z3mddbckdt] " +
+		"		SET [dbdmxhh] = ?,[dbddjh] = ?,[dbdlsh] = ?,[dbdckr] = ?,[dbddcjgid] = ?, " +
+		"			[dbdhpid] = ?,[dbddwid] = ?,[dbdhsl] = ?,[dbdjmsl] = ?,[dbdzdrid] = ?, " +
+		"			[dbdbz] = ?,[dbdshsj] = ?,[dbddcckid] = ?,[dbdlsj] = ?,[dbddhj] = ?, " +
+		"			[dbrkshjgid] = ?,[dbrkppid] = ? " +
+		"		WHERE [dbdmxhh] = ? " +
+		"	END " +
+		"ELSE " +
+		"	BEGIN " +
+		"		INSERT INTO [z3mddbckdt]( " +
+		"			[dbdmxhh],[dbddjh],[dbdlsh],[dbdckr],[dbddcjgid], " +
+		"			[dbdhpid],[dbddwid],[dbdhsl],[dbdjmsl],[dbdzdrid], " +
+		"			[dbdbz],[dbdshsj],[dbddcckid],[dbdlsj],[dbddhj], " +
+		"			[dbrkshjgid],[dbrkppid]) " +
+		"		VALUES ( " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?) " +
+		"	END"
 )
 
 type repZxZc struct {
@@ -46,6 +94,7 @@ func NewRepZxZc() (*repZxZc, error) {
 	}, nil
 }
 
+//销售出库货品明细
 func (r *repZxZc) UpdateMdZ3XsCkDt(d *object.Z3XsCkDt) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL(r.dbConfig, sqlUpdateMdZ3XsCkDt,
@@ -60,4 +109,36 @@ func (r *repZxZc) UpdateMdZ3XsCkDt(d *object.Z3XsCkDt) error {
 		d.CkdJmSl, d.CkdFjXx, d.CkZdRid, d.CkKhId, d.CkBz,
 		d.CkZdzSj, d.CkdCkId, d.CkdBqjXj, d.CkdCjjXj,
 	)
+}
+
+//门店销售退货明细
+func (r *repZxZc) UpdateMdZ3XsTht(d *object.Z3XsTht) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL(r.dbConfig, sqlUpdateMdZ3XsTht,
+		d.ThHpMxHh,
+		d.ThHpMxHh, d.ThDjh, d.ThLsh, d.ThYyRq, d.ThMdid,
+		d.ThHpId, d.ThJlDwId, d.ThZhl, d.ThJmSl, d.ThHpFjXx,
+		d.ThZdrId, d.ThKhId, d.ThBz, d.ThZdzSj, d.ThQtCkId,
+		d.ThBqjJeXj, d.ThZzCjJeXj,
+		d.ThHpMxHh,
+		d.ThHpMxHh, d.ThDjh, d.ThLsh, d.ThYyRq, d.ThMdid,
+		d.ThHpId, d.ThJlDwId, d.ThZhl, d.ThJmSl, d.ThHpFjXx,
+		d.ThZdrId, d.ThKhId, d.ThBz, d.ThZdzSj, d.ThQtCkId,
+		d.ThBqjJeXj, d.ThZzCjJeXj)
+}
+
+//调拨出库明细
+func (r *repZxZc) UpdateMdZ3MdDbCkDt(d *object.Z3MdDbCkDt) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL(r.dbConfig, sqlUpdateMdZ3MdDbCkDt,
+		d.DbdMxHh,
+		d.DbdMxHh, d.DbdDjh, d.DbdLsh, d.DbdCkr, d.DbdDcJgId,
+		d.DbdHpId, d.DbdDwId, d.DbdHsl, d.DbdJmSl, d.DbdZdrId,
+		d.DbdBz, d.DbdShSj, d.DbdDcCkId, d.DbdLsj, d.DbdDhj,
+		d.DbrKShJgId, d.DbrKPpId,
+		d.DbdMxHh,
+		d.DbdMxHh, d.DbdDjh, d.DbdLsh, d.DbdCkr, d.DbdDcJgId,
+		d.DbdHpId, d.DbdDwId, d.DbdHsl, d.DbdJmSl, d.DbdZdrId,
+		d.DbdBz, d.DbdShSj, d.DbdDcCkId, d.DbdLsj, d.DbdDhj,
+		d.DbrKShJgId, d.DbrKPpId)
 }

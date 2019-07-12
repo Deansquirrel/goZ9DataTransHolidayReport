@@ -43,3 +43,23 @@ type Z3XsTht struct {
 	ThBz       string
 	ThZdzSj    time.Time
 }
+
+type Z3MdDbCkDt struct {
+	DbdMxHh    string
+	DbdDjh     string
+	DbdLsh     string
+	DbdCkr     time.Time
+	DbdDcJgId  int
+	DbdDcCkId  int
+	DbrKShJgId int
+	DbrKPpId   int
+	DbdHpId    int
+	DbdDwId    int
+	DbdHsl     float64
+	DbdJmSl    float64
+	DbdLsj     float64
+	DbdDhj     float64
+	DbdZdrId   int
+	DbdBz      string
+	DbdShSj    time.Time
+}
