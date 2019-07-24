@@ -3,9 +3,13 @@ package worker
 import (
 	"fmt"
 	"github.com/Deansquirrel/goToolCron"
+	"github.com/Deansquirrel/goToolMSSqlHelper"
+	"github.com/Deansquirrel/goToolSVRV3"
 	"github.com/Deansquirrel/goZ9DataTransHolidayReport/global"
 	"github.com/Deansquirrel/goZ9DataTransHolidayReport/object"
+	"github.com/kataras/iris/core/errors"
 	"strconv"
+	"time"
 )
 
 import log "github.com/Deansquirrel/goToolLog"
@@ -20,22 +24,94 @@ func NewCommon() *common {
 //系统配置检查
 func (c *common) checkSysConfig() bool {
 	if global.SysConfig.OnLineDb.Db == "" {
-		log.Warn("线上库地址不能为空")
+		log.Error("线上库地址不能为空")
 		global.Cancel()
 		return false
 	}
-	if global.SysConfig.LocalDb.Server == "" ||
-		global.SysConfig.LocalDb.DbName == "" ||
-		global.SysConfig.LocalDb.User == "" {
-		log.Warn("本地库地址、名称、用户名不能为空")
-		global.Cancel()
-		return false
+	if object.RunMode(global.SysConfig.Task.RunMode) == object.RunModeDzq {
+		if global.SysConfig.LocalDb.Server == "" ||
+			global.SysConfig.LocalDb.DbName == "" ||
+			global.SysConfig.LocalDb.User == "" {
+			log.Error("本地库地址、名称、用户名不能为空")
+			global.Cancel()
+			return false
+		}
+	} else {
+		err := c.refreshLocalDbConfig()
+		if err != nil {
+			return false
+		}
 	}
 	return true
 }
 
+func (c *common) refreshLocalDbConfig() error {
+	port := -1
+	appType := ""
+	clientType := ""
+
+	switch object.RunMode(global.SysConfig.Task.RunMode) {
+	case object.RunModeMd:
+		port = 7083
+		appType = "83"
+		clientType = "8301"
+	case object.RunModeGs:
+		port = 7081
+		appType = "81"
+		clientType = "8101"
+	case object.RunModeGc:
+		port = 7082
+		appType = "82"
+		clientType = "8201"
+	default:
+		errMsg := fmt.Sprintf("unexpected runmode %d", global.SysConfig.Task.RunMode)
+		log.Error(errMsg)
+		return errors.New(errMsg)
+	}
+
+	dbConfig, err := goToolSVRV3.GetSQLConfig(global.SysConfig.SvrV3Info.Address, port, appType, clientType)
+	if err != nil {
+		errMsg := fmt.Sprintf("get dbConfig from svr v3 err: %s", err.Error())
+		log.Error(errMsg)
+		return errors.New(errMsg)
+	}
+
+	if dbConfig == nil {
+		errMsg := fmt.Sprintf("get dbConfig from svr v3 return nil")
+		log.Error(errMsg)
+		return errors.New(errMsg)
+	}
+
+	accList, err := goToolSVRV3.GetAccountList(goToolMSSqlHelper.ConvertDbConfigTo2000(dbConfig), appType)
+	if err != nil {
+		errMsg := fmt.Sprintf("get acc list err: %s", err.Error())
+		log.Error(errMsg)
+		return errors.New(errMsg)
+	}
+
+	if accList == nil || len(accList) <= 0 {
+		errMsg := "acc list is empty"
+		log.Error(errMsg)
+		return errors.New(errMsg)
+	}
+	global.SysConfig.LocalDb.Server = dbConfig.Server
+	global.SysConfig.LocalDb.Port = dbConfig.Port
+	global.SysConfig.LocalDb.User = dbConfig.User
+	global.SysConfig.LocalDb.Pwd = dbConfig.Pwd
+	global.SysConfig.LocalDb.DbName = accList[0]
+	return nil
+}
+
 func (c *common) StartService(sType object.RunMode) {
 	log.Debug("RunMode " + strconv.Itoa(int(sType)))
+	for {
+		r := c.checkSysConfig()
+		if r {
+			break
+		} else {
+			time.Sleep(time.Minute * 30)
+		}
+	}
 	if !c.checkSysConfig() {
 		return
 	}

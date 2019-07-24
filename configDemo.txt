@@ -8,6 +8,10 @@ logLevel="warn"
 # 线上库连接信息
 db=""
 
+[svrV3Info]
+# 服务器地址，如 127.0.0.1
+address=""
+
 [localDb]
 # 本地库连接信息
 server=""

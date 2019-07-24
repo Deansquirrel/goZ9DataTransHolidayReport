@@ -10,11 +10,12 @@ import log "github.com/Deansquirrel/goToolLog"
 
 //系统配置（Server|Client）
 type SystemConfig struct {
-	Total    systemConfigTotal    `toml:"total"`
-	OnLineDb systemConfigOnLineDB `toml:"onLineDb"`
-	LocalDb  systemConfigLocalDB  `toml:"localDb"`
-	Task     systemConfigTask     `toml:"task"`
-	Service  systemConfigService  `toml:"service"`
+	Total     systemConfigTotal     `toml:"total"`
+	OnLineDb  systemConfigOnLineDB  `toml:"onLineDb"`
+	SvrV3Info systemConfigSvrV3Info `toml:"svrV3Info"`
+	LocalDb   systemConfigLocalDB   `toml:"localDb"`
+	Task      systemConfigTask      `toml:"task"`
+	Service   systemConfigService   `toml:"service"`
 }
 
 func (sc *SystemConfig) FormatConfig() {
@@ -69,6 +70,18 @@ type systemConfigOnLineDB struct {
 
 func (sc *systemConfigOnLineDB) FormatConfig() {
 	sc.Db = strings.Trim(sc.Db, " ")
+}
+
+//SvrV3服务器地址
+type systemConfigSvrV3Info struct {
+	Address string `toml:"address"`
+}
+
+func (c *systemConfigSvrV3Info) FormatConfig() {
+	c.Address = strings.Trim(c.Address, " ")
+	if c.Address == "" {
+		c.Address = "127.0.0.1"
+	}
 }
 
 //本地库配置库
