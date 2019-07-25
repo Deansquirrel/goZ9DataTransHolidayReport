@@ -1,7 +1,10 @@
 package object
 
-import "time"
+import (
+	"time"
+)
 
+//销售出库
 type Z3XsCkDt struct {
 	CkdMxHh  string
 	CkDjh    string
@@ -24,6 +27,7 @@ type Z3XsCkDt struct {
 	CkZdzSj  time.Time
 }
 
+//销售退货
 type Z3XsTht struct {
 	ThHpMxHh   string
 	ThDjh      string
@@ -44,6 +48,7 @@ type Z3XsTht struct {
 	ThZdzSj    time.Time
 }
 
+//调拨出库
 type Z3MdDbCkDt struct {
 	DbdMxHh    string
 	DbdDjh     string
@@ -62,4 +67,25 @@ type Z3MdDbCkDt struct {
 	DbdZdrId   int
 	DbdBz      string
 	DbdShSj    time.Time
+}
+
+//调拨调整
+type Z3MdDbTzDt struct {
+	TzdMxHh   string
+	TzdDjh    string
+	TzdLsh    string
+	TzdCkr    time.Time
+	TzdJgId   int
+	TzdCkId   int
+	TzRkJgId  int
+	TzRkCkId  int
+	TzdHpId   int
+	TzdDwId   int
+	TzdHsl    float64
+	TzdJmTzSl float64
+	TzdLsj    float64
+	TzdDhj    float64
+	TzdZdrId  int
+	TzdBz     string
+	TzdShSj   time.Time
 }
