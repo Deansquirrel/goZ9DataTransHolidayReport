@@ -127,3 +127,22 @@ type Z3HpRkDjDt struct {
 	RkShrId     int
 	RksShSj     time.Time
 }
+
+//盘亏登记
+type Z3PkDjDt struct {
+	PkdMxHh   string
+	PkdDjh    string
+	PkdLsh    string
+	PkdYyr    time.Time
+	PkdPdJgId int
+	PkdPdCkId int
+	PkdHpId   int
+	PkdDwId   int
+	PkdHsl    float64
+	PkdJmSl   float64
+	PkdLsj    float64
+	PkdDhj    float64
+	PkdBz     string
+	PkdShrId  int
+	PkdShSj   time.Time
+}

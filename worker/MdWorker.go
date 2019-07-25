@@ -304,7 +304,50 @@ func (w *mdWorker) Z3HpRkDjt() {
 
 //门店：门店盘亏登记z3pkdjt和z3pkdjdt明细表
 func (w *mdWorker) Z3PkDjt() {
-	log.Debug("Z3PkDjt")
+	id := goToolCommon.Guid()
+	log.Info(fmt.Sprintf("Z3PkDjt %s start", id))
+	defer log.Info(fmt.Sprintf("Z3PkDjt %s complete", id))
+	repMd := repository.NewRepMd()
+	repOnLine, err := repository.NewRepZxZc()
+	if err != nil {
+		errMsg := fmt.Sprintf("Z3PkDjt get rep online err: %s", err.Error())
+		log.Error(errMsg)
+		return
+	}
+	counter := 0
+	for {
+		rList, err := repMd.GetZ3PkDjDt()
+		if err != nil {
+			return
+		}
+		if rList == nil {
+			errMsg := fmt.Sprintf("Z3PkDjt get data error: return list can not be nil")
+			log.Error(errMsg)
+			return
+		}
+		if len(rList) == 0 {
+			break
+		}
+		for _, d := range rList {
+			err = repOnLine.UpdateZ3PkDjDt(d)
+			if err != nil {
+				errMsg := fmt.Sprintf("update online Z3PkDjt PkdMxHh[%s] err: %s", d.PkdMxHh, err.Error())
+				log.Error(errMsg)
+				return
+			}
+		}
+		err = repMd.DelZ3PkDjDtSy(rList[0].PkdLsh)
+		if err != nil {
+			errMsg := fmt.Sprintf("del md Z3PkDjt PkdLsh[%s] err: %s", rList[0].PkdLsh, err.Error())
+			log.Error(errMsg)
+			return
+		}
+		counter = counter + 1
+		log.Debug(fmt.Sprintf("md Z3PkDjt[%s] Updated ", rList[0].PkdLsh))
+	}
+	if counter > 0 {
+		log.Info(fmt.Sprintf("md Z3PkDjt Update %d", counter))
+	}
 }
 
 //门店：门店配送收货调整z3pstzdt和z3pstzt

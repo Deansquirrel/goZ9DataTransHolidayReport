@@ -101,6 +101,17 @@ const (
 	sqlDelZ3HpRkDjDtSy = "" +
 		"delete from z3hprkdjsyt " +
 		"where rklsh = ?"
+
+	sqlGetZ3PkDjDt = "" +
+		"declare @lsh varchar(255) " +
+		"select top 1 @lsh=pkdlsh from z3pkdjsyt order by pkdlsh asc " +
+		"select a.pkdmxhh,b.pkdjh as pkddjh,b.pklsh as pkdlsh,a.pkdyyr,a.pkdpdjgid, " +
+		"	a.pkdpdckid,a.pkdhpid,a.pkddwid,a.pkdhsl,a.pkdjmsl, " +
+		"	a.pkdlsj,a.pkddhj,b.pkbz as pkdbz,b.pkshrid as pkdshrid,b.pkshsj as pkdshsj " +
+		"from z3pkdjdt a inner join z3pkdjt b on left(a.pkdmxhh,12) = b.pklsh and b.pklsh = @lsh"
+	sqlDelZ3PkDjDt = "" +
+		"delete from z3pkdjsyt " +
+		"where pkdlsh = ?"
 )
 
 type repMd struct {
@@ -463,4 +474,60 @@ func (r *repMd) GetZ3HpRkDjDt() ([]*object.Z3HpRkDjDt, error) {
 func (r *repMd) DelZ3HpRkDjDtSy(id string) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HpRkDjDtSy, id)
+}
+
+//获取盘亏登记
+func (r *repMd) GetZ3PkDjDt() ([]*object.Z3PkDjDt, error) {
+	comm := NewCommon()
+	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3PkDjDt)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	var pkdMxHh, pkdDjh, pkdLsh, pkdBz string
+	var pkdYyr, pkdShSj time.Time
+	var pkdPdJgId, pkdPdCkId, pkdHpId, pkdDwId, pkdShrId int
+	var pkdHsl, pkdJmSl, pkdLsj, pkdDhj float64
+	rList := make([]*object.Z3PkDjDt, 0)
+	for rows.Next() {
+		err := rows.Scan(&pkdMxHh, &pkdDjh, &pkdLsh, &pkdYyr, &pkdPdJgId,
+			&pkdPdCkId, &pkdHpId, &pkdDwId, &pkdHsl, &pkdJmSl,
+			&pkdLsj, &pkdDhj, &pkdBz, &pkdShrId, &pkdShSj)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3PkDjDt", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.Z3PkDjDt{
+			PkdMxHh:   pkdMxHh,
+			PkdDjh:    pkdDjh,
+			PkdLsh:    pkdLsh,
+			PkdYyr:    pkdYyr,
+			PkdPdJgId: pkdPdJgId,
+			PkdPdCkId: pkdPdCkId,
+			PkdHpId:   pkdHpId,
+			PkdDwId:   pkdDwId,
+			PkdHsl:    pkdHsl,
+			PkdJmSl:   pkdJmSl,
+			PkdLsj:    pkdLsj,
+			PkdDhj:    pkdDhj,
+			PkdBz:     pkdBz,
+			PkdShrId:  pkdShrId,
+			PkdShSj:   pkdShSj,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3PkDjDt", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+
+//删除盘亏登记
+func (r *repMd) DelZ3PkDjDtSy(id string) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3PkDjDt, id)
 }

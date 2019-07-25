@@ -143,6 +143,27 @@ const (
 		"			?,?,?,?,?, " +
 		"			?,?,?,?,?) " +
 		"	END"
+
+	sqlUpdateZ3PkDjDt = "" +
+		"IF EXISTS (SELECT * FROM [z3pkdjdt] WHERE [pkdmxhh]=?) " +
+		"	BEGIN " +
+		"		UPDATE [z3pkdjdt] " +
+		"		SET [pkdMxHh]=?,[pkdDjh]=?,[pkdLsh]=?,[pkdYyr]=?,[pkdPdJgId]=?, " +
+		"			[pkdPdCkId]=?,[pkdHpId]=?,[pkdDwId]=?,[pkdHsl]=?,[pkdJmSl]=?, " +
+		"			[pkdLsj]=?,[pkdDhj]=?,[pkdBz]=?,[pkdShrId]=?,[pkdShSj]=? " +
+		"		WHERE [pkdmxhh]=? " +
+		"	END " +
+		"ELSE " +
+		"	BEGIN " +
+		"		INSERT INTO [z3pkdjdt]( " +
+		"			[pkdMxHh],[pkdDjh],[pkdLsh],[pkdYyr],[pkdPdJgId], " +
+		"			[pkdPdCkId],[pkdHpId],[pkdDwId],[pkdHsl],[pkdJmSl], " +
+		"			[pkdLsj],[pkdDhj],[pkdBz],[pkdShrId],[pkdShSj]) " +
+		"		VALUES ( " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?) " +
+		"	END"
 )
 
 type repZxZc struct {
@@ -251,4 +272,18 @@ func (r *repZxZc) UpdateZ3HpRkDjDt(d *object.Z3HpRkDjDt) error {
 		d.RkdMxHh, d.RkdDjh, d.RkdLsh, d.RkdYyr, d.RkdRkFzJgId,
 		d.RkdCkId, d.RkdHpId, d.RkdDwId, d.RkdHsl, d.RkdJmSl,
 		d.RkdDhj, d.RkdLsj, d.RkBz, d.RkShrId, d.RksShSj)
+}
+
+//盘亏登记
+func (r *repZxZc) UpdateZ3PkDjDt(d *object.Z3PkDjDt) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL(r.dbConfig, sqlUpdateZ3PkDjDt,
+		d.PkdMxHh,
+		d.PkdMxHh, d.PkdDjh, d.PkdLsh, d.PkdYyr, d.PkdPdJgId,
+		d.PkdPdCkId, d.PkdHpId, d.PkdDwId, d.PkdHsl, d.PkdJmSl,
+		d.PkdLsj, d.PkdDhj, d.PkdBz, d.PkdShrId, d.PkdShSj,
+		d.PkdMxHh,
+		d.PkdMxHh, d.PkdDjh, d.PkdLsh, d.PkdYyr, d.PkdPdJgId,
+		d.PkdPdCkId, d.PkdHpId, d.PkdDwId, d.PkdHsl, d.PkdJmSl,
+		d.PkdLsj, d.PkdDhj, d.PkdBz, d.PkdShrId, d.PkdShSj)
 }
