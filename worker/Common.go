@@ -112,9 +112,7 @@ func (c *common) StartService(sType object.RunMode) {
 			time.Sleep(time.Minute * 30)
 		}
 	}
-	if !c.checkSysConfig() {
-		return
-	}
+	log.Debug(fmt.Sprintf("dbName: %s", global.SysConfig.LocalDb.DbName))
 	switch sType {
 	case object.RunModeMd:
 		c.addMdWorker()
@@ -122,6 +120,7 @@ func (c *common) StartService(sType object.RunMode) {
 		c.addWlWorker()
 	default:
 		log.Warn(fmt.Sprintf("unknown runmode %v", sType))
+		global.Cancel()
 	}
 }
 

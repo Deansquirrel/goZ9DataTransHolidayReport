@@ -121,9 +121,11 @@ func (p *program) Start(s service.Service) error {
 		case <-global.Ctx.Done():
 			err := p.Stop(s)
 			if err != nil {
-				fmt.Println(err.Error())
+				//fmt.Println(err.Error())
+				log.Error(err.Error())
 			}
 			time.Sleep(time.Second * 3)
+			log.Warn("exist")
 			os.Exit(0)
 		}
 	}()
