@@ -66,6 +66,7 @@ func (c *common) refreshLocalDbConfig() error {
 	default:
 		errMsg := fmt.Sprintf("unexpected runmode %d", global.SysConfig.Task.RunMode)
 		log.Error(errMsg)
+		global.Cancel()
 		return errors.New(errMsg)
 	}
 
