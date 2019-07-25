@@ -89,3 +89,22 @@ type Z3MdDbTzDt struct {
 	TzdBz     string
 	TzdShSj   time.Time
 }
+
+//货品出库登记
+type Z3HpCkDjDt struct {
+	CkdMxHh     string
+	CkdDjh      string
+	CkdLsh      string
+	CkdYyr      time.Time
+	CkdCkFzJgId int
+	CkdCkId     int
+	CkdHpId     int
+	CkdDwId     int
+	CkdHsl      float64
+	CkdJmSl     float64
+	CkdLsj      float64
+	CkdDhj      float64
+	CkBz        string
+	CkShrId     int
+	CkShSj      time.Time
+}
