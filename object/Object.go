@@ -108,3 +108,22 @@ type Z3HpCkDjDt struct {
 	CkShrId     int
 	CkShSj      time.Time
 }
+
+//货品入库登记
+type Z3HpRkDjDt struct {
+	RkdMxHh     string
+	RkdDjh      string
+	RkdLsh      string
+	RkdYyr      time.Time
+	RkdRkFzJgId int
+	RkdCkId     int
+	RkdHpId     int
+	RkdDwId     int
+	RkdHsl      float64
+	RkdJmSl     float64
+	RkdDhj      float64
+	RkdLsj      float64
+	RkBz        string
+	RkShrId     int
+	RksShSj     time.Time
+}

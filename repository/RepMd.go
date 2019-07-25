@@ -90,6 +90,17 @@ const (
 	sqlDelZ3HpCkDjDtSy = "" +
 		"delete from z3hpckdjsyt " +
 		"where cklsh = ?"
+
+	sqlGetZ3HpRkDjDt = "" +
+		"declare @lsh varchar(255) " +
+		"select top 1 @lsh=rklsh from z3hprkdjsyt order by rklsh asc " +
+		"select a.rkdmxhh,b.rkdjh as rkddjh,b.rklsh as rkdlsh,a.rkdyyr,a.rkdrkfzjgid, " +
+		"	a.rkdckid,a.rkdhpid,a.rkddwid,a.rkdhsl,a.rkdjmsl, " +
+		"	a.rkddhj,a.rkdlsj,b.rkbz,b.rkshrid,b.rkshsj " +
+		"from z3hprkdjdt a inner join z3hprkdjt b on left(a.rkdmxhh,12) = b.rklsh and b.rklsh = @lsh"
+	sqlDelZ3HpRkDjDtSy = "" +
+		"delete from z3hprkdjsyt " +
+		"where rklsh = ?"
 )
 
 type repMd struct {
@@ -396,4 +407,60 @@ func (r *repMd) GetZ3HpCkDjDt() ([]*object.Z3HpCkDjDt, error) {
 func (r *repMd) DelZ3HpCkDjDt(id string) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HpCkDjDtSy, id)
+}
+
+//获取货品入库登记
+func (r *repMd) GetZ3HpRkDjDt() ([]*object.Z3HpRkDjDt, error) {
+	comm := NewCommon()
+	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HpRkDjDt)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	var rkdMxHh, rkdDjh, rkdLsh, rkBz string
+	var rkdYyr, rksShSj time.Time
+	var rkdRkFzJgId, rkdCkId, rkdHpId, rkdDwId, rkShrId int
+	var rkdHsl, rkdJmSl, rkdDhj, rkdLsj float64
+	rList := make([]*object.Z3HpRkDjDt, 0)
+	for rows.Next() {
+		err := rows.Scan(&rkdMxHh, &rkdDjh, &rkdLsh, &rkdYyr, &rkdRkFzJgId,
+			&rkdCkId, &rkdHpId, &rkdDwId, &rkdHsl, &rkdJmSl,
+			&rkdDhj, &rkdLsj, &rkBz, &rkShrId, &rksShSj)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3HpRkDjDt", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.Z3HpRkDjDt{
+			RkdMxHh:     rkdMxHh,
+			RkdDjh:      rkdDjh,
+			RkdLsh:      rkdLsh,
+			RkdYyr:      rkdYyr,
+			RkdRkFzJgId: rkdRkFzJgId,
+			RkdCkId:     rkdCkId,
+			RkdHpId:     rkdHpId,
+			RkdDwId:     rkdDwId,
+			RkdHsl:      rkdHsl,
+			RkdJmSl:     rkdJmSl,
+			RkdDhj:      rkdDhj,
+			RkdLsj:      rkdLsj,
+			RkBz:        rkBz,
+			RkShrId:     rkShrId,
+			RksShSj:     rksShSj,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3HpRkDjDt", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+
+//删除货品入库登记
+func (r *repMd) DelZ3HpRkDjDtSy(id string) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HpRkDjDtSy, id)
 }

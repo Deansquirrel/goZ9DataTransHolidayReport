@@ -122,6 +122,27 @@ const (
 		"			?,?,?,?,?, " +
 		"			?,?,?,?,?) " +
 		"	END"
+
+	sqoUpdateZ3HpRkDjDt = "" +
+		"IF EXISTS (SELECT * FROM [z3hprkdjdt] WHERE [rkdmxhh]=?) " +
+		"	BEGIN " +
+		"		UPDATE [z3hprkdjdt] " +
+		"		SET [rkdMxHh]=?,[rkdDjh]=?,[rkdLsh]=?,[rkdYyr]=?,[rkdRkFzJgId]=?, " +
+		"			[rkdCkId]=?,[rkdHpId]=?,[rkdDwId]=?,[rkdHsl]=?,[rkdJmSl]=?, " +
+		"			[rkdDhj]=?,[rkdLsj]=?,[rkBz]=?,[rkShrId]=?,[rkShSj]=? " +
+		"		WHERE [rkdmxhh]=? " +
+		"	END " +
+		"ELSE " +
+		"	BEGIN " +
+		"		INSERT INTO [z3hprkdjdt]( " +
+		"			[rkdMxHh],[rkdDjh],[rkdLsh],[rkdYyr],[rkdRkFzJgId], " +
+		"			[rkdCkId],[rkdHpId],[rkdDwId],[rkdHsl],[rkdJmSl], " +
+		"			[rkdDhj],[rkdLsj],[rkBz],[rkShrId],[rkShSj]) " +
+		"		VALUES ( " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?) " +
+		"	END"
 )
 
 type repZxZc struct {
@@ -216,4 +237,18 @@ func (r *repZxZc) UpdateZ3HpCkDjDt(d *object.Z3HpCkDjDt) error {
 		d.CkdMxHh, d.CkdDjh, d.CkdLsh, d.CkdYyr, d.CkdCkFzJgId,
 		d.CkdCkId, d.CkdHpId, d.CkdDwId, d.CkdHsl, d.CkdJmSl,
 		d.CkdLsj, d.CkdDhj, d.CkBz, d.CkShrId, d.CkShSj)
+}
+
+//货品入库登记
+func (r *repZxZc) UpdateZ3HpRkDjDt(d *object.Z3HpRkDjDt) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL(r.dbConfig, sqoUpdateZ3HpRkDjDt,
+		d.RkdMxHh,
+		d.RkdMxHh, d.RkdDjh, d.RkdLsh, d.RkdYyr, d.RkdRkFzJgId,
+		d.RkdCkId, d.RkdHpId, d.RkdDwId, d.RkdHsl, d.RkdJmSl,
+		d.RkdDhj, d.RkdLsj, d.RkBz, d.RkShrId, d.RksShSj,
+		d.RkdMxHh,
+		d.RkdMxHh, d.RkdDjh, d.RkdLsh, d.RkdYyr, d.RkdRkFzJgId,
+		d.RkdCkId, d.RkdHpId, d.RkdDwId, d.RkdHsl, d.RkdJmSl,
+		d.RkdDhj, d.RkdLsj, d.RkBz, d.RkShrId, d.RksShSj)
 }
