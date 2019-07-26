@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+//==============================================================================================
 //销售出库
 type Z3XsCkDt struct {
 	CkdMxHh  string
@@ -194,3 +195,32 @@ type Z3XsDdThDt struct {
 	ThZdSj    time.Time
 	ThBz      string
 }
+
+//==============================================================================================
+//配送出库货品明细
+type Z3PsCkHpDt struct {
+	CkdLsh       string
+	CkdHpId      int
+	CkdDjh       string
+	CkdDwId      int
+	CkdHsl       float64
+	CkdCckFzJgId int
+	CkdCckId     int
+	CkMdId       int
+	CkPpId       int
+	CkdEdDjLx    int
+	CkdPhBj      int
+	CkdDhZxSl    float64
+	CkdZxDhj     float64
+	CkdDhJe      float64
+	CkdZsPsj     float64
+	CkdHrq       time.Time
+	CkdShSj      time.Time
+	CkdPsJmSl    float64
+	CkPsBz       string
+	CkFcCzrId    int
+}
+
+//==============================================================================================
+
+//==============================================================================================
