@@ -146,3 +146,24 @@ type Z3PkDjDt struct {
 	PkdShrId  int
 	PkdShSj   time.Time
 }
+
+//门店配送调整
+type Z3MdPsTzDt struct {
+	TzdMxHh   string
+	TzdDjh    string
+	TzdLsh    string
+	TzdCkr    time.Time
+	TzdShJgId int
+	TzdShCkId int
+	TzdPsJgId int
+	TzdPsCkId int
+	TzdHpId   int
+	TzdDwId   int
+	TzdHsl    float64
+	TzdJmSl   float64
+	TzdDhj    float64
+	TzdPsj    float64
+	TzdBz     string
+	TzdShrId  int
+	TzdShSj   time.Time
+}

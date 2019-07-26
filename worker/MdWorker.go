@@ -17,8 +17,8 @@ func NewMdWorker() *mdWorker {
 //门店销售出库z3xsckt主表和z3xsckdt明细表
 func (w *mdWorker) Z3XsCkt() {
 	id := goToolCommon.Guid()
-	log.Info(fmt.Sprintf("Z3XsCkt %s start", id))
-	defer log.Info(fmt.Sprintf("Z3XsCkt %s complete", id))
+	log.Debug(fmt.Sprintf("Z3XsCkt %s start", id))
+	defer log.Debug(fmt.Sprintf("Z3XsCkt %s complete", id))
 	repMd := repository.NewRepMd()
 	repOnLine, err := repository.NewRepZxZc()
 	if err != nil {
@@ -65,8 +65,8 @@ func (w *mdWorker) Z3XsCkt() {
 //门店：门店销售退货z3xstht表和z3xsthhpdt明细表
 func (w *mdWorker) Z3XsTht() {
 	id := goToolCommon.Guid()
-	log.Info(fmt.Sprintf("Z3XsTht %s start", id))
-	defer log.Info(fmt.Sprintf("Z3XsTht %s complete", id))
+	log.Debug(fmt.Sprintf("Z3XsTht %s start", id))
+	defer log.Debug(fmt.Sprintf("Z3XsTht %s complete", id))
 	repMd := repository.NewRepMd()
 	repOnLine, err := repository.NewRepZxZc()
 	if err != nil {
@@ -113,8 +113,8 @@ func (w *mdWorker) Z3XsTht() {
 //门店：门店调拨出库z3mddbckt和z3mddbckdt明细表
 func (w *mdWorker) Z3MdDbCkt() {
 	id := goToolCommon.Guid()
-	log.Info(fmt.Sprintf("Z3MdDbCkt %s start", id))
-	defer log.Info(fmt.Sprintf("Z3MdDbCkt %s complete", id))
+	log.Debug(fmt.Sprintf("Z3MdDbCkt %s start", id))
+	defer log.Debug(fmt.Sprintf("Z3MdDbCkt %s complete", id))
 	repMd := repository.NewRepMd()
 	repOnLine, err := repository.NewRepZxZc()
 	if err != nil {
@@ -161,8 +161,8 @@ func (w *mdWorker) Z3MdDbCkt() {
 //门店：门店调拨调整z3dbtzt和z3dbtzdt明细表
 func (w *mdWorker) Z3DbTzt() {
 	id := goToolCommon.Guid()
-	log.Info(fmt.Sprintf("Z3DbTzt %s start", id))
-	defer log.Info(fmt.Sprintf("Z3DbTzt %s complete", id))
+	log.Debug(fmt.Sprintf("Z3DbTzt %s start", id))
+	defer log.Debug(fmt.Sprintf("Z3DbTzt %s complete", id))
 	repMd := repository.NewRepMd()
 	repOnLine, err := repository.NewRepZxZc()
 	if err != nil {
@@ -209,8 +209,8 @@ func (w *mdWorker) Z3DbTzt() {
 //门店：门店其他出库z3hpckdjt和z3hpckdjdt明细表
 func (w *mdWorker) Z3HpCkDjt() {
 	id := goToolCommon.Guid()
-	log.Info(fmt.Sprintf("Z3HpCkDjt %s start", id))
-	defer log.Info(fmt.Sprintf("Z3HpCkDjt %s complete", id))
+	log.Debug(fmt.Sprintf("Z3HpCkDjt %s start", id))
+	defer log.Debug(fmt.Sprintf("Z3HpCkDjt %s complete", id))
 	repMd := repository.NewRepMd()
 	repOnLine, err := repository.NewRepZxZc()
 	if err != nil {
@@ -257,8 +257,8 @@ func (w *mdWorker) Z3HpCkDjt() {
 //门店：门店其它入库z3hprkdjt和z3hprkdjdt明细表
 func (w *mdWorker) Z3HpRkDjt() {
 	id := goToolCommon.Guid()
-	log.Info(fmt.Sprintf("Z3HpRkDjt %s start", id))
-	defer log.Info(fmt.Sprintf("Z3HpRkDjt %s complete", id))
+	log.Debug(fmt.Sprintf("Z3HpRkDjt %s start", id))
+	defer log.Debug(fmt.Sprintf("Z3HpRkDjt %s complete", id))
 	repMd := repository.NewRepMd()
 	repOnLine, err := repository.NewRepZxZc()
 	if err != nil {
@@ -305,8 +305,8 @@ func (w *mdWorker) Z3HpRkDjt() {
 //门店：门店盘亏登记z3pkdjt和z3pkdjdt明细表
 func (w *mdWorker) Z3PkDjt() {
 	id := goToolCommon.Guid()
-	log.Info(fmt.Sprintf("Z3PkDjt %s start", id))
-	defer log.Info(fmt.Sprintf("Z3PkDjt %s complete", id))
+	log.Debug(fmt.Sprintf("Z3PkDjt %s start", id))
+	defer log.Debug(fmt.Sprintf("Z3PkDjt %s complete", id))
 	repMd := repository.NewRepMd()
 	repOnLine, err := repository.NewRepZxZc()
 	if err != nil {
@@ -352,7 +352,50 @@ func (w *mdWorker) Z3PkDjt() {
 
 //门店：门店配送收货调整z3pstzdt和z3pstzt
 func (w *mdWorker) Z3PsTzDt() {
-	log.Debug("Z3PsTzDt")
+	id := goToolCommon.Guid()
+	log.Debug(fmt.Sprintf("Z3PsTzDt %s start", id))
+	defer log.Debug(fmt.Sprintf("Z3PsTzDt %s complete", id))
+	repMd := repository.NewRepMd()
+	repOnLine, err := repository.NewRepZxZc()
+	if err != nil {
+		errMsg := fmt.Sprintf("Z3PsTzDt get rep online err: %s", err.Error())
+		log.Error(errMsg)
+		return
+	}
+	counter := 0
+	for {
+		rList, err := repMd.GetZ3MdPsTzDt()
+		if err != nil {
+			return
+		}
+		if rList == nil {
+			errMsg := fmt.Sprintf("Z3PsTzDt get data error: return list can not be nil")
+			log.Error(errMsg)
+			return
+		}
+		if len(rList) == 0 {
+			break
+		}
+		for _, d := range rList {
+			err = repOnLine.UpdateZ3MdPsTzDt(d)
+			if err != nil {
+				errMsg := fmt.Sprintf("update online Z3PsTzDt TzdMxHh[%s] err: %s", d.TzdMxHh, err.Error())
+				log.Error(errMsg)
+				return
+			}
+		}
+		err = repMd.DelZ3MdPsTzDtSy(rList[0].TzdLsh)
+		if err != nil {
+			errMsg := fmt.Sprintf("del md Z3PsTzDt PkdLsh[%s] err: %s", rList[0].TzdLsh, err.Error())
+			log.Error(errMsg)
+			return
+		}
+		counter = counter + 1
+		log.Debug(fmt.Sprintf("md Z3PsTzDt[%s] Updated ", rList[0].TzdLsh))
+	}
+	if counter > 0 {
+		log.Info(fmt.Sprintf("md Z3PsTzDt Update %d", counter))
+	}
 }
 
 //门店：门店提货单z3xsddthdt

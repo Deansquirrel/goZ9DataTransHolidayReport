@@ -164,6 +164,30 @@ const (
 		"			?,?,?,?,?, " +
 		"			?,?,?,?,?) " +
 		"	END"
+
+	sqlUpdateZ3MdPsTzDt = "" +
+		"IF EXISTS (SELECT * FROM [z3mdpstzdt] WHERE [tzdmxhh]=?) " +
+		"	BEGIN " +
+		"		UPDATE [z3mdpstzdt] " +
+		"		SET [tzdMxHh]=?,[tzdDjh]=?,[tzdLsh]=?,[tzdCkr]=?,[tzdShJgId]=?, " +
+		"			[tzdShCkId]=?,[tzdPsJgId]=?,[tzdPsCkId]=?,[tzdHpId]=?,[tzdDwId]=?, " +
+		"			[tzdHsl]=?,[tzdJmSl]=?,[tzdDhj]=?,[tzdPsj]=?,[tzdBz]=?, " +
+		"			[tzdShrId]=?,[tzdShSj]=? " +
+		"		WHERE [tzdmxhh]=? " +
+		"	END " +
+		"ELSE " +
+		"	BEGIN " +
+		"		INSERT INTO [z3mdpstzdt]( " +
+		"			[tzdMxHh],[tzdDjh],[tzdLsh],[tzdCkr],[tzdShJgId], " +
+		"			[tzdShCkId],[tzdPsJgId],[tzdPsCkId],[tzdHpId],[tzdDwId], " +
+		"			[tzdHsl],[tzdJmSl],[tzdDhj],[tzdPsj],[tzdBz], " +
+		"			[tzdShrId],[tzdShSj]) " +
+		"		VALUES ( " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?," +
+		"			?,?) " +
+		"	END"
 )
 
 type repZxZc struct {
@@ -286,4 +310,20 @@ func (r *repZxZc) UpdateZ3PkDjDt(d *object.Z3PkDjDt) error {
 		d.PkdMxHh, d.PkdDjh, d.PkdLsh, d.PkdYyr, d.PkdPdJgId,
 		d.PkdPdCkId, d.PkdHpId, d.PkdDwId, d.PkdHsl, d.PkdJmSl,
 		d.PkdLsj, d.PkdDhj, d.PkdBz, d.PkdShrId, d.PkdShSj)
+}
+
+//门店配送调整
+func (r *repZxZc) UpdateZ3MdPsTzDt(d *object.Z3MdPsTzDt) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL(r.dbConfig, sqlUpdateZ3MdPsTzDt,
+		d.TzdMxHh,
+		d.TzdMxHh, d.TzdDjh, d.TzdLsh, d.TzdCkr, d.TzdShJgId,
+		d.TzdShCkId, d.TzdPsJgId, d.TzdPsCkId, d.TzdHpId, d.TzdDwId,
+		d.TzdHsl, d.TzdJmSl, d.TzdDhj, d.TzdPsj, d.TzdBz,
+		d.TzdShrId, d.TzdShSj,
+		d.TzdMxHh,
+		d.TzdMxHh, d.TzdDjh, d.TzdLsh, d.TzdCkr, d.TzdShJgId,
+		d.TzdShCkId, d.TzdPsJgId, d.TzdPsCkId, d.TzdHpId, d.TzdDwId,
+		d.TzdHsl, d.TzdJmSl, d.TzdDhj, d.TzdPsj, d.TzdBz,
+		d.TzdShrId, d.TzdShSj)
 }

@@ -112,6 +112,18 @@ const (
 	sqlDelZ3PkDjDt = "" +
 		"delete from z3pkdjsyt " +
 		"where pkdlsh = ?"
+
+	sqlGetZ3MdPsTzDt = "" +
+		"declare @lsh varchar(255) " +
+		"select top 1 @lsh=tzdlsh from z3pstzsyt order by tzdlsh asc " +
+		"select a.tzdmxhh,b.tzdjh as tzddjh,b.tzlsh as tzdlsh,a.tzdckr,a.tzdshjgid, " +
+		"	a.tzdshckid,b.tzrkpsjgid as tzdpsjgid,b.tzrkpsckid as tzdpsckid,a.tzdhpid,a.tzddwid, " +
+		"	a.tzdhsl,a.tzdjmsl,a.tzddhj,a.tzdpsj,b.tzbz as tzdbz, " +
+		"	b.tzqrrid as tzdshrid,b.tzqrsj as tzdshsj " +
+		"from z3pstzdt a inner join z3pstzt b on left(a.tzdmxhh,12) = b.tzlsh and b.tzlsh = @lsh"
+	sqlDelZ3MdPsTzDtSy = "" +
+		"delete from z3pstzsyt " +
+		"where tzdlsh = ?"
 )
 
 type repMd struct {
@@ -530,4 +542,64 @@ func (r *repMd) GetZ3PkDjDt() ([]*object.Z3PkDjDt, error) {
 func (r *repMd) DelZ3PkDjDtSy(id string) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3PkDjDt, id)
+}
+
+//获取门店配送调整
+func (r *repMd) GetZ3MdPsTzDt() ([]*object.Z3MdPsTzDt, error) {
+	comm := NewCommon()
+	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3MdPsTzDt)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	var tzdMxHh, tzdDjh, tzdLsh, tzdBz string
+	var tzdCkr, tzdShSj time.Time
+	var tzdShrId, tzdShJgId, tzdShCkId, tzdPsJgId, tzdPsCkId, tzdHpId, tzdDwId int
+	var tzdHsl, tzdJmSl, tzdDhj, tzdPsj float64
+
+	rList := make([]*object.Z3MdPsTzDt, 0)
+	for rows.Next() {
+		err := rows.Scan(&tzdMxHh, &tzdDjh, &tzdLsh, &tzdCkr, &tzdShJgId,
+			&tzdShCkId, &tzdPsJgId, &tzdPsCkId, &tzdHpId, &tzdDwId,
+			&tzdHsl, &tzdJmSl, &tzdDhj, &tzdPsj, &tzdBz,
+			&tzdShrId, &tzdShSj)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3MdPsTzDt", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.Z3MdPsTzDt{
+			TzdMxHh:   tzdMxHh,
+			TzdDjh:    tzdDjh,
+			TzdLsh:    tzdLsh,
+			TzdCkr:    tzdCkr,
+			TzdShJgId: tzdShJgId,
+			TzdShCkId: tzdShCkId,
+			TzdPsJgId: tzdPsJgId,
+			TzdPsCkId: tzdPsCkId,
+			TzdHpId:   tzdHpId,
+			TzdDwId:   tzdDwId,
+			TzdHsl:    tzdHsl,
+			TzdJmSl:   tzdJmSl,
+			TzdDhj:    tzdDhj,
+			TzdPsj:    tzdPsj,
+			TzdBz:     tzdBz,
+			TzdShrId:  tzdShrId,
+			TzdShSj:   tzdShSj,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3MdPsTzDt", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+
+//删除门店配送调整
+func (r *repMd) DelZ3MdPsTzDtSy(id string) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3MdPsTzDtSy, id)
 }
