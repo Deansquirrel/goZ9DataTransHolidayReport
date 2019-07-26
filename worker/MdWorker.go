@@ -400,5 +400,48 @@ func (w *mdWorker) Z3PsTzDt() {
 
 //门店：门店提货单z3xsddthdt
 func (w *mdWorker) Z3XsDdThDt() {
-	log.Debug("Z3XsDdThDt")
+	id := goToolCommon.Guid()
+	log.Debug(fmt.Sprintf("Z3XsDdThDt %s start", id))
+	defer log.Debug(fmt.Sprintf("Z3XsDdThDt %s complete", id))
+	repMd := repository.NewRepMd()
+	repOnLine, err := repository.NewRepZxZc()
+	if err != nil {
+		errMsg := fmt.Sprintf("Z3XsDdThDt get rep online err: %s", err.Error())
+		log.Error(errMsg)
+		return
+	}
+	counter := 0
+	for {
+		rList, err := repMd.GetZ3XsDdThDt()
+		if err != nil {
+			return
+		}
+		if rList == nil {
+			errMsg := fmt.Sprintf("Z3XsDdThDt get data error: return list can not be nil")
+			log.Error(errMsg)
+			return
+		}
+		if len(rList) == 0 {
+			break
+		}
+		for _, d := range rList {
+			err = repOnLine.UpdateZ3XsDdThDt(d)
+			if err != nil {
+				errMsg := fmt.Sprintf("update online Z3XsDdThDt ThdMxHh[%s] err: %s", d.ThdMxHh, err.Error())
+				log.Error(errMsg)
+				return
+			}
+		}
+		err = repMd.DelZ3XsDdThDtSy(rList[0].ThdLsh)
+		if err != nil {
+			errMsg := fmt.Sprintf("del md Z3XsDdThDt ThdLsh[%s] err: %s", rList[0].ThdLsh, err.Error())
+			log.Error(errMsg)
+			return
+		}
+		counter = counter + 1
+		log.Debug(fmt.Sprintf("md Z3XsDdThDt[%s] Updated ", rList[0].ThdLsh))
+	}
+	if counter > 0 {
+		log.Info(fmt.Sprintf("md Z3XsDdThDt Update %d", counter))
+	}
 }

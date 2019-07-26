@@ -188,6 +188,33 @@ const (
 		"			?,?,?,?,?," +
 		"			?,?) " +
 		"	END"
+
+	sqlUpdateZ3XsDdThDt = "" +
+		"IF EXISTS (SELECT * FROM [z3xsddthdt] WHERE [thdmxhh]=?) " +
+		"	BEGIN " +
+		"		UPDATE [z3xsddthdt] " +
+		"		SET [ThdMxHh]=?,[ThdDjh]=?,[ThdDdLsh]=?,[ThdLsh]=?,[ThdDjLx]=?, " +
+		"			[ThdYyr]=?,[ThdJfMdId]=?,[ThdCkId]=?,[ThdKhPpid]=?,[ThPhBj]=?, " +
+		"			[ThKhId]=?,[ThdHpId]=?,[ThdDwId]=?,[ThdHsl]=?,[ThdDZxSl]=?, " +
+		"			[ThDdBqjXj]=?,[ThDdCjjXj]=?,[ThdJmSl]=?,[ThdBqjXj]=?,[ThdCjjXj]=?, " +
+		"			[ThZdrId]=?,[ThZdSj]=?,[ThBz]=? " +
+		"		WHERE [thdmxhh]=? " +
+		"	END " +
+		"ELSE " +
+		"	BEGIN " +
+		"		INSERT INTO [z3xsddthdt]( " +
+		"			[ThdMxHh],[ThdDjh],[ThdDdLsh],[ThdLsh],[ThdDjLx], " +
+		"			[ThdYyr],[ThdJfMdId],[ThdCkId],[ThdKhPpid],[ThPhBj], " +
+		"			[ThKhId],[ThdHpId],[ThdDwId],[ThdHsl],[ThdDZxSl], " +
+		"			[ThDdBqjXj],[ThDdCjjXj],[ThdJmSl],[ThdBqjXj],[ThdCjjXj], " +
+		"			[ThZdrId],[ThZdSj],[ThBz]) " +
+		"		VALUES ( " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?) " +
+		"	END"
 )
 
 type repZxZc struct {
@@ -326,4 +353,22 @@ func (r *repZxZc) UpdateZ3MdPsTzDt(d *object.Z3MdPsTzDt) error {
 		d.TzdShCkId, d.TzdPsJgId, d.TzdPsCkId, d.TzdHpId, d.TzdDwId,
 		d.TzdHsl, d.TzdJmSl, d.TzdDhj, d.TzdPsj, d.TzdBz,
 		d.TzdShrId, d.TzdShSj)
+}
+
+//提货货品明细
+func (r *repZxZc) UpdateZ3XsDdThDt(d *object.Z3XsDdThDt) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL(r.dbConfig, sqlUpdateZ3XsDdThDt,
+		d.ThdMxHh,
+		d.ThdMxHh, d.ThdDjh, d.ThdDdLsh, d.ThdLsh, d.ThdDjLx,
+		d.ThdYyr, d.ThdJfMdId, d.ThdCkId, d.ThdKhPpid, d.ThPhBj,
+		d.ThKhId, d.ThdHpId, d.ThdDwId, d.ThdHsl, d.ThdDZxSl,
+		d.ThDdBqjXj, d.ThDdCjjXj, d.ThdJmSl, d.ThdBqjXj, d.ThdCjjXj,
+		d.ThZdrId, d.ThZdSj, d.ThBz,
+		d.ThdMxHh,
+		d.ThdMxHh, d.ThdDjh, d.ThdDdLsh, d.ThdLsh, d.ThdDjLx,
+		d.ThdYyr, d.ThdJfMdId, d.ThdCkId, d.ThdKhPpid, d.ThPhBj,
+		d.ThKhId, d.ThdHpId, d.ThdDwId, d.ThdHsl, d.ThdDZxSl,
+		d.ThDdBqjXj, d.ThDdCjjXj, d.ThdJmSl, d.ThdBqjXj, d.ThdCjjXj,
+		d.ThZdrId, d.ThZdSj, d.ThBz)
 }

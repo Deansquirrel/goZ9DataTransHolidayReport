@@ -167,3 +167,30 @@ type Z3MdPsTzDt struct {
 	TzdShrId  int
 	TzdShSj   time.Time
 }
+
+//提货货品明细
+type Z3XsDdThDt struct {
+	ThdMxHh   string
+	ThdDjh    string
+	ThdDdLsh  string
+	ThdLsh    string
+	ThdDjLx   int
+	ThdYyr    time.Time
+	ThdJfMdId int
+	ThdCkId   int
+	ThdKhPpid int
+	ThPhBj    int
+	ThKhId    int
+	ThdHpId   int
+	ThdDwId   int
+	ThdHsl    float64
+	ThdDZxSl  float64
+	ThDdBqjXj float64
+	ThDdCjjXj float64
+	ThdJmSl   float64
+	ThdBqjXj  float64
+	ThdCjjXj  float64
+	ThZdrId   int
+	ThZdSj    time.Time
+	ThBz      string
+}

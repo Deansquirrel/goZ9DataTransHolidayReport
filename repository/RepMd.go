@@ -124,6 +124,21 @@ const (
 	sqlDelZ3MdPsTzDtSy = "" +
 		"delete from z3pstzsyt " +
 		"where tzdlsh = ?"
+
+	sqlGetZ3XsDdThDt = "" +
+		"declare @lsh varchar(255) " +
+		"select top 1 @lsh=thdlsh from z3xsddthsyt order by thdlsh asc " +
+		"select a.thdmxhh,b.thdjh as thddjh,b.thddlsh as thdddlsh,b.thlsh as thdlsh,a.thddjlx, " +
+		"	a.thdyyr,a.thdjfmdid,a.thdckid,a.thdkhppid,c.ddphbj as thphbj, " +
+		"	c.ddkhid as thkhid,a.thdhpid,a.thddwid,a.thdhsl,a.thddzxsl, " +
+		"	a.thddbqjxj,a.thddcjjxj,a.thdjmsl,a.thdbqjxj,a.thdcjjxj, " +
+		"	b.thzdrid,b.thzdsj,b.thbz " +
+		"from z3xsddthdt a " +
+		"inner join z3xsddtht b on left(a.thdmxhh,12) = b.thlsh and b.thlsh = @lsh " +
+		"inner join z3ddt c on c.ddlsh = b.thddlsh"
+	sqlDelZ3XsDdThDtSy = "" +
+		"delete from z3xsddthsyt " +
+		"where thdlsh = ?"
 )
 
 type repMd struct {
@@ -602,4 +617,70 @@ func (r *repMd) GetZ3MdPsTzDt() ([]*object.Z3MdPsTzDt, error) {
 func (r *repMd) DelZ3MdPsTzDtSy(id string) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3MdPsTzDtSy, id)
+}
+
+//获取提货货品明细
+func (r *repMd) GetZ3XsDdThDt() ([]*object.Z3XsDdThDt, error) {
+	comm := NewCommon()
+	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3XsDdThDt)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	var thdMxHh, thdDjh, thdDdLsh, thdLsh, thBz string
+	var thdDjLx, thdJfMdId, thdCkId, thdKhPpid, thPhBj, thKhId, thdHpId, thdDwId, thZdrId int
+	var thdYyr, thZdSj time.Time
+	var thdHsl, thdDZxSl, thDdBqjXj, thDdCjjXj, thdJmSl, thdBqjXj, thdCjjXj float64
+	rList := make([]*object.Z3XsDdThDt, 0)
+	for rows.Next() {
+		err := rows.Scan(&thdMxHh, &thdDjh, &thdDdLsh, &thdLsh, &thdDjLx,
+			&thdYyr, &thdJfMdId, &thdCkId, &thdKhPpid, &thPhBj,
+			&thKhId, &thdHpId, &thdDwId, &thdHsl, &thdDZxSl,
+			&thDdBqjXj, &thDdCjjXj, &thdJmSl, &thdBqjXj, &thdCjjXj,
+			&thZdrId, &thZdSj, &thBz)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3XsDdThDt", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.Z3XsDdThDt{
+			ThdMxHh:   thdMxHh,
+			ThdDjh:    thdDjh,
+			ThdDdLsh:  thdDdLsh,
+			ThdLsh:    thdLsh,
+			ThdDjLx:   thdDjLx,
+			ThdYyr:    thdYyr,
+			ThdJfMdId: thdJfMdId,
+			ThdCkId:   thdCkId,
+			ThdKhPpid: thdKhPpid,
+			ThPhBj:    thPhBj,
+			ThKhId:    thKhId,
+			ThdHpId:   thdHpId,
+			ThdDwId:   thdDwId,
+			ThdHsl:    thdHsl,
+			ThdDZxSl:  thdDZxSl,
+			ThDdBqjXj: thDdBqjXj,
+			ThDdCjjXj: thDdCjjXj,
+			ThdJmSl:   thdJmSl,
+			ThdBqjXj:  thdBqjXj,
+			ThdCjjXj:  thdCjjXj,
+			ThZdrId:   thZdrId,
+			ThZdSj:    thZdSj,
+			ThBz:      thBz,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3XsDdThDt", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+
+//删除提货货品明细
+func (r *repMd) DelZ3XsDdThDtSy(id string) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3XsDdThDtSy, id)
 }
