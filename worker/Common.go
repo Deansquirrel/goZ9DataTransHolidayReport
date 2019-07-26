@@ -99,7 +99,24 @@ func (c *common) refreshLocalDbConfig() error {
 	global.SysConfig.LocalDb.Port = dbConfig.Port
 	global.SysConfig.LocalDb.User = dbConfig.User
 	global.SysConfig.LocalDb.Pwd = dbConfig.Pwd
-	global.SysConfig.LocalDb.DbName = accList[0]
+
+	if global.SysConfig.LocalDb.DbName != "" {
+		flag := false
+		for _, acc := range accList {
+			if acc == global.SysConfig.LocalDb.DbName {
+				log.Debug(acc)
+				flag = true
+				break
+			}
+		}
+		if !flag {
+			log.Warn(fmt.Sprintf("db [%s] is not a effective acc", global.SysConfig.LocalDb.DbName))
+			global.SysConfig.LocalDb.DbName = ""
+		}
+	}
+	if global.SysConfig.LocalDb.DbName == "" {
+		global.SysConfig.LocalDb.DbName = accList[0]
+	}
 	return nil
 }
 
