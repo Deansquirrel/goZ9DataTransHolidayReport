@@ -298,7 +298,7 @@ func (r *repZxZc) UpdateMdZ3MdDbTzDt(d *object.Z3MdDbTzDt) error {
 }
 
 //货品出库登记
-func (r *repZxZc) UpdateZ3HpCkDjDt(d *object.Z3HpCkDjDt) error {
+func (r *repZxZc) UpdateMdZ3HpCkDjDt(d *object.Z3HpCkDjDt) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL(r.dbConfig, sqlUpdateZ3HpCkDjDt,
 		d.CkdMxHh,
@@ -312,7 +312,7 @@ func (r *repZxZc) UpdateZ3HpCkDjDt(d *object.Z3HpCkDjDt) error {
 }
 
 //货品入库登记
-func (r *repZxZc) UpdateZ3HpRkDjDt(d *object.Z3HpRkDjDt) error {
+func (r *repZxZc) UpdateMdZ3HpRkDjDt(d *object.Z3HpRkDjDt) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL(r.dbConfig, sqoUpdateZ3HpRkDjDt,
 		d.RkdMxHh,
@@ -326,7 +326,7 @@ func (r *repZxZc) UpdateZ3HpRkDjDt(d *object.Z3HpRkDjDt) error {
 }
 
 //盘亏登记
-func (r *repZxZc) UpdateZ3PkDjDt(d *object.Z3PkDjDt) error {
+func (r *repZxZc) UpdateMdZ3PkDjDt(d *object.Z3PkDjDt) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL(r.dbConfig, sqlUpdateZ3PkDjDt,
 		d.PkdMxHh,
@@ -340,7 +340,7 @@ func (r *repZxZc) UpdateZ3PkDjDt(d *object.Z3PkDjDt) error {
 }
 
 //门店配送调整
-func (r *repZxZc) UpdateZ3MdPsTzDt(d *object.Z3MdPsTzDt) error {
+func (r *repZxZc) UpdateMdZ3MdPsTzDt(d *object.Z3MdPsTzDt) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL(r.dbConfig, sqlUpdateZ3MdPsTzDt,
 		d.TzdMxHh,
@@ -356,7 +356,7 @@ func (r *repZxZc) UpdateZ3MdPsTzDt(d *object.Z3MdPsTzDt) error {
 }
 
 //提货货品明细
-func (r *repZxZc) UpdateZ3XsDdThDt(d *object.Z3XsDdThDt) error {
+func (r *repZxZc) UpdateMdZ3XsDdThDt(d *object.Z3XsDdThDt) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL(r.dbConfig, sqlUpdateZ3XsDdThDt,
 		d.ThdMxHh,

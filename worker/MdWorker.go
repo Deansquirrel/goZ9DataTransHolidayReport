@@ -233,7 +233,7 @@ func (w *mdWorker) Z3HpCkDjt() {
 			break
 		}
 		for _, d := range rList {
-			err = repOnLine.UpdateZ3HpCkDjDt(d)
+			err = repOnLine.UpdateMdZ3HpCkDjDt(d)
 			if err != nil {
 				errMsg := fmt.Sprintf("update online Z3HpCkDjt CkdMxHh[%s] err: %s", d.CkdMxHh, err.Error())
 				log.Error(errMsg)
@@ -281,7 +281,7 @@ func (w *mdWorker) Z3HpRkDjt() {
 			break
 		}
 		for _, d := range rList {
-			err = repOnLine.UpdateZ3HpRkDjDt(d)
+			err = repOnLine.UpdateMdZ3HpRkDjDt(d)
 			if err != nil {
 				errMsg := fmt.Sprintf("update online Z3HpRkDjt RkdMxHh[%s] err: %s", d.RkdMxHh, err.Error())
 				log.Error(errMsg)
@@ -329,7 +329,7 @@ func (w *mdWorker) Z3PkDjt() {
 			break
 		}
 		for _, d := range rList {
-			err = repOnLine.UpdateZ3PkDjDt(d)
+			err = repOnLine.UpdateMdZ3PkDjDt(d)
 			if err != nil {
 				errMsg := fmt.Sprintf("update online Z3PkDjt PkdMxHh[%s] err: %s", d.PkdMxHh, err.Error())
 				log.Error(errMsg)
@@ -377,7 +377,7 @@ func (w *mdWorker) Z3PsTzDt() {
 			break
 		}
 		for _, d := range rList {
-			err = repOnLine.UpdateZ3MdPsTzDt(d)
+			err = repOnLine.UpdateMdZ3MdPsTzDt(d)
 			if err != nil {
 				errMsg := fmt.Sprintf("update online Z3PsTzDt TzdMxHh[%s] err: %s", d.TzdMxHh, err.Error())
 				log.Error(errMsg)
@@ -425,7 +425,7 @@ func (w *mdWorker) Z3XsDdThDt() {
 			break
 		}
 		for _, d := range rList {
-			err = repOnLine.UpdateZ3XsDdThDt(d)
+			err = repOnLine.UpdateMdZ3XsDdThDt(d)
 			if err != nil {
 				errMsg := fmt.Sprintf("update online Z3XsDdThDt ThdMxHh[%s] err: %s", d.ThdMxHh, err.Error())
 				log.Error(errMsg)
