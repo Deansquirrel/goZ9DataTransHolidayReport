@@ -264,4 +264,14 @@ type Z3HpDwFja struct {
 	DwFjIsForbidden int
 }
 
+//计量单位设置（A）
+type Z3JlDwa struct {
+	DwId          int
+	DwSzMc        string
+	DwGlMc        string
+	DwSym         string
+	DwPym         string
+	DwIsForbidden int
+}
+
 //==============================================================================================

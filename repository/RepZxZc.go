@@ -258,6 +258,22 @@ const (
 	sqlDelZ3HpDwFja = "" +
 		"delete from [z3hpdwfja] " +
 		"where [dwfjhpid]=? and [dwfjdwid] = ?"
+
+	sqlUpdateZ3JlDwa = "" +
+		"IF EXISTS (SELECT * FROM [z3jldwa] WHERE [dwid]=?) " +
+		"	BEGIN " +
+		"		UPDATE [z3jldwa] " +
+		"		SET [dwid]=?,[dwszmc]=?,[dwglmc]=?,[dwsym]=?,[dwpym]=?,[dwisforbidden]=? " +
+		"		WHERE [dwid]=? " +
+		"	END " +
+		"ELSE " +
+		"	BEGIN " +
+		"		INSERT INTO [z3jldwa]([dwid],[dwszmc],[dwglmc],[dwsym],[dwpym],[dwisforbidden]) " +
+		"		VALUES (?,?,?,?,?,?) " +
+		"	END"
+	sqlDelZ3JlDwa = "" +
+		"delete from [z3jldwa] " +
+		"where [dwid]=?"
 )
 
 type repZxZc struct {
@@ -452,6 +468,20 @@ func (r *repZxZc) UpdateZ3HpDwFja(d *object.Z3HpDwFja) error {
 func (r *repZxZc) DelZ3HpDwFja(hpId, dwId int) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL(r.dbConfig, sqlDelZ3HpDwFja, hpId, dwId)
+}
+
+//计量单位设置
+func (r *repZxZc) UpdateZ3JlDwa(d *object.Z3JlDwa) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL(r.dbConfig, sqlUpdateZ3JlDwa,
+		d.DwId,
+		d.DwId, d.DwSzMc, d.DwGlMc, d.DwSym, d.DwPym, d.DwIsForbidden,
+		d.DwId,
+		d.DwId, d.DwSzMc, d.DwGlMc, d.DwSym, d.DwPym, d.DwIsForbidden)
+}
+func (r *repZxZc) DelZ3JlDwa(id int64) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL(r.dbConfig, sqlDelZ3JlDwa, id)
 }
 
 //==============================================================================================

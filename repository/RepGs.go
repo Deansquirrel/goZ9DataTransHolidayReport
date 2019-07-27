@@ -34,6 +34,17 @@ const (
 	sqlDelZ3HpDwFjaSy = "" +
 		"delete from [z3hpdwfjsyt] " +
 		"where [dwfjhpid] = ? and [dwfjdwid] = ?"
+
+	sqlGetZ3JlDwaSy = "" +
+		"select top 1 [dwid] " +
+		"from [z3jldwsyt]"
+	sqlGetZ3JlDwa = "" +
+		"select [dwid],[dwszmc],[dwglmc],[dwsym],[dwpym],[dwisforbidden] " +
+		"from [z3jldwa] " +
+		"where [dwid] = ?"
+	sqlDelZ3JlDwaSy = "" +
+		"delete from [z3jldwsyt] " +
+		"where [dwid] = ?"
 )
 
 type repGs struct {
@@ -168,7 +179,7 @@ func (r *repGs) GetZ3HpDwFjaSy() ([]*object.Z3HpDwFjSyt, error) {
 }
 
 //获取货品计量单位附加表
-func (r repGs) GetZ3HpDwFja(sy *object.Z3HpDwFjSyt) ([]*object.Z3HpDwFja, error) {
+func (r *repGs) GetZ3HpDwFja(sy *object.Z3HpDwFjSyt) ([]*object.Z3HpDwFja, error) {
 	comm := NewCommon()
 	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HpDwFja, sy.DwFjHpId, sy.DwFjDwId)
 	if err != nil {
@@ -209,4 +220,77 @@ func (r repGs) GetZ3HpDwFja(sy *object.Z3HpDwFjSyt) ([]*object.Z3HpDwFja, error)
 func (r *repGs) DelZ3HpDwFjaSy(sy *object.Z3HpDwFjSyt) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HpDwFjaSy, sy.DwFjHpId, sy.DwFjDwId)
+}
+
+//获取计量单位设置索引
+func (r *repGs) GetZ3JlDwaSy() ([]int64, error) {
+	comm := NewCommon()
+	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3JlDwaSy)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	rList := make([]int64, 0)
+	for rows.Next() {
+		var id int64
+		err := rows.Scan(&id)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3JlDwaSy", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, id)
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3JlDwaSy", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+
+//获取计量单位设置
+func (r *repGs) GetZ3JlDwa(id int64) ([]*object.Z3JlDwa, error) {
+	comm := NewCommon()
+	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3JlDwa, id)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	var dwId, dwIsForbidden int
+	var dwSzMc, dwGlMc, dwSym, dwPym string
+
+	rList := make([]*object.Z3JlDwa, 0)
+	for rows.Next() {
+		err := rows.Scan(&dwId, &dwSzMc, &dwGlMc, &dwSym, &dwPym, &dwIsForbidden)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3JlDwa", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.Z3JlDwa{
+			DwId:          dwId,
+			DwSzMc:        dwSzMc,
+			DwGlMc:        dwGlMc,
+			DwSym:         dwSym,
+			DwPym:         dwPym,
+			DwIsForbidden: dwIsForbidden,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3JlDwa", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+
+//删除计量单位设置索引
+func (r *repGs) DelZ3JlDwaSy(id int64) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3JlDwaSy, id)
 }

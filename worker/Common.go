@@ -189,4 +189,5 @@ func (c *common) addGsWorker() {
 	worker := NewGsWorker()
 	c.addWorker("Z3Hpa", worker.Z3Hpa)
 	c.addWorker("Z3HpDwFja", worker.Z3HpDwFja)
+	c.addWorker("Z3JlDwa", worker.Z3JlDwa)
 }
