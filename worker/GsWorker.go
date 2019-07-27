@@ -46,6 +46,11 @@ func (w *gsWorker) Z3Hpa() {
 			if err != nil {
 				return
 			}
+			if dList == nil {
+				errMsg := fmt.Sprintf("Z3Hpa get data error: return list can not be nil")
+				log.Error(errMsg)
+				return
+			}
 			if len(dList) > 0 {
 				for _, d := range dList {
 					err := repOnLine.UpdateZ3Hpa(d)
@@ -61,7 +66,6 @@ func (w *gsWorker) Z3Hpa() {
 				}
 				dCounter = dCounter + 1
 			}
-
 			err = repGs.DelZ3HpaSy(id)
 			if err != nil {
 				return
@@ -74,7 +78,70 @@ func (w *gsWorker) Z3Hpa() {
 	}
 }
 
-//公司货品表
+//货品计量单位附加表
+func (w *gsWorker) Z3HpDwFja() {
+	id := goToolCommon.Guid()
+	log.Debug(fmt.Sprintf("Z3HpDwFja %s start", id))
+	defer log.Debug(fmt.Sprintf("Z3HpDwFja %s complete", id))
+	repGs := repository.NewRepGs()
+	repOnLine, err := repository.NewRepZxZc()
+	if err != nil {
+		errMsg := fmt.Sprintf("Z3HpDwFja get rep online err: %s", err.Error())
+		log.Error(errMsg)
+		return
+	}
+	uCounter := 0
+	dCounter := 0
+	for {
+		rList, err := repGs.GetZ3HpDwFjaSy()
+		if err != nil {
+			return
+		}
+		if rList == nil {
+			errMsg := fmt.Sprintf("Z3HpDwFja get sy error: return list can not be nil")
+			log.Error(errMsg)
+			return
+		}
+		if len(rList) == 0 {
+			break
+		}
+		for _, id := range rList {
+			dList, err := repGs.GetZ3HpDwFja(id)
+			if err != nil {
+				return
+			}
+			if dList == nil {
+				errMsg := fmt.Sprintf("Z3HpDwFja get data error: return list can not be nil")
+				log.Error(errMsg)
+				return
+			}
+			if len(dList) > 0 {
+				for _, d := range dList {
+					err := repOnLine.UpdateZ3HpDwFja(d)
+					if err != nil {
+						return
+					}
+				}
+				uCounter = uCounter + 1
+			} else {
+				err := repOnLine.DelZ3HpDwFja(id.DwFjHpId, id.DwFjDwId)
+				if err != nil {
+					return
+				}
+				dCounter = dCounter + 1
+			}
+			err = repGs.DelZ3HpDwFjaSy(id)
+			if err != nil {
+				return
+			}
+			log.Debug(fmt.Sprintf("gs Z3HpDwFja[%d_%d] Update", id.DwFjHpId, id.DwFjDwId))
+		}
+	}
+	if uCounter > 0 {
+		log.Info(fmt.Sprintf("gs Z3HpDwFja Update %d,Del %d,Total %d", uCounter, dCounter, uCounter+dCounter))
+	}
+}
+
 //货品计量单位附加表
 //计量单位设置（A）
 //货品二级分类t

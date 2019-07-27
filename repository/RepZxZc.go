@@ -242,6 +242,22 @@ const (
 	sqlDelZ3Hpa = "" +
 		"delete from [z3hpa] " +
 		"where [hpid] = ?"
+
+	sqlUpdateZ3HpDwFja = "" +
+		"IF EXISTS (SELECT * FROM [z3hpdwfja] WHERE [dwfjhpid]=? and [dwfjdwid] = ?) " +
+		"	BEGIN " +
+		"		UPDATE [z3hpdwfja] " +
+		"		SET [dwfjhpid]=?,[dwfjdwid]=?,[dwfjdwlx]=?,[dwfjhsl]=?,[dwfjtxm]=?,[dwfjisforbidden]=? " +
+		"		WHERE [dwfjhpid]=? and [dwfjdwid] = ? " +
+		"	END " +
+		"ELSE " +
+		"	BEGIN " +
+		"		INSERT INTO [z3hpdwfja]([dwfjhpid],[dwfjdwid],[dwfjdwlx],[dwfjhsl],[dwfjtxm],[dwfjisforbidden]) " +
+		"		VALUES (?,?,?,?,?,?) " +
+		"	END"
+	sqlDelZ3HpDwFja = "" +
+		"delete from [z3hpdwfja] " +
+		"where [dwfjhpid]=? and [dwfjdwid] = ?"
 )
 
 type repZxZc struct {
@@ -422,6 +438,20 @@ func (r *repZxZc) UpdateZ3Hpa(d *object.Z3Hpa) error {
 func (r *repZxZc) DelZ3Hpa(id int64) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL(r.dbConfig, sqlDelZ3Hpa, id)
+}
+
+//货品计量单位附加表
+func (r *repZxZc) UpdateZ3HpDwFja(d *object.Z3HpDwFja) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL(r.dbConfig, sqlUpdateZ3HpDwFja,
+		d.DwFjHpId, d.DwFjDwId,
+		d.DwFjHpId, d.DwFjDwId, d.DwFjDwLx, d.DwFjHsl, d.DwFjTxm, d.DwFjIsForbidden,
+		d.DwFjHpId, d.DwFjDwId,
+		d.DwFjHpId, d.DwFjDwId, d.DwFjDwLx, d.DwFjHsl, d.DwFjTxm, d.DwFjIsForbidden)
+}
+func (r *repZxZc) DelZ3HpDwFja(hpId, dwId int) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL(r.dbConfig, sqlDelZ3HpDwFja, hpId, dwId)
 }
 
 //==============================================================================================

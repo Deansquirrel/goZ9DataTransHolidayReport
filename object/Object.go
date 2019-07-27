@@ -248,4 +248,20 @@ type Z3Hpa struct {
 	HpDgHp        int
 }
 
+//货品计量单位附加表索引
+type Z3HpDwFjSyt struct {
+	DwFjHpId int
+	DwFjDwId int
+}
+
+//货品计量单位附加表
+type Z3HpDwFja struct {
+	DwFjHpId        int
+	DwFjDwId        int
+	DwFjDwLx        int
+	DwFjHsl         float64
+	DwFjTxm         string
+	DwFjIsForbidden int
+}
+
 //==============================================================================================
