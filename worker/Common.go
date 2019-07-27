@@ -136,6 +136,8 @@ func (c *common) StartService(sType object.RunMode) {
 		c.addMdWorker()
 	case object.RunModeGc:
 		c.addWlWorker()
+	case object.RunModeGs:
+		c.addGsWorker()
 	default:
 		log.Warn(fmt.Sprintf("unknown runmode %v", sType))
 		global.Cancel()
@@ -180,4 +182,10 @@ func (c *common) addWlWorker() {
 	c.addWorker("Z3MdDhDt", worker.Z3MdDhDt)
 	c.addWorker("Z3MdDhDtMd", worker.Z3MdDhDtMd)
 	c.addWorker("OodXv1DdShCkt", worker.OodXv1DdShCkt)
+}
+
+func (c *common) addGsWorker() {
+	log.Debug("add gs worker")
+	worker := NewGsWorker()
+	c.addWorker("Z3Hpa", worker.Z3Hpa)
 }

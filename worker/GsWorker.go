@@ -1,10 +1,77 @@
 package worker
 
+import (
+	"fmt"
+	"github.com/Deansquirrel/goToolCommon"
+	log "github.com/Deansquirrel/goToolLog"
+	"github.com/Deansquirrel/goZ9DataTransHolidayReport/repository"
+)
+
 type gsWorker struct {
 }
 
 func NewGsWorker() *gsWorker {
 	return &gsWorker{}
+}
+
+//集团通用货品设置A
+func (w *gsWorker) Z3Hpa() {
+	id := goToolCommon.Guid()
+	log.Debug(fmt.Sprintf("Z3Hpa %s start", id))
+	defer log.Debug(fmt.Sprintf("Z3Hpa %s complete", id))
+	repGs := repository.NewRepGs()
+	repOnLine, err := repository.NewRepZxZc()
+	if err != nil {
+		errMsg := fmt.Sprintf("Z3Hpa get rep online err: %s", err.Error())
+		log.Error(errMsg)
+		return
+	}
+	uCounter := 0
+	dCounter := 0
+	for {
+		rList, err := repGs.GetZ3HpaSy()
+		if err != nil {
+			return
+		}
+		if rList == nil {
+			errMsg := fmt.Sprintf("Z3Hpa get sy error: return list can not be nil")
+			log.Error(errMsg)
+			return
+		}
+		if len(rList) == 0 {
+			break
+		}
+		for _, id := range rList {
+			dList, err := repGs.GetZ3Hpa(id)
+			if err != nil {
+				return
+			}
+			if len(dList) > 0 {
+				for _, d := range dList {
+					err := repOnLine.UpdateZ3Hpa(d)
+					if err != nil {
+						return
+					}
+				}
+				uCounter = uCounter + 1
+			} else {
+				err := repOnLine.DelZ3Hpa(id)
+				if err != nil {
+					return
+				}
+				dCounter = dCounter + 1
+			}
+
+			err = repGs.DelZ3HpaSy(id)
+			if err != nil {
+				return
+			}
+			log.Debug(fmt.Sprintf("gs Z3Hpa[%d] Update", id))
+		}
+	}
+	if uCounter > 0 {
+		log.Info(fmt.Sprintf("gs Z3Hpa Update %d,Del %d,Total %d", uCounter, dCounter, uCounter+dCounter))
+	}
 }
 
 //公司货品表

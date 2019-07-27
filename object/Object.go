@@ -225,4 +225,27 @@ type Z3PsCkHpDt struct {
 
 //==============================================================================================
 
+//集团通用货品设置A
+type Z3Hpa struct {
+	HpId          int
+	HpBm          string
+	HpSzMc        string
+	HpPpId        int
+	HpSym         string
+	HpPym         string
+	HpZxDwId      int
+	HpZxDwMc      string
+	HpEjFlId      int
+	HpMdSzBj      int
+	HpdDkhDhHpBj  int
+	HpWdDhHpBj    int
+	HpMs          string
+	HpZyNj        int
+	HpIsForbidden int
+	HpSzId        int
+	HpNsFlm       string
+	HpJrHp        int
+	HpDgHp        int
+}
+
 //==============================================================================================

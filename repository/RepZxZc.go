@@ -215,6 +215,33 @@ const (
 		"			?,?,?,?,?, " +
 		"			?,?,?) " +
 		"	END"
+
+	sqlUpdateZ3Hpa = "" +
+		"IF EXISTS (SELECT * FROM [z3hpa] WHERE [hpid]=?) " +
+		"	BEGIN " +
+		"		UPDATE [z3hpa] " +
+		"		SET [hpid]=?,[hpbm]=?,[hpszmc]=?,[hpppid]=?,[hpsym]=?, " +
+		"			[hppym]=?,[hpzxdwid]=?,[hpzxdwmc]=?,[hpejflid]=?,[hpmdszbj]=?, " +
+		"			[hpdkhdhhpbj]=?,[hpwddhhpbj]=?,[hpms]=?,[hpzybj]=?,[hpisforbidden]=?, " +
+		"			[hpszid]=?,[hpnsflm]=?,[hpjrhp]=?,[hpdghp]=? " +
+		"		WHERE [hpid]=? " +
+		"	END " +
+		"ELSE " +
+		"	BEGIN " +
+		"		INSERT INTO [z3hpa]( " +
+		"			[hpid],[hpbm],[hpszmc],[hpppid],[hpsym]," +
+		" 			[hppym],[hpzxdwid],[hpzxdwmc],[hpejflid],[hpmdszbj], " +
+		"			[hpdkhdhhpbj],[hpwddhhpbj],[hpms],[hpzybj],[hpisforbidden], " +
+		"			[hpszid],[hpnsflm],[hpjrhp],[hpdghp]) " +
+		"		VALUES ( " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?) " +
+		"	END"
+	sqlDelZ3Hpa = "" +
+		"delete from [z3hpa] " +
+		"where [hpid] = ?"
 )
 
 type repZxZc struct {
@@ -231,6 +258,8 @@ func NewRepZxZc() (*repZxZc, error) {
 		dbConfig: dbConfig,
 	}, nil
 }
+
+//==============================================================================================
 
 //销售出库货品明细
 func (r *repZxZc) UpdateMdZ3XsCkDt(d *object.Z3XsCkDt) error {
@@ -372,3 +401,27 @@ func (r *repZxZc) UpdateMdZ3XsDdThDt(d *object.Z3XsDdThDt) error {
 		d.ThDdBqjXj, d.ThDdCjjXj, d.ThdJmSl, d.ThdBqjXj, d.ThdCjjXj,
 		d.ThZdrId, d.ThZdSj, d.ThBz)
 }
+
+//==============================================================================================
+
+//集团通用货品设置A
+func (r *repZxZc) UpdateZ3Hpa(d *object.Z3Hpa) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL(r.dbConfig, sqlUpdateZ3Hpa,
+		d.HpId,
+		d.HpId, d.HpBm, d.HpSzMc, d.HpPpId, d.HpSym,
+		d.HpPym, d.HpZxDwId, d.HpZxDwMc, d.HpEjFlId, d.HpMdSzBj,
+		d.HpdDkhDhHpBj, d.HpWdDhHpBj, d.HpMs, d.HpZyNj, d.HpIsForbidden,
+		d.HpSzId, d.HpNsFlm, d.HpJrHp, d.HpDgHp,
+		d.HpId,
+		d.HpId, d.HpBm, d.HpSzMc, d.HpPpId, d.HpSym,
+		d.HpPym, d.HpZxDwId, d.HpZxDwMc, d.HpEjFlId, d.HpMdSzBj,
+		d.HpdDkhDhHpBj, d.HpWdDhHpBj, d.HpMs, d.HpZyNj, d.HpIsForbidden,
+		d.HpSzId, d.HpNsFlm, d.HpJrHp, d.HpDgHp)
+}
+func (r *repZxZc) DelZ3Hpa(id int64) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL(r.dbConfig, sqlDelZ3Hpa, id)
+}
+
+//==============================================================================================
