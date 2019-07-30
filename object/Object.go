@@ -285,4 +285,25 @@ type Z3HpEjFlt struct {
 	EjFlHpYjFlId int
 }
 
+//客户登记通用信息表
+type Z3KhDja struct {
+	KhId          int
+	KhSzMc        string
+	KhQc          string
+	KhBm          string
+	KhNbYgBj      int
+	KhXb          int
+	KhPym         string
+	KhJb          int
+	KhSjHm        string
+	KhQtLsFs      int
+	KhKHyt        int
+	KhRcXyj       int
+	KhRcXyjSyDd   int
+	KhrRcYh       float64
+	KhFlId        int
+	KhLsZz        string
+	KhIsForbidden int
+}
+
 //==============================================================================================

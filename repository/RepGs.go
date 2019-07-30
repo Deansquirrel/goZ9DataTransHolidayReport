@@ -57,6 +57,20 @@ const (
 	sqlDelZ3HpEjFltSy = "" +
 		"delete from [z3hpejflsyt] " +
 		"where [ejflid] = ?"
+
+	sqlGetZ3KhDjaSy = "" +
+		"select top 1 [khid] " +
+		"from [z3khdjsyt]"
+	sqlGetZ3KhDja = "" +
+		"select [khid],[khszmc],[khqc],[khbm],[khnbygbj], " +
+		"	[khxb],[khpym],[khjb],[khsjhm],[khqtlsfs], " +
+		"	[khkhyt],[khrcxyj],[khrcxyjsydd],[khrcyh],[khflid], " +
+		"	[khlszz],[khisforbidden] " +
+		"from [z3khdja] " +
+		"where [khid] = ?"
+	sqlDelZ3KhDjaSy = "" +
+		"delete from [z3khdjsyt] " +
+		"where [khid] = ?"
 )
 
 type repGs struct {
@@ -380,4 +394,92 @@ func (r *repGs) GetZ3HpEjFlt(id int64) ([]*object.Z3HpEjFlt, error) {
 func (r *repGs) DelZ3HpEjFltSy(id int64) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HpEjFltSy, id)
+}
+
+//获取客户登记通用信息表索引
+func (r *repGs) GetZ3KhDjaSy() ([]int64, error) {
+	comm := NewCommon()
+	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3KhDjaSy)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	rList := make([]int64, 0)
+	for rows.Next() {
+		var id int64
+		err := rows.Scan(&id)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3KhDjaSy", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, id)
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3KhDjaSy", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+
+//获取客户登记通用信息表
+func (r *repGs) GetZ3KhDja(id int64) ([]*object.Z3KhDja, error) {
+	comm := NewCommon()
+	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3KhDja, id)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	var khId, khNbYgBj, khXb, khJb, khQtLsFs, khKHyt, khRcXyj, khRcXyjSyDd, khFlId, khIsForbidden int
+	var khSzMc, khQc, khBm, khPym, khSjHm, khLsZz string
+	var khrRcYh float64
+
+	rList := make([]*object.Z3KhDja, 0)
+	for rows.Next() {
+		err := rows.Scan(&khId, &khSzMc, &khQc, &khBm, &khNbYgBj,
+			&khXb, &khPym, &khJb, &khSjHm, &khQtLsFs,
+			&khKHyt, &khRcXyj, &khRcXyjSyDd, &khrRcYh, &khFlId,
+			&khLsZz, &khIsForbidden)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3KhDja", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.Z3KhDja{
+			KhId:          khId,
+			KhSzMc:        khSzMc,
+			KhQc:          khQc,
+			KhBm:          khBm,
+			KhNbYgBj:      khNbYgBj,
+			KhXb:          khXb,
+			KhPym:         khPym,
+			KhJb:          khJb,
+			KhSjHm:        khSjHm,
+			KhQtLsFs:      khQtLsFs,
+			KhKHyt:        khKHyt,
+			KhRcXyj:       khRcXyj,
+			KhRcXyjSyDd:   khRcXyjSyDd,
+			KhrRcYh:       khrRcYh,
+			KhFlId:        khFlId,
+			KhLsZz:        khLsZz,
+			KhIsForbidden: khIsForbidden,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3KhDja", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+
+//删除客户登记通用信息表索引
+func (r *repGs) DelZ3KhDjaSy(id int64) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3KhDjaSy, id)
 }

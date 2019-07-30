@@ -295,6 +295,34 @@ const (
 	sqlDelZ3HpEjFlt = "" +
 		"delete from [z3hpejflt] " +
 		"where [ejflid]=?"
+
+	sqlUpdateZ3KhDja = "" +
+		"IF EXISTS (SELECT * FROM [z3khdja] WHERE [khid]=?) " +
+		"	BEGIN " +
+		"		UPDATE [z3khdja] " +
+		"		SET [khid]=?,[khszmc]=?,[khqc]=?,[khbm]=?,[khnbygbj]=?, " +
+		"			[khxb]=?,[khpym]=?,[khjb]=?,[khsjhm]=?,[khqtlsfs]=?, " +
+		"			[khkhyt]=?,[khrcxyj]=?,[khrcxyjsydd]=?,[khrcyh]=?,[khflid]=?, " +
+		"			[khlszz]=?,[khisforbidden]=? " +
+		"		WHERE [khid]=? " +
+		"	END " +
+		"ELSE " +
+		"	BEGIN " +
+		"		INSERT INTO [z3khdja]( " +
+		"			[khid],[khszmc],[khqc],[khbm],[khnbygbj], " +
+		"			[khxb],[khpym],[khjb],[khsjhm],[khqtlsfs], " +
+		"			[khkhyt],[khrcxyj],[khrcxyjsydd],[khrcyh],[khflid]," +
+		"			[khlszz],[khisforbidden]) " +
+		"		VALUES ( " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?) " +
+		"	END"
+
+	sqlDelZ3KhDja = "" +
+		"delete from [z3khdja] " +
+		"where [khid]=?"
 )
 
 type repZxZc struct {
@@ -519,6 +547,26 @@ func (r *repZxZc) UpdateZ3HpEjFlt(d *object.Z3HpEjFlt) error {
 func (r *repZxZc) DelZ3HpEjFlt(id int64) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL(r.dbConfig, sqlDelZ3HpEjFlt, id)
+}
+
+//客户登记通用信息表
+func (r *repZxZc) UpdateZ3KhDja(d *object.Z3KhDja) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL(r.dbConfig, sqlUpdateZ3KhDja,
+		d.KhId,
+		d.KhId, d.KhSzMc, d.KhQc, d.KhBm, d.KhNbYgBj,
+		d.KhXb, d.KhPym, d.KhJb, d.KhSjHm, d.KhQtLsFs,
+		d.KhKHyt, d.KhRcXyj, d.KhRcXyjSyDd, d.KhrRcYh, d.KhFlId,
+		d.KhLsZz, d.KhIsForbidden,
+		d.KhId,
+		d.KhId, d.KhSzMc, d.KhQc, d.KhBm, d.KhNbYgBj,
+		d.KhXb, d.KhPym, d.KhJb, d.KhSjHm, d.KhQtLsFs,
+		d.KhKHyt, d.KhRcXyj, d.KhRcXyjSyDd, d.KhrRcYh, d.KhFlId,
+		d.KhLsZz, d.KhIsForbidden)
+}
+func (r *repZxZc) DelZ3KhDja(id int64) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL(r.dbConfig, sqlDelZ3KhDja, id)
 }
 
 //==============================================================================================

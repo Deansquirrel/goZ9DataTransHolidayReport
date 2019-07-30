@@ -271,6 +271,69 @@ func (w *gsWorker) Z3HpEjFlt() {
 }
 
 //客户登记通用信息表
+func (w *gsWorker) Z3KhDja() {
+	id := goToolCommon.Guid()
+	log.Debug(fmt.Sprintf("Z3KhDja %s start", id))
+	defer log.Debug(fmt.Sprintf("Z3KhDja %s complete", id))
+	repGs := repository.NewRepGs()
+	repOnLine, err := repository.NewRepZxZc()
+	if err != nil {
+		errMsg := fmt.Sprintf("Z3KhDja get rep online err: %s", err.Error())
+		log.Error(errMsg)
+		return
+	}
+	uCounter := 0
+	dCounter := 0
+	for {
+		rList, err := repGs.GetZ3KhDjaSy()
+		if err != nil {
+			return
+		}
+		if rList == nil {
+			errMsg := fmt.Sprintf("Z3KhDja get sy error: return list can not be nil")
+			log.Error(errMsg)
+			return
+		}
+		if len(rList) == 0 {
+			break
+		}
+		for _, id := range rList {
+			dList, err := repGs.GetZ3KhDja(id)
+			if err != nil {
+				return
+			}
+			if dList == nil {
+				errMsg := fmt.Sprintf("Z3KhDja get data error: return list can not be nil")
+				log.Error(errMsg)
+				return
+			}
+			if len(dList) > 0 {
+				for _, d := range dList {
+					err := repOnLine.UpdateZ3KhDja(d)
+					if err != nil {
+						return
+					}
+				}
+				uCounter = uCounter + 1
+			} else {
+				err := repOnLine.DelZ3KhDja(id)
+				if err != nil {
+					return
+				}
+				dCounter = dCounter + 1
+			}
+			err = repGs.DelZ3KhDjaSy(id)
+			if err != nil {
+				return
+			}
+			log.Debug(fmt.Sprintf("gs Z3KhDja[%d] Update", id))
+		}
+	}
+	if uCounter > 0 || dCounter > 0 {
+		log.Info(fmt.Sprintf("gs Z3KhDja Update %d,Del %d,Total %d", uCounter, dCounter, uCounter+dCounter))
+	}
+}
+
 //节日电子券设置附加表
 //机构表V/A
 //核心组织零售价
