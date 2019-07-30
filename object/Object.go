@@ -274,4 +274,15 @@ type Z3JlDwa struct {
 	DwIsForbidden int
 }
 
+//货品二级分类
+type Z3HpEjFlt struct {
+	EjFlId       int
+	EjFlMc       string
+	EjFlBm       string
+	EjFlPpId     int
+	EjFlSym      string
+	EjFlPym      string
+	EjFlHpYjFlId int
+}
+
 //==============================================================================================

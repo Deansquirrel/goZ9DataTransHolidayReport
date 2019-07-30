@@ -45,6 +45,18 @@ const (
 	sqlDelZ3JlDwaSy = "" +
 		"delete from [z3jldwsyt] " +
 		"where [dwid] = ?"
+
+	sqlGetZ3HpEjFltSy = "" +
+		"select top 1 [ejflid] " +
+		"from [z3hpejflsyt]"
+	sqlGetZ3HpEjFlt = "" +
+		"select [ejflid],[ejflmc],[ejflbm],[ejflppid],[ejflsym], " +
+		"	[ejflpym],[ejflhpyjflid] " +
+		"from [z3hpejflt] " +
+		"where [ejflid] = ?"
+	sqlDelZ3HpEjFltSy = "" +
+		"delete from [z3hpejflsyt] " +
+		"where [ejflid] = ?"
 )
 
 type repGs struct {
@@ -293,4 +305,79 @@ func (r *repGs) GetZ3JlDwa(id int64) ([]*object.Z3JlDwa, error) {
 func (r *repGs) DelZ3JlDwaSy(id int64) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3JlDwaSy, id)
+}
+
+//获取货品二级分类索引
+func (r *repGs) GetZ3HpEjFltSy() ([]int64, error) {
+	comm := NewCommon()
+	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HpEjFltSy)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	rList := make([]int64, 0)
+	for rows.Next() {
+		var id int64
+		err := rows.Scan(&id)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3HpEjFltSy", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, id)
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3HpEjFltSy", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+
+//获取货品二级分类
+func (r *repGs) GetZ3HpEjFlt(id int64) ([]*object.Z3HpEjFlt, error) {
+	comm := NewCommon()
+	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HpEjFlt, id)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	var ejFlId, ejFlPpId, ejFlHpYjFlId int
+	var ejFlMc, ejFlBm, ejFlSym, ejFlPym string
+
+	rList := make([]*object.Z3HpEjFlt, 0)
+	for rows.Next() {
+		err := rows.Scan(&ejFlId, &ejFlMc, &ejFlBm, &ejFlPpId, &ejFlSym,
+			&ejFlPym, &ejFlHpYjFlId)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3HpEjFlt", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.Z3HpEjFlt{
+			EjFlId:       ejFlId,
+			EjFlMc:       ejFlMc,
+			EjFlBm:       ejFlBm,
+			EjFlPpId:     ejFlPpId,
+			EjFlSym:      ejFlSym,
+			EjFlPym:      ejFlPym,
+			EjFlHpYjFlId: ejFlHpYjFlId,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3HpEjFlt", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+
+//删除货品二级分类索引
+func (r *repGs) DelZ3HpEjFltSy(id int64) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HpEjFltSy, id)
 }

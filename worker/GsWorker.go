@@ -73,7 +73,7 @@ func (w *gsWorker) Z3Hpa() {
 			log.Debug(fmt.Sprintf("gs Z3Hpa[%d] Update", id))
 		}
 	}
-	if uCounter > 0 {
+	if uCounter > 0 || dCounter > 0 {
 		log.Info(fmt.Sprintf("gs Z3Hpa Update %d,Del %d,Total %d", uCounter, dCounter, uCounter+dCounter))
 	}
 }
@@ -137,7 +137,7 @@ func (w *gsWorker) Z3HpDwFja() {
 			log.Debug(fmt.Sprintf("gs Z3HpDwFja[%d_%d] Update", id.DwFjHpId, id.DwFjDwId))
 		}
 	}
-	if uCounter > 0 {
+	if uCounter > 0 || dCounter > 0 {
 		log.Info(fmt.Sprintf("gs Z3HpDwFja Update %d,Del %d,Total %d", uCounter, dCounter, uCounter+dCounter))
 	}
 }
@@ -201,14 +201,75 @@ func (w *gsWorker) Z3JlDwa() {
 			log.Debug(fmt.Sprintf("gs Z3JlDwa[%d] Update", id))
 		}
 	}
-	if uCounter > 0 {
+	if uCounter > 0 || dCounter > 0 {
 		log.Info(fmt.Sprintf("gs Z3JlDwa Update %d,Del %d,Total %d", uCounter, dCounter, uCounter+dCounter))
 	}
 }
 
-//货品计量单位附加表
-//计量单位设置（A）
-//货品二级分类t
+//货品二级分类
+func (w *gsWorker) Z3HpEjFlt() {
+	id := goToolCommon.Guid()
+	log.Debug(fmt.Sprintf("Z3HpEjFlt %s start", id))
+	defer log.Debug(fmt.Sprintf("Z3HpEjFlt %s complete", id))
+	repGs := repository.NewRepGs()
+	repOnLine, err := repository.NewRepZxZc()
+	if err != nil {
+		errMsg := fmt.Sprintf("Z3HpEjFlt get rep online err: %s", err.Error())
+		log.Error(errMsg)
+		return
+	}
+	uCounter := 0
+	dCounter := 0
+	for {
+		rList, err := repGs.GetZ3HpEjFltSy()
+		if err != nil {
+			return
+		}
+		if rList == nil {
+			errMsg := fmt.Sprintf("Z3HpEjFlt get sy error: return list can not be nil")
+			log.Error(errMsg)
+			return
+		}
+		if len(rList) == 0 {
+			break
+		}
+		for _, id := range rList {
+			dList, err := repGs.GetZ3HpEjFlt(id)
+			if err != nil {
+				return
+			}
+			if dList == nil {
+				errMsg := fmt.Sprintf("Z3HpEjFlt get data error: return list can not be nil")
+				log.Error(errMsg)
+				return
+			}
+			if len(dList) > 0 {
+				for _, d := range dList {
+					err := repOnLine.UpdateZ3HpEjFlt(d)
+					if err != nil {
+						return
+					}
+				}
+				uCounter = uCounter + 1
+			} else {
+				err := repOnLine.DelZ3HpEjFlt(id)
+				if err != nil {
+					return
+				}
+				dCounter = dCounter + 1
+			}
+			err = repGs.DelZ3HpEjFltSy(id)
+			if err != nil {
+				return
+			}
+			log.Debug(fmt.Sprintf("gs Z3HpEjFlt[%d] Update", id))
+		}
+	}
+	if uCounter > 0 || dCounter > 0 {
+		log.Info(fmt.Sprintf("gs Z3HpEjFlt Update %d,Del %d,Total %d", uCounter, dCounter, uCounter+dCounter))
+	}
+}
+
 //客户登记通用信息表
 //节日电子券设置附加表
 //机构表V/A

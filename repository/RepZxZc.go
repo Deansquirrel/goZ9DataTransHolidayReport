@@ -274,6 +274,27 @@ const (
 	sqlDelZ3JlDwa = "" +
 		"delete from [z3jldwa] " +
 		"where [dwid]=?"
+
+	sqlUpdateZ3HpEjFlt = "" +
+		"IF EXISTS (SELECT * FROM [z3hpejflt] WHERE [ejflid]=?) " +
+		"	BEGIN " +
+		"		UPDATE [z3hpejflt] " +
+		"		SET [ejflid]=?,[ejflmc]=?,[ejflbm]=?,[ejflppid]=?,[ejflsym]=?, " +
+		"			[ejflpym]=?,[ejflhpyjflid]=? " +
+		"		WHERE [ejflid]=? " +
+		"	END " +
+		"ELSE " +
+		"	BEGIN " +
+		"		INSERT INTO [z3hpejflt]( " +
+		"			[ejflid],[ejflmc],[ejflbm],[ejflppid],[ejflsym], " +
+		"			[ejflpym],[ejflhpyjflid]) " +
+		"		VALUES ( " +
+		"			?,?,?,?,?," +
+		" 			?,?) " +
+		"	END"
+	sqlDelZ3HpEjFlt = "" +
+		"delete from [z3hpejflt] " +
+		"where [ejflid]=?"
 )
 
 type repZxZc struct {
@@ -482,6 +503,22 @@ func (r *repZxZc) UpdateZ3JlDwa(d *object.Z3JlDwa) error {
 func (r *repZxZc) DelZ3JlDwa(id int64) error {
 	comm := NewCommon()
 	return comm.SetRowsBySQL(r.dbConfig, sqlDelZ3JlDwa, id)
+}
+
+//货品二级分类
+func (r *repZxZc) UpdateZ3HpEjFlt(d *object.Z3HpEjFlt) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL(r.dbConfig, sqlUpdateZ3HpEjFlt,
+		d.EjFlId,
+		d.EjFlId, d.EjFlMc, d.EjFlBm, d.EjFlPpId, d.EjFlSym,
+		d.EjFlPym, d.EjFlHpYjFlId,
+		d.EjFlId,
+		d.EjFlId, d.EjFlMc, d.EjFlBm, d.EjFlPpId, d.EjFlSym,
+		d.EjFlPym, d.EjFlHpYjFlId)
+}
+func (r *repZxZc) DelZ3HpEjFlt(id int64) error {
+	comm := NewCommon()
+	return comm.SetRowsBySQL(r.dbConfig, sqlDelZ3HpEjFlt, id)
 }
 
 //==============================================================================================
