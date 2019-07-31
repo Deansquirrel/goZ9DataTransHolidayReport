@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/Deansquirrel/goToolMSSql2000"
+	"github.com/Deansquirrel/goToolMSSqlHelper"
 	"github.com/Deansquirrel/goZ9DataTransHolidayReport/object"
 )
 
@@ -71,6 +72,17 @@ const (
 	sqlDelZ3KhDjaSy = "" +
 		"delete from [z3khdjsyt] " +
 		"where [khid] = ?"
+
+	sqlGetZ3JrDzqSzFjaSy = "" +
+		"select top 1 [dzqid] " +
+		"from [z3jrdzqszfjsyt]"
+	sqlGetZ3JrDzqSzFja = "" +
+		"select [dzqid],[dzqdpqhpid],[dzqjybz] " +
+		"from [z3jrdzqszfja] " +
+		"where [dzqid]=?"
+	sqlDelZ3JrDzqSzFjaSy = "" +
+		"delete from [z3jrdzqszfjsyt] " +
+		"where [dzqid] = ?"
 )
 
 type repGs struct {
@@ -80,14 +92,13 @@ type repGs struct {
 func NewRepGs() *repGs {
 	comm := NewCommon()
 	return &repGs{
-		dbConfig: comm.ConvertDbConfigTo2000(comm.GetLocalDbConfig()),
+		dbConfig: goToolMSSqlHelper.ConvertDbConfigTo2000(comm.GetLocalDbConfig()),
 	}
 }
 
 //获取集团通用货品设置A索引
 func (r *repGs) GetZ3HpaSy() ([]int64, error) {
-	comm := NewCommon()
-	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HpaSy)
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HpaSy)
 	if err != nil {
 		return nil, err
 	}
@@ -115,8 +126,7 @@ func (r *repGs) GetZ3HpaSy() ([]int64, error) {
 
 //获取集团通用货品设置A
 func (r *repGs) GetZ3Hpa(id int64) ([]*object.Z3Hpa, error) {
-	comm := NewCommon()
-	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3Hpa, id)
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3Hpa, id)
 	if err != nil {
 		return nil, err
 	}
@@ -168,14 +178,12 @@ func (r *repGs) GetZ3Hpa(id int64) ([]*object.Z3Hpa, error) {
 
 //删除集团通用货品设置A索引
 func (r *repGs) DelZ3HpaSy(id int64) error {
-	comm := NewCommon()
-	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HpaSy, id)
+	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HpaSy, id)
 }
 
 //获取货品计量单位附加表索引
 func (r *repGs) GetZ3HpDwFjaSy() ([]*object.Z3HpDwFjSyt, error) {
-	comm := NewCommon()
-	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HpDwFjaSy)
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HpDwFjaSy)
 	if err != nil {
 		return nil, err
 	}
@@ -206,8 +214,7 @@ func (r *repGs) GetZ3HpDwFjaSy() ([]*object.Z3HpDwFjSyt, error) {
 
 //获取货品计量单位附加表
 func (r *repGs) GetZ3HpDwFja(sy *object.Z3HpDwFjSyt) ([]*object.Z3HpDwFja, error) {
-	comm := NewCommon()
-	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HpDwFja, sy.DwFjHpId, sy.DwFjDwId)
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HpDwFja, sy.DwFjHpId, sy.DwFjDwId)
 	if err != nil {
 		return nil, err
 	}
@@ -244,14 +251,12 @@ func (r *repGs) GetZ3HpDwFja(sy *object.Z3HpDwFjSyt) ([]*object.Z3HpDwFja, error
 
 //删除货品计量单位附加表索引
 func (r *repGs) DelZ3HpDwFjaSy(sy *object.Z3HpDwFjSyt) error {
-	comm := NewCommon()
-	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HpDwFjaSy, sy.DwFjHpId, sy.DwFjDwId)
+	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HpDwFjaSy, sy.DwFjHpId, sy.DwFjDwId)
 }
 
 //获取计量单位设置索引
 func (r *repGs) GetZ3JlDwaSy() ([]int64, error) {
-	comm := NewCommon()
-	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3JlDwaSy)
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3JlDwaSy)
 	if err != nil {
 		return nil, err
 	}
@@ -279,8 +284,7 @@ func (r *repGs) GetZ3JlDwaSy() ([]int64, error) {
 
 //获取计量单位设置
 func (r *repGs) GetZ3JlDwa(id int64) ([]*object.Z3JlDwa, error) {
-	comm := NewCommon()
-	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3JlDwa, id)
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3JlDwa, id)
 	if err != nil {
 		return nil, err
 	}
@@ -317,14 +321,12 @@ func (r *repGs) GetZ3JlDwa(id int64) ([]*object.Z3JlDwa, error) {
 
 //删除计量单位设置索引
 func (r *repGs) DelZ3JlDwaSy(id int64) error {
-	comm := NewCommon()
-	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3JlDwaSy, id)
+	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3JlDwaSy, id)
 }
 
 //获取货品二级分类索引
 func (r *repGs) GetZ3HpEjFltSy() ([]int64, error) {
-	comm := NewCommon()
-	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HpEjFltSy)
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HpEjFltSy)
 	if err != nil {
 		return nil, err
 	}
@@ -352,8 +354,7 @@ func (r *repGs) GetZ3HpEjFltSy() ([]int64, error) {
 
 //获取货品二级分类
 func (r *repGs) GetZ3HpEjFlt(id int64) ([]*object.Z3HpEjFlt, error) {
-	comm := NewCommon()
-	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HpEjFlt, id)
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HpEjFlt, id)
 	if err != nil {
 		return nil, err
 	}
@@ -392,14 +393,12 @@ func (r *repGs) GetZ3HpEjFlt(id int64) ([]*object.Z3HpEjFlt, error) {
 
 //删除货品二级分类索引
 func (r *repGs) DelZ3HpEjFltSy(id int64) error {
-	comm := NewCommon()
-	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HpEjFltSy, id)
+	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HpEjFltSy, id)
 }
 
 //获取客户登记通用信息表索引
 func (r *repGs) GetZ3KhDjaSy() ([]int64, error) {
-	comm := NewCommon()
-	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3KhDjaSy)
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3KhDjaSy)
 	if err != nil {
 		return nil, err
 	}
@@ -427,8 +426,7 @@ func (r *repGs) GetZ3KhDjaSy() ([]int64, error) {
 
 //获取客户登记通用信息表
 func (r *repGs) GetZ3KhDja(id int64) ([]*object.Z3KhDja, error) {
-	comm := NewCommon()
-	rows, err := comm.GetRowsBySQL2000(r.dbConfig, sqlGetZ3KhDja, id)
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3KhDja, id)
 	if err != nil {
 		return nil, err
 	}
@@ -480,6 +478,71 @@ func (r *repGs) GetZ3KhDja(id int64) ([]*object.Z3KhDja, error) {
 
 //删除客户登记通用信息表索引
 func (r *repGs) DelZ3KhDjaSy(id int64) error {
-	comm := NewCommon()
-	return comm.SetRowsBySQL2000(r.dbConfig, sqlDelZ3KhDjaSy, id)
+	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3KhDjaSy, id)
+}
+
+//获取节日电子券设置附加表索引
+func (r *repGs) GetZ3JrDzqSzFjaSy() ([]int64, error) {
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3JrDzqSzFjaSy)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	rList := make([]int64, 0)
+	for rows.Next() {
+		var id int64
+		err := rows.Scan(&id)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3JrDzqSzFjaSy", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, id)
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3JrDzqSzFjaSy", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+
+//获取节日电子券设置附加表
+func (r *repGs) GetZ3JrDzqSzFja(id int64) ([]*object.Z3JrDzqSzFja, error) {
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3JrDzqSzFja, id)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	var dzqId, dzqDpqHpId, dzqJyBz int
+
+	rList := make([]*object.Z3JrDzqSzFja, 0)
+	for rows.Next() {
+		err := rows.Scan(&dzqId, &dzqDpqHpId, &dzqJyBz)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3JrDzqSzFja", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.Z3JrDzqSzFja{
+			DzqId:      dzqId,
+			DzqDpqHpId: dzqDpqHpId,
+			DzqJyBz:    dzqJyBz,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3JrDzqSzFja", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+
+//删除节日电子券设置附加表索引
+func (r *repGs) DelZ3JrDzqSzFjaSy(id int64) error {
+	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3JrDzqSzFjaSy, id)
 }

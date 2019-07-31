@@ -2,6 +2,7 @@ package repository
 
 import (
 	"github.com/Deansquirrel/goToolMSSql2000"
+	"github.com/Deansquirrel/goToolMSSqlHelper"
 	"github.com/Deansquirrel/goZ9DataTransHolidayReport/object"
 )
 
@@ -12,7 +13,7 @@ type repWl struct {
 func NewRepWl() *repWl {
 	comm := NewCommon()
 	return &repWl{
-		dbConfig: comm.ConvertDbConfigTo2000(comm.GetLocalDbConfig()),
+		dbConfig: goToolMSSqlHelper.ConvertDbConfigTo2000(comm.GetLocalDbConfig()),
 	}
 }
 

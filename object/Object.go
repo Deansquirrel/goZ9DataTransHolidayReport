@@ -306,4 +306,11 @@ type Z3KhDja struct {
 	KhIsForbidden int
 }
 
+//节日电子券设置附加表
+type Z3JrDzqSzFja struct {
+	DzqId      int
+	DzqDpqHpId int
+	DzqJyBz    int
+}
+
 //==============================================================================================
