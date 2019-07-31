@@ -340,6 +340,29 @@ const (
 	sqlDelZ3JrDzqSzFja = "" +
 		"delete from [z3jrdzqszfja] " +
 		"where [dzqid]=?"
+
+	sqlUpdateZ3FzJga = "" +
+		"IF EXISTS (SELECT * FROM [z3fzjga] WHERE [fzjgid]=?) " +
+		"	BEGIN " +
+		"		UPDATE [z3fzjga] " +
+		"		SET [fzjgid]=?,[fzjgszmc]=?,[fzjgqc]=?,[fzjglx]=?,[fzjgsxrq]=?, " +
+		"			[fzjgpym]=?,[fzjgsym]=?,[fzjgtdm]=?,[fzjgxsm]=?,[fzjglszz]=?, " +
+		"			[fzjgisforbidden]=? " +
+		"		WHERE [fzjgid]=? " +
+		"	END " +
+		"ELSE " +
+		"	BEGIN " +
+		"		INSERT INTO [z3fzjga]([fzjgid],[fzjgszmc],[fzjgqc],[fzjglx],[fzjgsxrq], " +
+		"			[fzjgpym],[fzjgsym],[fzjgtdm],[fzjgxsm],[fzjglszz], " +
+		"			[fzjgisforbidden]) " +
+		"		VALUES ( " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?) " +
+		"	END"
+	sqlDelZ3FzJga = "" +
+		"delete from [z3jrdzqszfja] " +
+		"where [dzqid]=?"
 )
 
 type repZxZc struct {
@@ -577,6 +600,22 @@ func (r *repZxZc) UpdateZ3JrDzqSzFja(d *object.Z3JrDzqSzFja) error {
 }
 func (r *repZxZc) DelZ3JrDzqSzFja(id int64) error {
 	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3JrDzqSzFja, id)
+}
+
+//机构表A
+func (r *repZxZc) UpdateZ3FzJga(d *object.Z3FzJga) error {
+	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3FzJga,
+		d.FzJgId,
+		d.FzJgId, d.FzJgSzMc, d.FzJgQc, d.FzJgLx, d.FzJgsSxRq,
+		d.FzJgPym, d.FzJgSym, d.FzJgTdm, d.FzJgXsm, d.FzJgLsZz,
+		d.FzJgIsForbidden,
+		d.FzJgId,
+		d.FzJgId, d.FzJgSzMc, d.FzJgQc, d.FzJgLx, d.FzJgsSxRq,
+		d.FzJgPym, d.FzJgSym, d.FzJgTdm, d.FzJgXsm, d.FzJgLsZz,
+		d.FzJgIsForbidden)
+}
+func (r *repZxZc) DelZ3FzJga(id int64) error {
+	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3FzJga, id)
 }
 
 //==============================================================================================

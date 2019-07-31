@@ -313,4 +313,19 @@ type Z3JrDzqSzFja struct {
 	DzqJyBz    int
 }
 
+//机构表A
+type Z3FzJga struct {
+	FzJgId          int
+	FzJgSzMc        string
+	FzJgQc          string
+	FzJgLx          int
+	FzJgsSxRq       time.Time
+	FzJgPym         string
+	FzJgSym         string
+	FzJgTdm         string
+	FzJgXsm         string
+	FzJgLsZz        string
+	FzJgIsForbidden int
+}
+
 //==============================================================================================
