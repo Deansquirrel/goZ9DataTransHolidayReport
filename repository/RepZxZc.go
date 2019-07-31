@@ -363,6 +363,32 @@ const (
 	sqlDelZ3FzJga = "" +
 		"delete from [z3jrdzqszfja] " +
 		"where [dzqid]=?"
+
+	sqlUpdateZ3DzqSza = "" +
+		"IF EXISTS (SELECT * FROM [z3dzqsza] WHERE [dzqid]=?) " +
+		"	BEGIN " +
+		"		UPDATE [z3dzqsza] " +
+		"		SET [dzqid]=?,[dzqszmc]=?,[dzqdwxsmc]=?,[dzqbm]=?,[dzqpym]=?, " +
+		"			[dzqjrqbj]=?,[dzqzzqmz]=?,[dzqyt]=?,[dzqhxhly]=?,[dzqdbbs]=?, " +
+		"			[dzqhsxz]=?,[dzqctqid]=?,[dzqzdzkl]=?,[dzqqxzkyh]=?,[dzqqhsjzr]=?, " +
+		"			[dzqjybz]=? " +
+		"		WHERE [dzqid]=? " +
+		"	END " +
+		"ELSE " +
+		"	BEGIN " +
+		"		INSERT INTO [z3dzqsza]([dzqid],[dzqszmc],[dzqdwxsmc],[dzqbm],[dzqpym], " +
+		"			[dzqjrqbj],[dzqzzqmz],[dzqyt],[dzqhxhly],[dzqdbbs], " +
+		"			[dzqhsxz],[dzqctqid],[dzqzdzkl],[dzqqxzkyh],[dzqqhsjzr], " +
+		"			[dzqjybz]) 	" +
+		"	VALUES ( " +
+		"		?,?,?,?,?, " +
+		"		?,?,?,?,?, " +
+		"		?,?,?,?,?, " +
+		"		?) " +
+		"	END"
+	sqlDelZ3DzqSza = "" +
+		"delete from [z3dzqsza] " +
+		"where [dzqid]=?"
 )
 
 type repZxZc struct {
@@ -616,6 +642,25 @@ func (r *repZxZc) UpdateZ3FzJga(d *object.Z3FzJga) error {
 }
 func (r *repZxZc) DelZ3FzJga(id int64) error {
 	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3FzJga, id)
+}
+
+//电子券设置
+//机构表A
+func (r *repZxZc) UpdateZ3DzqSza(d *object.Z3DzqSza) error {
+	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3DzqSza,
+		d.DzqId,
+		d.DzqId, d.DzqSzMc, d.DzqDwXsMc, d.DzqBm, d.DzqPym,
+		d.DzqJrqBj, d.DzqZzqMz, d.DzqYt, d.DzqHxhLy, d.DzqDbBs,
+		d.DzqHsXz, d.DzqCtqId, d.DzqZdZkl, d.DzqQxZkYh, d.DzqQhsJzr,
+		d.DzqJyBz,
+		d.DzqId,
+		d.DzqId, d.DzqSzMc, d.DzqDwXsMc, d.DzqBm, d.DzqPym,
+		d.DzqJrqBj, d.DzqZzqMz, d.DzqYt, d.DzqHxhLy, d.DzqDbBs,
+		d.DzqHsXz, d.DzqCtqId, d.DzqZdZkl, d.DzqQxZkYh, d.DzqQhsJzr,
+		d.DzqJyBz)
+}
+func (r *repZxZc) DelZ3DzqSza(id int64) error {
+	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3DzqSza, id)
 }
 
 //==============================================================================================

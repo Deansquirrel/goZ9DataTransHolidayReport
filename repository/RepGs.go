@@ -97,6 +97,20 @@ const (
 	sqlDelZ3FzJgaSy = "" +
 		"delete from [z3fzjgsyt] " +
 		"where [fzjgid] = ?"
+
+	sqlGetZ3DzqSzaSy = "" +
+		"select top 1 [dzqid] " +
+		"from [z3dzqszsyt]"
+	sqlGetZ3DzqSza = "" +
+		"select [dzqid],[dzqszmc],[dzqdwxsmc],[dzqbm],[dzqpym], " +
+		"	[dzqjrqbj],[dzqzzqmz],[dzqyt],[dzqhxhly],[dzqdbbs], " +
+		"	[dzqhsxz],[dzqctqid],[dzqzdzkl],[dzqqxzkyh],[dzqqhsjzr], " +
+		"	[dzqjybz] " +
+		"from [z3dzqsza] " +
+		"where [dzqid] = ?"
+	sqlDelZ3DzqSzaSy = "" +
+		"delete from [z3dzqszsyt] " +
+		"where [dzqid] = ?"
 )
 
 type repGs struct {
@@ -636,4 +650,89 @@ func (r *repGs) GetZ3FzJga(id int64) ([]*object.Z3FzJga, error) {
 //删除机构表A索引
 func (r *repGs) DelZ3FzJgaSy(id int64) error {
 	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3FzJgaSy, id)
+}
+
+//获取电子券设置索引
+func (r *repGs) GetZ3DzqSzaSy() ([]int64, error) {
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3DzqSzaSy)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	rList := make([]int64, 0)
+	for rows.Next() {
+		var id int64
+		err := rows.Scan(&id)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3DzqSzaSy", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, id)
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3DzqSzaSy", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+
+//获取电子券设置
+func (r *repGs) GetZ3DzqSza(id int64) ([]*object.Z3DzqSza, error) {
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3DzqSza, id)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	var dzqId, dzqJrqBj, dzqYt, dzqHxhLy, dzqDbBs, dzqHsXz, dzqCtqId, dzqQxZkYh, dzqJyBz int
+	var dzqSzMc, dzqDwXsMc, dzqBm, dzqPym string
+	var dzqZzqMz, dzqZdZkl float64
+	var dzqQhsJzr time.Time
+
+	rList := make([]*object.Z3DzqSza, 0)
+	for rows.Next() {
+		err := rows.Scan(&dzqId, &dzqSzMc, &dzqDwXsMc, &dzqBm, &dzqPym,
+			&dzqJrqBj, &dzqZzqMz, &dzqYt, &dzqHxhLy, &dzqDbBs,
+			&dzqHsXz, &dzqCtqId, &dzqZdZkl, &dzqQxZkYh, &dzqQhsJzr,
+			&dzqJyBz)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3JrDzqSzFja", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.Z3DzqSza{
+			DzqId:     dzqId,
+			DzqSzMc:   dzqSzMc,
+			DzqDwXsMc: dzqDwXsMc,
+			DzqBm:     dzqBm,
+			DzqPym:    dzqPym,
+			DzqJrqBj:  dzqJrqBj,
+			DzqZzqMz:  dzqZzqMz,
+			DzqYt:     dzqYt,
+			DzqHxhLy:  dzqHxhLy,
+			DzqDbBs:   dzqDbBs,
+			DzqHsXz:   dzqHsXz,
+			DzqCtqId:  dzqCtqId,
+			DzqZdZkl:  dzqZdZkl,
+			DzqQxZkYh: dzqQxZkYh,
+			DzqQhsJzr: dzqQhsJzr,
+			DzqJyBz:   dzqJyBz,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3JrDzqSzFja", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+
+//删除电子券设置索引
+func (r *repGs) DelZ3DzqSzaSy(id int64) error {
+	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3DzqSzaSy, id)
 }

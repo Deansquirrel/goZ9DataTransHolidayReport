@@ -194,4 +194,5 @@ func (c *common) addGsWorker() {
 	c.addWorker("Z3KhDja", worker.Z3KhDja)
 	c.addWorker("Z3JrDzqSzFja", worker.Z3JrDzqSzFja)
 	c.addWorker("Z3FzJga", worker.Z3FzJga)
+	c.addWorker("Z3DzqSza", worker.Z3DzqSza)
 }

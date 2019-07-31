@@ -328,4 +328,26 @@ type Z3FzJga struct {
 	FzJgIsForbidden int
 }
 
+//电子券设置
+type Z3DzqSza struct {
+	DzqId     int
+	DzqSzMc   string
+	DzqDwXsMc string
+	DzqBm     string
+	DzqPym    string
+	DzqJrqBj  int
+	DzqZzqMz  float64
+	DzqYt     int
+	DzqHxhLy  int
+	DzqDbBs   int
+	DzqHsXz   int
+	DzqCtqId  int
+	DzqZdZkl  float64
+	DzqQxZkYh int
+	DzqQhsJzr time.Time
+	DzqJyBz   int
+}
+
+//货品品牌设置z3ppa
+
 //==============================================================================================
