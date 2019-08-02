@@ -389,6 +389,26 @@ const (
 	sqlDelZ3DzqSza = "" +
 		"delete from [z3dzqsza] " +
 		"where [dzqid]=?"
+
+	sqlUpdateZ3Ppa = "" +
+		"IF EXISTS (SELECT * FROM [z3ppa] WHERE [ppid]=?) " +
+		"	BEGIN " +
+		"		UPDATE [z3ppa] " +
+		"		SET [ppid]=?,[ppszmc]=?,[ppqc]=?,[ppyt]=?,[ppbm]=?, " +
+		"			[ppsym]=?,[pppym]=?,[ppisforbidden]=?,[ppbz]=? " +
+		"		WHERE [ppid]=? " +
+		"	END " +
+		"ELSE " +
+		"	BEGIN " +
+		"		INSERT INTO [z3ppa]([ppid],[ppszmc],[ppqc],[ppyt],[ppbm], " +
+		"			[ppsym],[pppym],[ppisforbidden],[ppbz]) " +
+		"		VALUES ( " +
+		"		?,?,?,?,?, " +
+		"		?,?,?,?) " +
+		"	END"
+	sqlDelZ3Ppa = "" +
+		"delete from [z3ppa] " +
+		"where [ppid]=?"
 )
 
 type repZxZc struct {
@@ -645,7 +665,6 @@ func (r *repZxZc) DelZ3FzJga(id int64) error {
 }
 
 //电子券设置
-//机构表A
 func (r *repZxZc) UpdateZ3DzqSza(d *object.Z3DzqSza) error {
 	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3DzqSza,
 		d.DzqId,
@@ -661,6 +680,20 @@ func (r *repZxZc) UpdateZ3DzqSza(d *object.Z3DzqSza) error {
 }
 func (r *repZxZc) DelZ3DzqSza(id int64) error {
 	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3DzqSza, id)
+}
+
+//货品品牌设置
+func (r *repZxZc) UpdateZ3Ppa(d *object.Z3Ppa) error {
+	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3Ppa,
+		d.PpId,
+		d.PpId, d.PpSzMc, d.PpQc, d.PpYt, d.PpBm,
+		d.PpSym, d.PpPym, d.PpIsForbidden, d.PpBz,
+		d.PpId,
+		d.PpId, d.PpSzMc, d.PpQc, d.PpYt, d.PpBm,
+		d.PpSym, d.PpPym, d.PpIsForbidden, d.PpBz)
+}
+func (r *repZxZc) DelZ3Ppa(id int64) error {
+	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3Ppa, id)
 }
 
 //==============================================================================================

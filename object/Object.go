@@ -348,6 +348,17 @@ type Z3DzqSza struct {
 	DzqJyBz   int
 }
 
-//货品品牌设置z3ppa
+//货品品牌设置
+type Z3Ppa struct {
+	PpId          int
+	PpSzMc        string
+	PpQc          string
+	PpYt          int
+	PpBm          string
+	PpSym         string
+	PpPym         string
+	PpIsForbidden int
+	PpBz          string
+}
 
 //==============================================================================================

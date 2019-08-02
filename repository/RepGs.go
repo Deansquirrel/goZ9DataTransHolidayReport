@@ -111,6 +111,17 @@ const (
 	sqlDelZ3DzqSzaSy = "" +
 		"delete from [z3dzqszsyt] " +
 		"where [dzqid] = ?"
+
+	sqlGetZ3PpaSy = "" +
+		"select top 1 [ppid] " +
+		"from [z3ppsyt]"
+	sqlGetZ3Ppa = "" +
+		"select [ppid],[ppszmc],[ppqc],[ppyt],[ppbm], " +
+		"	[ppsym],[pppym],[ppisforbidden],[ppbz] " +
+		"from [z3ppa] " +
+		"where [ppid] = ?"
+	sqlDelZ3PpaSy = "delete from [z3ppsyt] " +
+		"where [ppid] = ?"
 )
 
 type repGs struct {
@@ -735,4 +746,73 @@ func (r *repGs) GetZ3DzqSza(id int64) ([]*object.Z3DzqSza, error) {
 //删除电子券设置索引
 func (r *repGs) DelZ3DzqSzaSy(id int64) error {
 	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3DzqSzaSy, id)
+}
+
+//货品品牌设置
+func (r *repGs) GetZ3PpaSy() ([]int64, error) {
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3PpaSy)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	rList := make([]int64, 0)
+	for rows.Next() {
+		var id int64
+		err := rows.Scan(&id)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3PpaSy", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, id)
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3PpaSy", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+func (r *repGs) GetZ3Ppa(id int64) ([]*object.Z3Ppa, error) {
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3Ppa, id)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	var ppId, ppYt, ppIsForbidden int
+	var ppSzMc, ppQc, ppBm, ppSym, ppPym, ppBz string
+	rList := make([]*object.Z3Ppa, 0)
+	for rows.Next() {
+		err := rows.Scan(&ppId, &ppSzMc, &ppQc, &ppYt, &ppBm,
+			&ppSym, &ppPym, &ppIsForbidden, &ppBz)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3Ppa", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.Z3Ppa{
+			PpId:          ppId,
+			PpSzMc:        ppSzMc,
+			PpQc:          ppQc,
+			PpYt:          ppYt,
+			PpBm:          ppBm,
+			PpSym:         ppSym,
+			PpPym:         ppPym,
+			PpIsForbidden: ppIsForbidden,
+			PpBz:          ppBz,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3Ppa", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+func (r *repGs) DelZ3PpaSy(id int64) error {
+	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3PpaSy, id)
 }
