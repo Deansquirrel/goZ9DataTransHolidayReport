@@ -117,6 +117,11 @@ func (c *common) refreshLocalDbConfig() error {
 	if global.SysConfig.LocalDb.DbName == "" {
 		global.SysConfig.LocalDb.DbName = accList[0]
 	}
+	if global.SysConfig.LocalDb.DbName == "" {
+		errMsg := fmt.Sprintf("无可用账套")
+		log.Error(errMsg)
+		return errors.New(errMsg)
+	}
 	return nil
 }
 
