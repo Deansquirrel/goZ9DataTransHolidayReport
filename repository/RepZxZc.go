@@ -6,6 +6,8 @@ import (
 	"github.com/Deansquirrel/goZ9DataTransHolidayReport/object"
 )
 
+import log "github.com/Deansquirrel/goToolLog"
+
 const (
 	sqlUpdateMdZ3XsCkDt = "" +
 		"IF EXISTS (SELECT * FROM [z3xsckdt] WHERE [ckdmxhh]=?) " +
@@ -447,7 +449,7 @@ func NewRepZxZc() (*repZxZc, error) {
 
 //销售出库货品明细
 func (r *repZxZc) UpdateMdZ3XsCkDt(d *object.Z3XsCkDt) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateMdZ3XsCkDt,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateMdZ3XsCkDt,
 		d.CkdMxHh,
 		d.CkdMxHh, d.CkDjh, d.CkdLsh, d.CkdBj, d.CkdCxBj,
 		d.CkdYyr, d.CkdMdId, d.CkdHpId, d.CkdDwId, d.CkdHsl,
@@ -459,11 +461,16 @@ func (r *repZxZc) UpdateMdZ3XsCkDt(d *object.Z3XsCkDt) error {
 		d.CkdJmSl, d.CkdFjXx, d.CkZdRid, d.CkKhId, d.CkBz,
 		d.CkZdzSj, d.CkdCkId, d.CkdBqjXj, d.CkdCjjXj,
 	)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //门店销售退货明细
 func (r *repZxZc) UpdateMdZ3XsTht(d *object.Z3XsTht) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateMdZ3XsTht,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateMdZ3XsTht,
 		d.ThHpMxHh,
 		d.ThHpMxHh, d.ThDjh, d.ThLsh, d.ThYyRq, d.ThMdid,
 		d.ThHpId, d.ThJlDwId, d.ThZhl, d.ThJmSl, d.ThHpFjXx,
@@ -474,11 +481,16 @@ func (r *repZxZc) UpdateMdZ3XsTht(d *object.Z3XsTht) error {
 		d.ThHpId, d.ThJlDwId, d.ThZhl, d.ThJmSl, d.ThHpFjXx,
 		d.ThZdrId, d.ThKhId, d.ThBz, d.ThZdzSj, d.ThQtCkId,
 		d.ThBqjJeXj, d.ThZzCjJeXj)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //调拨出库明细
 func (r *repZxZc) UpdateMdZ3MdDbCkDt(d *object.Z3MdDbCkDt) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateMdZ3MdDbCkDt,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateMdZ3MdDbCkDt,
 		d.DbdMxHh,
 		d.DbdMxHh, d.DbdDjh, d.DbdLsh, d.DbdCkr, d.DbdDcJgId,
 		d.DbdHpId, d.DbdDwId, d.DbdHsl, d.DbdJmSl, d.DbdZdrId,
@@ -489,11 +501,16 @@ func (r *repZxZc) UpdateMdZ3MdDbCkDt(d *object.Z3MdDbCkDt) error {
 		d.DbdHpId, d.DbdDwId, d.DbdHsl, d.DbdJmSl, d.DbdZdrId,
 		d.DbdBz, d.DbdShSj, d.DbdDcCkId, d.DbdLsj, d.DbdDhj,
 		d.DbrKShJgId, d.DbrKPpId)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //调拨调整明细
 func (r *repZxZc) UpdateMdZ3MdDbTzDt(d *object.Z3MdDbTzDt) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateMdZ3MdDbTzDt,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateMdZ3MdDbTzDt,
 		d.TzdMxHh,
 		d.TzdMxHh, d.TzdDjh, d.TzdLsh, d.TzdCkr, d.TzdJgId,
 		d.TzdCkId, d.TzRkJgId, d.TzRkCkId, d.TzdHpId, d.TzdDwId,
@@ -504,11 +521,16 @@ func (r *repZxZc) UpdateMdZ3MdDbTzDt(d *object.Z3MdDbTzDt) error {
 		d.TzdCkId, d.TzRkJgId, d.TzRkCkId, d.TzdHpId, d.TzdDwId,
 		d.TzdHsl, d.TzdJmTzSl, d.TzdLsj, d.TzdDhj, d.TzdZdrId,
 		d.TzdBz, d.TzdShSj)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //货品出库登记
 func (r *repZxZc) UpdateMdZ3HpCkDjDt(d *object.Z3HpCkDjDt) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3HpCkDjDt,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3HpCkDjDt,
 		d.CkdMxHh,
 		d.CkdMxHh, d.CkdDjh, d.CkdLsh, d.CkdYyr, d.CkdCkFzJgId,
 		d.CkdCkId, d.CkdHpId, d.CkdDwId, d.CkdHsl, d.CkdJmSl,
@@ -517,11 +539,16 @@ func (r *repZxZc) UpdateMdZ3HpCkDjDt(d *object.Z3HpCkDjDt) error {
 		d.CkdMxHh, d.CkdDjh, d.CkdLsh, d.CkdYyr, d.CkdCkFzJgId,
 		d.CkdCkId, d.CkdHpId, d.CkdDwId, d.CkdHsl, d.CkdJmSl,
 		d.CkdLsj, d.CkdDhj, d.CkBz, d.CkShrId, d.CkShSj)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //货品入库登记
 func (r *repZxZc) UpdateMdZ3HpRkDjDt(d *object.Z3HpRkDjDt) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqoUpdateZ3HpRkDjDt,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqoUpdateZ3HpRkDjDt,
 		d.RkdMxHh,
 		d.RkdMxHh, d.RkdDjh, d.RkdLsh, d.RkdYyr, d.RkdRkFzJgId,
 		d.RkdCkId, d.RkdHpId, d.RkdDwId, d.RkdHsl, d.RkdJmSl,
@@ -530,11 +557,16 @@ func (r *repZxZc) UpdateMdZ3HpRkDjDt(d *object.Z3HpRkDjDt) error {
 		d.RkdMxHh, d.RkdDjh, d.RkdLsh, d.RkdYyr, d.RkdRkFzJgId,
 		d.RkdCkId, d.RkdHpId, d.RkdDwId, d.RkdHsl, d.RkdJmSl,
 		d.RkdDhj, d.RkdLsj, d.RkBz, d.RkShrId, d.RksShSj)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //盘亏登记
 func (r *repZxZc) UpdateMdZ3PkDjDt(d *object.Z3PkDjDt) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3PkDjDt,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3PkDjDt,
 		d.PkdMxHh,
 		d.PkdMxHh, d.PkdDjh, d.PkdLsh, d.PkdYyr, d.PkdPdJgId,
 		d.PkdPdCkId, d.PkdHpId, d.PkdDwId, d.PkdHsl, d.PkdJmSl,
@@ -543,11 +575,16 @@ func (r *repZxZc) UpdateMdZ3PkDjDt(d *object.Z3PkDjDt) error {
 		d.PkdMxHh, d.PkdDjh, d.PkdLsh, d.PkdYyr, d.PkdPdJgId,
 		d.PkdPdCkId, d.PkdHpId, d.PkdDwId, d.PkdHsl, d.PkdJmSl,
 		d.PkdLsj, d.PkdDhj, d.PkdBz, d.PkdShrId, d.PkdShSj)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //门店配送调整
 func (r *repZxZc) UpdateMdZ3MdPsTzDt(d *object.Z3MdPsTzDt) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3MdPsTzDt,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3MdPsTzDt,
 		d.TzdMxHh,
 		d.TzdMxHh, d.TzdDjh, d.TzdLsh, d.TzdCkr, d.TzdShJgId,
 		d.TzdShCkId, d.TzdPsJgId, d.TzdPsCkId, d.TzdHpId, d.TzdDwId,
@@ -558,11 +595,16 @@ func (r *repZxZc) UpdateMdZ3MdPsTzDt(d *object.Z3MdPsTzDt) error {
 		d.TzdShCkId, d.TzdPsJgId, d.TzdPsCkId, d.TzdHpId, d.TzdDwId,
 		d.TzdHsl, d.TzdJmSl, d.TzdDhj, d.TzdPsj, d.TzdBz,
 		d.TzdShrId, d.TzdShSj)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //提货货品明细
 func (r *repZxZc) UpdateMdZ3XsDdThDt(d *object.Z3XsDdThDt) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3XsDdThDt,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3XsDdThDt,
 		d.ThdMxHh,
 		d.ThdMxHh, d.ThdDjh, d.ThdDdLsh, d.ThdLsh, d.ThdDjLx,
 		d.ThdYyr, d.ThdJfMdId, d.ThdCkId, d.ThdKhPpid, d.ThPhBj,
@@ -575,13 +617,18 @@ func (r *repZxZc) UpdateMdZ3XsDdThDt(d *object.Z3XsDdThDt) error {
 		d.ThKhId, d.ThdHpId, d.ThdDwId, d.ThdHsl, d.ThdDZxSl,
 		d.ThDdBqjXj, d.ThDdCjjXj, d.ThdJmSl, d.ThdBqjXj, d.ThdCjjXj,
 		d.ThZdrId, d.ThZdSj, d.ThBz)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //==============================================================================================
 
 //集团通用货品设置A
 func (r *repZxZc) UpdateZ3Hpa(d *object.Z3Hpa) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3Hpa,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3Hpa,
 		d.HpId,
 		d.HpId, d.HpBm, d.HpSzMc, d.HpPpId, d.HpSym,
 		d.HpPym, d.HpZxDwId, d.HpZxDwMc, d.HpEjFlId, d.HpMdSzBj,
@@ -592,52 +639,92 @@ func (r *repZxZc) UpdateZ3Hpa(d *object.Z3Hpa) error {
 		d.HpPym, d.HpZxDwId, d.HpZxDwMc, d.HpEjFlId, d.HpMdSzBj,
 		d.HpdDkhDhHpBj, d.HpWdDhHpBj, d.HpMs, d.HpZyNj, d.HpIsForbidden,
 		d.HpSzId, d.HpNsFlm, d.HpJrHp, d.HpDgHp)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 func (r *repZxZc) DelZ3Hpa(id int64) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3Hpa, id)
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3Hpa, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //货品计量单位附加表
 func (r *repZxZc) UpdateZ3HpDwFja(d *object.Z3HpDwFja) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3HpDwFja,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3HpDwFja,
 		d.DwFjHpId, d.DwFjDwId,
 		d.DwFjHpId, d.DwFjDwId, d.DwFjDwLx, d.DwFjHsl, d.DwFjTxm, d.DwFjIsForbidden,
 		d.DwFjHpId, d.DwFjDwId,
 		d.DwFjHpId, d.DwFjDwId, d.DwFjDwLx, d.DwFjHsl, d.DwFjTxm, d.DwFjIsForbidden)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 func (r *repZxZc) DelZ3HpDwFja(hpId, dwId int) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3HpDwFja, hpId, dwId)
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3HpDwFja, hpId, dwId)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //计量单位设置
 func (r *repZxZc) UpdateZ3JlDwa(d *object.Z3JlDwa) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3JlDwa,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3JlDwa,
 		d.DwId,
 		d.DwId, d.DwSzMc, d.DwGlMc, d.DwSym, d.DwPym, d.DwIsForbidden,
 		d.DwId,
 		d.DwId, d.DwSzMc, d.DwGlMc, d.DwSym, d.DwPym, d.DwIsForbidden)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 func (r *repZxZc) DelZ3JlDwa(id int64) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3JlDwa, id)
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3JlDwa, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //货品二级分类
 func (r *repZxZc) UpdateZ3HpEjFlt(d *object.Z3HpEjFlt) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3HpEjFlt,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3HpEjFlt,
 		d.EjFlId,
 		d.EjFlId, d.EjFlMc, d.EjFlBm, d.EjFlPpId, d.EjFlSym,
 		d.EjFlPym, d.EjFlHpYjFlId,
 		d.EjFlId,
 		d.EjFlId, d.EjFlMc, d.EjFlBm, d.EjFlPpId, d.EjFlSym,
 		d.EjFlPym, d.EjFlHpYjFlId)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 func (r *repZxZc) DelZ3HpEjFlt(id int64) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3HpEjFlt, id)
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3HpEjFlt, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //客户登记通用信息表
 func (r *repZxZc) UpdateZ3KhDja(d *object.Z3KhDja) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3KhDja,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3KhDja,
 		d.KhId,
 		d.KhId, d.KhSzMc, d.KhQc, d.KhBm, d.KhNbYgBj,
 		d.KhXb, d.KhPym, d.KhJb, d.KhSjHm, d.KhQtLsFs,
@@ -648,26 +735,46 @@ func (r *repZxZc) UpdateZ3KhDja(d *object.Z3KhDja) error {
 		d.KhXb, d.KhPym, d.KhJb, d.KhSjHm, d.KhQtLsFs,
 		d.KhKHyt, d.KhRcXyj, d.KhRcXyjSyDd, d.KhrRcYh, d.KhFlId,
 		d.KhLsZz, d.KhIsForbidden)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 func (r *repZxZc) DelZ3KhDja(id int64) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3KhDja, id)
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3KhDja, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //节日电子券设置附加表
 func (r *repZxZc) UpdateZ3JrDzqSzFja(d *object.Z3JrDzqSzFja) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3JrDzqSzFja,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3JrDzqSzFja,
 		d.DzqId,
 		d.DzqId, d.DzqDpqHpId, d.DzqJyBz,
 		d.DzqId,
 		d.DzqId, d.DzqDpqHpId, d.DzqJyBz)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 func (r *repZxZc) DelZ3JrDzqSzFja(id int64) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3JrDzqSzFja, id)
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3JrDzqSzFja, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //机构表A
 func (r *repZxZc) UpdateZ3FzJga(d *object.Z3FzJga) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3FzJga,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3FzJga,
 		d.FzJgId,
 		d.FzJgId, d.FzJgSzMc, d.FzJgQc, d.FzJgLx, d.FzJgsSxRq,
 		d.FzJgPym, d.FzJgSym, d.FzJgTdm, d.FzJgXsm, d.FzJgLsZz,
@@ -676,27 +783,47 @@ func (r *repZxZc) UpdateZ3FzJga(d *object.Z3FzJga) error {
 		d.FzJgId, d.FzJgSzMc, d.FzJgQc, d.FzJgLx, d.FzJgsSxRq,
 		d.FzJgPym, d.FzJgSym, d.FzJgTdm, d.FzJgXsm, d.FzJgLsZz,
 		d.FzJgIsForbidden)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 func (r *repZxZc) DelZ3FzJga(id int64) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3FzJga, id)
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3FzJga, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //核心组织零售价
 func (r *repZxZc) UpdateZ3HxZzLsjt(d *object.Z3HxZzLsjt) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3HxZzLsjt,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3HxZzLsjt,
 		d.LsjJgZzId, d.LsjHpid,
 		d.LsjJgZzId, d.LsjHpid, d.LsjYxZxLsj,
 		d.LsjJgZzId, d.LsjHpid,
 		d.LsjHpid,
 		d.LsjJgZzId, d.LsjHpid, d.LsjYxZxLsj)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 func (r *repZxZc) DelZ3HxZzLsjt(id *object.Z3HxZzLsjSyt) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3HxZzLsjt, id.LsjZzId, id.LsjHpId)
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3HxZzLsjt, id.LsjZzId, id.LsjHpId)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //电子券设置
 func (r *repZxZc) UpdateZ3DzqSza(d *object.Z3DzqSza) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3DzqSza,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3DzqSza,
 		d.DzqId,
 		d.DzqId, d.DzqSzMc, d.DzqDwXsMc, d.DzqBm, d.DzqPym,
 		d.DzqJrqBj, d.DzqZzqMz, d.DzqYt, d.DzqHxhLy, d.DzqDbBs,
@@ -707,23 +834,43 @@ func (r *repZxZc) UpdateZ3DzqSza(d *object.Z3DzqSza) error {
 		d.DzqJrqBj, d.DzqZzqMz, d.DzqYt, d.DzqHxhLy, d.DzqDbBs,
 		d.DzqHsXz, d.DzqCtqId, d.DzqZdZkl, d.DzqQxZkYh, d.DzqQhsJzr,
 		d.DzqJyBz)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 func (r *repZxZc) DelZ3DzqSza(id int64) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3DzqSza, id)
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3DzqSza, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //货品品牌设置
 func (r *repZxZc) UpdateZ3Ppa(d *object.Z3Ppa) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3Ppa,
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3Ppa,
 		d.PpId,
 		d.PpId, d.PpSzMc, d.PpQc, d.PpYt, d.PpBm,
 		d.PpSym, d.PpPym, d.PpIsForbidden, d.PpBz,
 		d.PpId,
 		d.PpId, d.PpSzMc, d.PpQc, d.PpYt, d.PpBm,
 		d.PpSym, d.PpPym, d.PpIsForbidden, d.PpBz)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 func (r *repZxZc) DelZ3Ppa(id int64) error {
-	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3Ppa, id)
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3Ppa, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //==============================================================================================

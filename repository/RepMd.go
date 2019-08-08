@@ -157,6 +157,7 @@ func NewRepMd() *repMd {
 func (r *repMd) GetZ3XsCkDt() ([]*object.Z3XsCkDt, error) {
 	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3XsCkDt)
 	if err != nil {
+		log.Error(err.Error())
 		return nil, err
 	}
 	defer func() {
@@ -209,13 +210,19 @@ func (r *repMd) GetZ3XsCkDt() ([]*object.Z3XsCkDt, error) {
 
 //删除销售出库货品明细索引
 func (r *repMd) DelZ3XsCkDtSy(id string) error {
-	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDeleteZ3XsCkDtSy, id)
+	err := goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDeleteZ3XsCkDtSy, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //获取门店销售退货明细
 func (r *repMd) GetZ3XsTht() ([]*object.Z3XsTht, error) {
 	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3XsTht)
 	if err != nil {
+		log.Error(err.Error())
 		return nil, err
 	}
 	defer func() {
@@ -266,13 +273,19 @@ func (r *repMd) GetZ3XsTht() ([]*object.Z3XsTht, error) {
 
 //删除门店销售退货明细索引
 func (r *repMd) DelZ3XsThtSy(id string) error {
-	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3XsThtSy, id)
+	err := goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3XsThtSy, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //获取调拨出库明细
 func (r *repMd) GetZ3MdDbCkDt() ([]*object.Z3MdDbCkDt, error) {
 	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3MdDbCkDt)
 	if err != nil {
+		log.Error(err.Error())
 		return nil, err
 	}
 	defer func() {
@@ -324,13 +337,19 @@ func (r *repMd) GetZ3MdDbCkDt() ([]*object.Z3MdDbCkDt, error) {
 
 //删除调拨出库索引
 func (r *repMd) DelZ3MdDbCkDtSy(id string) error {
-	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3MdDbCkDtSy, id)
+	err := goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3MdDbCkDtSy, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //获取调拨调整明细
 func (r *repMd) GetZ3MdDbTzDt() ([]*object.Z3MdDbTzDt, error) {
 	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3MdDbTzDt)
 	if err != nil {
+		log.Error(err.Error())
 		return nil, err
 	}
 	defer func() {
@@ -381,13 +400,19 @@ func (r *repMd) GetZ3MdDbTzDt() ([]*object.Z3MdDbTzDt, error) {
 
 //删除调拨调整明细
 func (r *repMd) DelZ3MdDbTzDtSy(id string) error {
-	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3MdDbTzDtSy, id)
+	err := goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3MdDbTzDtSy, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //获取货品出库登记
 func (r *repMd) GetZ3HpCkDjDt() ([]*object.Z3HpCkDjDt, error) {
 	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HpCkDjDt)
 	if err != nil {
+		log.Error(err.Error())
 		return nil, err
 	}
 	defer func() {
@@ -435,13 +460,19 @@ func (r *repMd) GetZ3HpCkDjDt() ([]*object.Z3HpCkDjDt, error) {
 
 //删除货品出库登记
 func (r *repMd) DelZ3HpCkDjDt(id string) error {
-	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HpCkDjDtSy, id)
+	err := goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HpCkDjDtSy, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //获取货品入库登记
 func (r *repMd) GetZ3HpRkDjDt() ([]*object.Z3HpRkDjDt, error) {
 	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HpRkDjDt)
 	if err != nil {
+		log.Error(err.Error())
 		return nil, err
 	}
 	defer func() {
@@ -489,13 +520,19 @@ func (r *repMd) GetZ3HpRkDjDt() ([]*object.Z3HpRkDjDt, error) {
 
 //删除货品入库登记
 func (r *repMd) DelZ3HpRkDjDtSy(id string) error {
-	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HpRkDjDtSy, id)
+	err := goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HpRkDjDtSy, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //获取盘亏登记
 func (r *repMd) GetZ3PkDjDt() ([]*object.Z3PkDjDt, error) {
 	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3PkDjDt)
 	if err != nil {
+		log.Error(err.Error())
 		return nil, err
 	}
 	defer func() {
@@ -543,13 +580,19 @@ func (r *repMd) GetZ3PkDjDt() ([]*object.Z3PkDjDt, error) {
 
 //删除盘亏登记
 func (r *repMd) DelZ3PkDjDtSy(id string) error {
-	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3PkDjDt, id)
+	err := goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3PkDjDt, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //获取门店配送调整
 func (r *repMd) GetZ3MdPsTzDt() ([]*object.Z3MdPsTzDt, error) {
 	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3MdPsTzDt)
 	if err != nil {
+		log.Error(err.Error())
 		return nil, err
 	}
 	defer func() {
@@ -601,13 +644,19 @@ func (r *repMd) GetZ3MdPsTzDt() ([]*object.Z3MdPsTzDt, error) {
 
 //删除门店配送调整
 func (r *repMd) DelZ3MdPsTzDtSy(id string) error {
-	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3MdPsTzDtSy, id)
+	err := goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3MdPsTzDtSy, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 //获取提货货品明细
 func (r *repMd) GetZ3XsDdThDt() ([]*object.Z3XsDdThDt, error) {
 	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3XsDdThDt)
 	if err != nil {
+		log.Error(err.Error())
 		return nil, err
 	}
 	defer func() {
@@ -665,5 +714,10 @@ func (r *repMd) GetZ3XsDdThDt() ([]*object.Z3XsDdThDt, error) {
 
 //删除提货货品明细
 func (r *repMd) DelZ3XsDdThDtSy(id string) error {
-	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3XsDdThDtSy, id)
+	err := goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3XsDdThDtSy, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
