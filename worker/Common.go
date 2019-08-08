@@ -2,11 +2,13 @@ package worker
 
 import (
 	"fmt"
+	"github.com/Deansquirrel/goServiceSupportHelper"
 	"github.com/Deansquirrel/goToolCron"
 	"github.com/Deansquirrel/goToolMSSqlHelper"
 	"github.com/Deansquirrel/goToolSVRV3"
 	"github.com/Deansquirrel/goZ9DataTransHolidayReport/global"
 	"github.com/Deansquirrel/goZ9DataTransHolidayReport/object"
+	"github.com/Deansquirrel/goZ9DataTransHolidayReport/repository"
 	"github.com/kataras/iris/core/errors"
 	"strconv"
 	"time"
@@ -136,6 +138,14 @@ func (c *common) StartService(sType object.RunMode) {
 		}
 	}
 	log.Debug(fmt.Sprintf("dbName: %s", global.SysConfig.LocalDb.DbName))
+
+	go func() {
+		goServiceSupportHelper.SetOtherInfo(
+			repository.NewCommon().GetLocalDbConfig(),
+			1,
+			true)
+	}()
+
 	switch sType {
 	case object.RunModeMd:
 		c.addMdWorker()
@@ -154,7 +164,11 @@ func (c *common) panicHandle(v interface{}) {
 }
 
 func (c *common) addWorker(key string, cmd func()) {
-	err := goToolCron.AddFunc(key, global.SysConfig.Task.Cron, cmd, c.panicHandle)
+	err := goToolCron.AddFunc(
+		key,
+		global.SysConfig.Task.Cron,
+		goServiceSupportHelper.NewJob().FormatSSJob(key, cmd),
+		c.panicHandle)
 	if err != nil {
 		errMsg := fmt.Sprintf("add job [%s] error: %s", key, err.Error())
 		log.Error(errMsg)

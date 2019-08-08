@@ -12,6 +12,9 @@ db=""
 # 服务器地址，如 127.0.0.1
 address=""
 
+[ssConfig]
+address=""
+
 [localDb]
 # 本地库连接信息
 server=""
