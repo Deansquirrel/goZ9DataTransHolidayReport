@@ -425,7 +425,7 @@ const (
 		"	End"
 	sqlDelZ3HxZzLsjt = "" +
 		"delete from [z3hxzzlsjt] " +
-		"where [lsjjgzzid]=? and [lsjhpid]=?)"
+		"where [lsjjgzzid]=? and [lsjhpid]=?"
 )
 
 type repZxZc struct {
