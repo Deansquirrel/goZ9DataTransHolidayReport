@@ -313,6 +313,19 @@ type Z3JrDzqSzFja struct {
 	DzqJyBz    int
 }
 
+//核心组织零售价
+type Z3HxZzLsjt struct {
+	LsjJgZzId  int
+	LsjHpid    int
+	LsjYxZxLsj float64
+}
+
+//核心组织零售价索引
+type Z3HxZzLsjSyt struct {
+	LsjHpId int
+	LsjZzId int
+}
+
 //机构表A
 type Z3FzJga struct {
 	FzJgId          int

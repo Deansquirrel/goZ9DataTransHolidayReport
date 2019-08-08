@@ -409,6 +409,23 @@ const (
 	sqlDelZ3Ppa = "" +
 		"delete from [z3ppa] " +
 		"where [ppid]=?"
+
+	sqlUpdateZ3HxZzLsjt = "" +
+		"IF EXISTS (SELECT * FROM [z3hxzzlsjt] WHERE [lsjjgzzid]=? and [lsjhpid]=?) " +
+		"	Begin " +
+		"		UPDATE [z3hxzzlsjt] " +
+		"		SET [lsjjgzzid]=?,[lsjhpid]=?,[lsjyxzxlsj]=? " +
+		"		WHERE [lsjjgzzid]=? and [lsjhpid]=? " +
+		"	End " +
+		"ELSE " +
+		"	Begin " +
+		"		DELETE FROM [z3hxzzlsjt] WHERE [lsjhpid]=? " +
+		"		INSERT INTO [z3hxzzlsjt]([lsjjgzzid],[lsjhpid],[lsjyxzxlsj]) " +
+		"		VALUES (?,?,?) " +
+		"	End"
+	sqlDelZ3HxZzLsjt = "" +
+		"delete from [z3hxzzlsjt] " +
+		"where [lsjjgzzid]=? and [lsjhpid]=?)"
 )
 
 type repZxZc struct {
@@ -662,6 +679,19 @@ func (r *repZxZc) UpdateZ3FzJga(d *object.Z3FzJga) error {
 }
 func (r *repZxZc) DelZ3FzJga(id int64) error {
 	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3FzJga, id)
+}
+
+//核心组织零售价
+func (r *repZxZc) UpdateZ3HxZzLsjt(d *object.Z3HxZzLsjt) error {
+	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3HxZzLsjt,
+		d.LsjJgZzId, d.LsjHpid,
+		d.LsjJgZzId, d.LsjHpid, d.LsjYxZxLsj,
+		d.LsjJgZzId, d.LsjHpid,
+		d.LsjHpid,
+		d.LsjJgZzId, d.LsjHpid, d.LsjYxZxLsj)
+}
+func (r *repZxZc) DelZ3HxZzLsjt(id *object.Z3HxZzLsjSyt) error {
+	return goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlDelZ3HxZzLsjt, id.LsjZzId, id.LsjHpId)
 }
 
 //电子券设置

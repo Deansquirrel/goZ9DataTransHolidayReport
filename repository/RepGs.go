@@ -120,8 +120,22 @@ const (
 		"	[ppsym],[pppym],[ppisforbidden],[ppbz] " +
 		"from [z3ppa] " +
 		"where [ppid] = ?"
-	sqlDelZ3PpaSy = "delete from [z3ppsyt] " +
+	sqlDelZ3PpaSy = "" +
+		"delete from [z3ppsyt] " +
 		"where [ppid] = ?"
+
+	sqlGetZ3HxZzLsjtSy = "" +
+		"select top 1 [lsjzzid],[lsjhpid] " +
+		"from [z3hxzzlsjsyt] " +
+		"order by [lsjhpid],[lsjzzid]"
+	sqlGetZ3HxZzLsjt = "" +
+		"select ls.[lsjjgzzid],ls.[lsjhpid],ls.[lsjyxzxlsj] " +
+		"from [z3mdjgzzlsjt] ls " +
+		"inner join [z3mdjgzzt] zz on ls.[lsjjgzzid]=zz.[zzmcid] and zz.[zzhxzz]=1 " +
+		"where ls.[lsjjgzzid] = ? and ls.[lsjhpid] = ?"
+	sqlDelZ3HxZzLsjtSy = "" +
+		"delete from [z3hxzzlsjsyt] " +
+		"where [lsjzzid]=? and  [lsjhpid]=?"
 )
 
 type repGs struct {
@@ -815,4 +829,69 @@ func (r *repGs) GetZ3Ppa(id int64) ([]*object.Z3Ppa, error) {
 }
 func (r *repGs) DelZ3PpaSy(id int64) error {
 	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3PpaSy, id)
+}
+
+//核心组织零售价
+func (r *repGs) GetZ3HxZzLsjtSy() ([]*object.Z3HxZzLsjSyt, error) {
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HxZzLsjtSy)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	rList := make([]*object.Z3HxZzLsjSyt, 0)
+	var zzId, hpId int
+	for rows.Next() {
+		err := rows.Scan(&zzId, &hpId)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3HxZzLsjtSy", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.Z3HxZzLsjSyt{
+			LsjHpId: hpId,
+			LsjZzId: zzId,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3HxZzLsjtSy", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+func (r *repGs) GetZ3HxZzLsjt(id *object.Z3HxZzLsjSyt) ([]*object.Z3HxZzLsjt, error) {
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3HxZzLsjt, id.LsjZzId, id.LsjHpId)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	var lsjJgZzId, lsjHpid int
+	var lsjYxZxLsj float64
+	rList := make([]*object.Z3HxZzLsjt, 0)
+	for rows.Next() {
+		err := rows.Scan(&lsjJgZzId, &lsjHpid, &lsjYxZxLsj)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3HxZzLsjt", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.Z3HxZzLsjt{
+			LsjJgZzId:  lsjJgZzId,
+			LsjHpid:    lsjHpid,
+			LsjYxZxLsj: lsjYxZxLsj,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3HxZzLsjt", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+func (r *repGs) DelZ3HxZzLsjtSy(id *object.Z3HxZzLsjSyt) error {
+	return goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3HxZzLsjtSy, id.LsjZzId, id.LsjHpId)
 }

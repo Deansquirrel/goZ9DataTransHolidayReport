@@ -462,7 +462,69 @@ func (w *gsWorker) Z3FzJga() {
 	}
 }
 
-//TODO 核心组织零售价
+//核心组织零售价
+func (w *gsWorker) Z3HxZzLsjt() {
+	id := goToolCommon.Guid()
+	log.Debug(fmt.Sprintf("Z3HxZzLsjt %s start", id))
+	defer log.Debug(fmt.Sprintf("Z3HxZzLsjt %s complete", id))
+	repGs := repository.NewRepGs()
+	repOnLine, err := repository.NewRepZxZc()
+	if err != nil {
+		errMsg := fmt.Sprintf("Z3HxZzLsjt get rep online err: %s", err.Error())
+		log.Error(errMsg)
+		return
+	}
+	uCounter := 0
+	dCounter := 0
+	for {
+		rList, err := repGs.GetZ3HxZzLsjtSy()
+		if err != nil {
+			return
+		}
+		if rList == nil {
+			errMsg := fmt.Sprintf("Z3HxZzLsjt get sy error: return list can not be nil")
+			log.Error(errMsg)
+			return
+		}
+		if len(rList) == 0 {
+			break
+		}
+		for _, id := range rList {
+			dList, err := repGs.GetZ3HxZzLsjt(id)
+			if err != nil {
+				return
+			}
+			if dList == nil {
+				errMsg := fmt.Sprintf("Z3HxZzLsjt get data error: return list can not be nil")
+				log.Error(errMsg)
+				return
+			}
+			if len(dList) > 0 {
+				for _, d := range dList {
+					err := repOnLine.UpdateZ3HxZzLsjt(d)
+					if err != nil {
+						return
+					}
+				}
+				uCounter = uCounter + 1
+			} else {
+				err := repOnLine.DelZ3HxZzLsjt(id)
+				if err != nil {
+					return
+				}
+				dCounter = dCounter + 1
+			}
+			err = repGs.DelZ3HxZzLsjtSy(id)
+			if err != nil {
+				return
+			}
+			log.Debug(fmt.Sprintf("gs Z3HxZzLsjt[%d,%d] Update", id.LsjZzId, id.LsjHpId))
+		}
+	}
+	if uCounter > 0 || dCounter > 0 {
+		log.Info(fmt.Sprintf("gs Z3HxZzLsjt Update %d,Del %d,Total %d", uCounter, dCounter, uCounter+dCounter))
+	}
+}
 
 //电子券设置
 func (w *gsWorker) Z3DzqSza() {
@@ -528,7 +590,7 @@ func (w *gsWorker) Z3DzqSza() {
 	}
 }
 
-//TODO 货品品牌设置
+//货品品牌设置
 func (w *gsWorker) Z3Ppa() {
 	id := goToolCommon.Guid()
 	log.Debug(fmt.Sprintf("Z3Ppa %s start", id))
