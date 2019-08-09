@@ -193,7 +193,7 @@ func (c *common) addWlWorker() {
 	log.Debug("add wl worker")
 	worker := NewWlWorker()
 	c.addWorker("Z3PsCkHpDt", worker.Z3PsCkHpDt)
-	//c.addWorker("Z3PsXzt", worker.Z3PsXzt)
+	c.addWorker("Z3PsXzDt", worker.Z3PsXzDt)
 	//c.addWorker("Z3MdPsCht", worker.Z3MdPsCht)
 	//c.addWorker("Z3SheZhXsCkt", worker.Z3SheZhXsCkt)
 	//c.addWorker("ShengChWgRkt", worker.ShengChWgRkt)

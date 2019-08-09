@@ -234,6 +234,29 @@ type Z3PsCkHpFjDt struct {
 	CkPhBj    int
 }
 
+//配送修正
+type Z3PsXzDt struct {
+	XzdMxHh   string
+	XzDjh     string
+	XzLsh     string
+	XzdXzr    time.Time
+	XzdShJgId int
+	XzdShCkId int
+	XzRkJgId  int
+	XzRkCkId  int
+	XzdHpId   int
+	XzdDwId   int
+	XzdHsl    float64
+	XzdJmTzSl float64
+	XzdZxTzSl float64
+	XzdJmXzSl float64
+	XzdDhj    float64
+	XzdPsj    float64
+	XzBz      string
+	XzrId     int
+	XzSj      time.Time
+}
+
 //==============================================================================================
 
 //集团通用货品设置A

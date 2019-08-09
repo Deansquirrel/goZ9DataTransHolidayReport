@@ -79,17 +79,69 @@ func (w *wlWorker) Z3PsCkHpDt() {
 			if err != nil {
 				return
 			}
-			log.Debug(fmt.Sprintf("gs Z3PsCkHpDt[%s] Update", id))
+			log.Debug(fmt.Sprintf("wl Z3PsCkHpDt[%s] Update", id))
 		}
 	}
 	if uCounter > 0 || udCounter > 0 {
-		log.Info(fmt.Sprintf("gs Z3PsCkHpDt Update %d,Z3PsCkHpFjDt Update %d", uCounter, udCounter))
+		log.Info(fmt.Sprintf("wl Z3PsCkHpDt Update %d,Z3PsCkHpFjDt Update %d", uCounter, udCounter))
 	}
 }
 
 //工厂配送修正 z3psxzt 和z3psxzdt
-func (w *wlWorker) Z3PsXzt() {
-	log.Debug("Z3PsXzt")
+func (w *wlWorker) Z3PsXzDt() {
+	id := goToolCommon.Guid()
+	log.Debug(fmt.Sprintf("Z3PsXzDt %s start", id))
+	defer log.Debug(fmt.Sprintf("Z3PsXzDt %s complete", id))
+	repWl := repository.NewRepWl()
+	repOnLine, err := repository.NewRepZxZc()
+	if err != nil {
+		errMsg := fmt.Sprintf("Z3PsXzDt get rep online err: %s", err.Error())
+		log.Error(errMsg)
+		return
+	}
+	uCounter := 0
+	for {
+		rList, err := repWl.GetZ3PsXzDtSy()
+		if err != nil {
+			return
+		}
+		if rList == nil {
+			errMsg := fmt.Sprintf("Z3PsXzDt get sy error: return list can not be nil")
+			log.Error(errMsg)
+			return
+		}
+		if len(rList) == 0 {
+			break
+		}
+		for _, id := range rList {
+			dList, err := repWl.GetZ3PsXzDt(id)
+			if err != nil {
+				return
+			}
+			if dList == nil {
+				errMsg := fmt.Sprintf("Z3PsXzDt get data error: return list can not be nil")
+				log.Error(errMsg)
+				return
+			}
+			if len(dList) > 0 {
+				for _, d := range dList {
+					err := repOnLine.UpdateZ3PsXzDt(d)
+					if err != nil {
+						return
+					}
+				}
+				uCounter = uCounter + 1
+			}
+			err = repWl.DelZ3PsXzDtSy(id)
+			if err != nil {
+				return
+			}
+			log.Debug(fmt.Sprintf("gs Z3PsXzDt[%s] Update", id))
+		}
+	}
+	if uCounter > 0 {
+		log.Info(fmt.Sprintf("gs Z3PsXzDt Update %d", uCounter))
+	}
 }
 
 //工厂配送冲红z3mdpscht 和z3mdpschdt
