@@ -199,7 +199,7 @@ type Z3XsDdThDt struct {
 
 //==============================================================================================
 
-//配送出库货品明细
+//配送出库
 type Z3PsCkHpDt struct {
 	CkdLsh       string
 	CkdHpId      int
@@ -211,7 +211,6 @@ type Z3PsCkHpDt struct {
 	CkMdId       int
 	CkPpId       int
 	CkdEdDjLx    int
-	CkdPhBj      int
 	CkdDhZxSl    float64
 	CkdZxDhj     float64
 	CkdDhJe      float64
@@ -221,6 +220,18 @@ type Z3PsCkHpDt struct {
 	CkdPsJmSl    float64
 	CkPsBz       string
 	CkFcCzrId    int
+}
+
+//配送出库二级明细表
+type Z3PsCkHpFjDt struct {
+	CkdLsh    string
+	CkdHpId   int
+	CkGhdMxHh string
+	CkdDwId   int
+	CkdHsl    float64
+	CkZxDdSl  float64
+	CkZxPsSl  float64
+	CkPhBj    int
 }
 
 //==============================================================================================

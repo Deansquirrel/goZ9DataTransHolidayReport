@@ -428,6 +428,46 @@ const (
 	sqlDelZ3HxZzLsjt = "" +
 		"delete from [z3hxzzlsjt] " +
 		"where [lsjjgzzid]=? and [lsjhpid]=?"
+
+	sqlUpdateZ3PsCkHpDt = "" +
+		"IF EXISTS (SELECT * FROM [z3psckhpdt] WHERE [ckdlsh]=?) " +
+		"	Begin " +
+		"		UPDATE [z3psckhpdt] " +
+		"		SET [ckdlsh]=?,[ckdhpid]=?,[ckddjh]=?,[ckddwid]=?,[ckdhsl]=?, " +
+		"			[ckdcckfzjgid]=?,[ckdcckid]=?,[ckmdid]=?,[ckppid]=?,[ckdeddjlx]=?, " +
+		"			[ckddhzxsl]=?,[ckdzxdhj]=?,[ckddhje]=?,[ckdzspsj]=?,[ckdhrq]=?, " +
+		"			[ckdshsj]=?,[ckdpsjmsl]=?,[ckpsbz]=?,[ckfcczrid]=? " +
+		"		WHERE [ckdlsh]=? " +
+		"	End " +
+		"ELSE " +
+		"	Begin " +
+		"		INSERT INTO [z3psckhpdt]([ckdlsh],[ckdhpid],[ckddjh],[ckddwid],[ckdhsl], " +
+		"			[ckdcckfzjgid],[ckdcckid],[ckmdid],[ckppid],[ckdeddjlx], " +
+		"			[ckddhzxsl],[ckdzxdhj],[ckddhje],[ckdzspsj],[ckdhrq], " +
+		"			[ckdshsj],[ckdpsjmsl],[ckpsbz],[ckfcczrid]) " +
+		"		VALUES ( " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?) " +
+		"	End"
+
+	sqlUpdateZ3PsCkHpFjDt = "" +
+		"IF EXISTS (SELECT * FROM [z3psckhpfjdt] WHERE [ckdlsh]=?) " +
+		"	Begin " +
+		"		UPDATE [z3psckhpfjdt] " +
+		"		SET [ckdlsh]=?,[ckdhpid]=?,[ckghdmxhh]=?,[ckddwid]=?,[ckdhsl]=?, " +
+		"			[ckzxddsl]=?,[ckzxpssl]=?,[ckphbj]=? " +
+		"		WHERE [ckdlsh]=? " +
+		"	End " +
+		"ELSE " +
+		"	Begin " +
+		"		INSERT INTO [z3psckhpfjdt]([ckdlsh],[ckdhpid],[ckghdmxhh],[ckddwid],[ckdhsl], " +
+		"			[ckzxddsl],[ckzxpssl],[ckphbj]) " +
+		"		VALUES ( " +
+		"			?,?,?,?,?, " +
+		"			?,?,?) " +
+		"	End"
 )
 
 type repZxZc struct {
@@ -617,6 +657,44 @@ func (r *repZxZc) UpdateMdZ3XsDdThDt(d *object.Z3XsDdThDt) error {
 		d.ThKhId, d.ThdHpId, d.ThdDwId, d.ThdHsl, d.ThdDZxSl,
 		d.ThDdBqjXj, d.ThDdCjjXj, d.ThdJmSl, d.ThdBqjXj, d.ThdCjjXj,
 		d.ThZdrId, d.ThZdSj, d.ThBz)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
+}
+
+//==============================================================================================
+
+// 配送出库
+func (r *repZxZc) UpdateZ3PsCkHpDt(d *object.Z3PsCkHpDt) error {
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3PsCkHpDt,
+		d.CkdLsh,
+		d.CkdLsh, d.CkdHpId, d.CkdDjh, d.CkdDwId, d.CkdHsl,
+		d.CkdCckFzJgId, d.CkdCckId, d.CkMdId, d.CkPpId, d.CkdEdDjLx,
+		d.CkdDhZxSl, d.CkdZxDhj, d.CkdDhJe, d.CkdZsPsj, d.CkdHrq,
+		d.CkdShSj, d.CkdPsJmSl, d.CkPsBz, d.CkFcCzrId,
+		d.CkdLsh,
+		d.CkdLsh, d.CkdHpId, d.CkdDjh, d.CkdDwId, d.CkdHsl,
+		d.CkdCckFzJgId, d.CkdCckId, d.CkMdId, d.CkPpId, d.CkdEdDjLx,
+		d.CkdDhZxSl, d.CkdZxDhj, d.CkdDhJe, d.CkdZsPsj, d.CkdHrq,
+		d.CkdShSj, d.CkdPsJmSl, d.CkPsBz, d.CkFcCzrId)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
+}
+
+// 配送出库二级明细表
+func (r *repZxZc) UpdateZ3PsCkHpFjDt(d *object.Z3PsCkHpFjDt) error {
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3PsCkHpFjDt,
+		d.CkdLsh,
+		d.CkdLsh, d.CkdHpId, d.CkGhdMxHh, d.CkdDwId, d.CkdHsl,
+		d.CkZxDdSl, d.CkZxPsSl, d.CkPhBj,
+		d.CkdLsh,
+		d.CkdLsh, d.CkdHpId, d.CkGhdMxHh, d.CkdDwId, d.CkdHsl,
+		d.CkZxDdSl, d.CkZxPsSl, d.CkPhBj)
 	if err != nil {
 		log.Error(err.Error())
 		return err

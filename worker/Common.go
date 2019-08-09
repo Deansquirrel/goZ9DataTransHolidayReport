@@ -192,15 +192,15 @@ func (c *common) addMdWorker() {
 func (c *common) addWlWorker() {
 	log.Debug("add wl worker")
 	worker := NewWlWorker()
-	c.addWorker("Z3MdPsCkDt", worker.Z3MdPsCkDt)
-	c.addWorker("Z3PsXzt", worker.Z3PsXzt)
-	c.addWorker("Z3MdPsCht", worker.Z3MdPsCht)
-	c.addWorker("Z3SheZhXsCkt", worker.Z3SheZhXsCkt)
-	c.addWorker("ShengChWgRkt", worker.ShengChWgRkt)
-	c.addWorker("XtTz", worker.XtTz)
-	c.addWorker("Z3MdDhDt", worker.Z3MdDhDt)
-	c.addWorker("Z3MdDhDtMd", worker.Z3MdDhDtMd)
-	c.addWorker("OodXv1DdShCkt", worker.OodXv1DdShCkt)
+	c.addWorker("Z3PsCkHpDt", worker.Z3PsCkHpDt)
+	//c.addWorker("Z3PsXzt", worker.Z3PsXzt)
+	//c.addWorker("Z3MdPsCht", worker.Z3MdPsCht)
+	//c.addWorker("Z3SheZhXsCkt", worker.Z3SheZhXsCkt)
+	//c.addWorker("ShengChWgRkt", worker.ShengChWgRkt)
+	//c.addWorker("XtTz", worker.XtTz)
+	//c.addWorker("Z3MdDhDt", worker.Z3MdDhDt)
+	//c.addWorker("Z3MdDhDtMd", worker.Z3MdDhDtMd)
+	//c.addWorker("OodXv1DdShCkt", worker.OodXv1DdShCkt)
 }
 
 func (c *common) addGsWorker() {
