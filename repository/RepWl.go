@@ -47,6 +47,10 @@ const (
 	sqlDelZ3PsXzDtSy = "" +
 		"DELETE FROM [z3psxzsyt] " +
 		"WHERE [xzdlsh]=?"
+
+	sqlGetZ3MdPsChDtSy = "" +
+		"select top 1 xzdlsh " +
+		"from z3pschsyt"
 )
 
 type repWl struct {
@@ -277,4 +281,45 @@ func (r *repWl) DelZ3PsXzDtSy(id string) error {
 		return err
 	}
 	return nil
+}
+
+//配送冲红单
+func (r *repWl) GetZ3MdPsChDtSy() ([]string, error) {
+	return r.getSyStr("GetZ3MdPsChDtSy", sqlGetZ3MdPsChDtSy)
+}
+func (r *repWl) GetZ3MdPsChDt(id string) ([]*object.Z3MdPsChDt, error) {
+	//TODO
+	return nil, nil
+}
+func (r *repWl) DelZ3MdPsChDtSy(id string) error {
+	//TODO
+	return nil
+}
+
+func (r *repWl) getSyStr(key string, sqlStr string) ([]string, error) {
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlStr)
+	if err != nil {
+		log.Error(err.Error())
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	rList := make([]string, 0)
+	for rows.Next() {
+		var id string
+		err := rows.Scan(&id)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", key, err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, id)
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", key, rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
 }

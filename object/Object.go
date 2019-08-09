@@ -257,6 +257,26 @@ type Z3PsXzDt struct {
 	XzSj      time.Time
 }
 
+//配送冲红单
+type Z3MdPsChDt struct {
+	ChdLsh       string
+	ChDjh        string
+	ChLsh        string
+	ChdHpId      int
+	ChdCckFzJgId int
+	ChdCckId     int
+	ChdHsr       time.Time
+	ChdHsXzId    int
+	ChdHsBmId    int
+	ChdDwId      int
+	ChdHsl       float64
+	ChdPsJmSl    float64
+	ChdPsj       float64
+	ChBz         string
+	ChShrId      int
+	ChShSj       time.Time
+}
+
 //==============================================================================================
 
 //集团通用货品设置A
