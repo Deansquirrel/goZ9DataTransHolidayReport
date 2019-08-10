@@ -194,7 +194,7 @@ func (c *common) addWlWorker() {
 	worker := NewWlWorker()
 	c.addWorker("Z3PsCkHpDt", worker.Z3PsCkHpDt)
 	c.addWorker("Z3PsXzDt", worker.Z3PsXzDt)
-	//c.addWorker("Z3MdPsCht", worker.Z3MdPsCht)
+	c.addWorker("Z3MdPsChDt", worker.Z3MdPsChDt)
 	//c.addWorker("Z3SheZhXsCkt", worker.Z3SheZhXsCkt)
 	//c.addWorker("ShengChWgRkt", worker.ShengChWgRkt)
 	//c.addWorker("XtTz", worker.XtTz)
