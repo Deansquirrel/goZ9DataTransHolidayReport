@@ -513,6 +513,26 @@ const (
 		"			?,?,?,?,?, " +
 		"			?) " +
 		"	End"
+
+	sqlUpdateShengChWgRkDt = "" +
+		"IF EXISTS (SELECT * FROM [shengchwgrkdt] WHERE [wgrkmxhh]=?) " +
+		"	Begin " +
+		"		UPDATE [shengchwgrkdt] " +
+		"		SET [wgrkmxhh]=?,[wgrkdjh]=?,[wgrklsh]=?,[wgrkhsrq]=?,[wgrkhpid]=?, " +
+		"			[wgrkdwid]=?,[wgrkhsl]=?,[wgrkrfzjgid]=?,[wgrkrckid]=?,[wgrkjmsl]=?, " +
+		"			[wgrkcpczdj]=?,[wgrkjg]=?,[wgrkzdrid]=?,[wgrkshsj]=?,[wgrkbz]=? " +
+		"		WHERE [wgrkmxhh]=? " +
+		"	End " +
+		"ELSE " +
+		"	Begin " +
+		"		INSERT INTO [shengchwgrkdt]([wgrkmxhh],[wgrkdjh],[wgrklsh],[wgrkhsrq],[wgrkhpid], " +
+		"			[wgrkdwid],[wgrkhsl],[wgrkrfzjgid],[wgrkrckid],[wgrkjmsl], " +
+		"			[wgrkcpczdj],[wgrkjg],[wgrkzdrid],[wgrkshsj],[wgrkbz]) " +
+		"		VALUES ( " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?) " +
+		"	End"
 )
 
 type repZxZc struct {
@@ -780,6 +800,24 @@ func (r *repZxZc) UpdateZ3MdPsChDt(d *object.Z3MdPsChDt) error {
 		d.ChdCckId, d.ChdHsr, d.ChdHsXzId, d.ChdHsBmId, d.ChdDwId,
 		d.ChdHsl, d.ChdPsJmSl, d.ChdPsj, d.ChBz, d.ChShrId,
 		d.ChShSj)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
+}
+
+//完工入库
+func (r *repZxZc) UpdateShengChWgRkDt(d *object.ShengChWgRkDt) error {
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateShengChWgRkDt,
+		d.WgRkMxHh,
+		d.WgRkMxHh, d.WgRkDjh, d.WgRkLsh, d.WgRkHsRq, d.WgRkHpId,
+		d.WgRkDwId, d.WgRkHsl, d.WgRkrFzJgId, d.WgRkrCkId, d.WgRkJmSl,
+		d.WgRkCpCzDj, d.WgRkJg, d.WgRkZdrId, d.WgRkShSj, d.WgRkBz,
+		d.WgRkMxHh,
+		d.WgRkMxHh, d.WgRkDjh, d.WgRkLsh, d.WgRkHsRq, d.WgRkHpId,
+		d.WgRkDwId, d.WgRkHsl, d.WgRkrFzJgId, d.WgRkrCkId, d.WgRkJmSl,
+		d.WgRkCpCzDj, d.WgRkJg, d.WgRkZdrId, d.WgRkShSj, d.WgRkBz)
 	if err != nil {
 		log.Error(err.Error())
 		return err

@@ -277,6 +277,25 @@ type Z3MdPsChDt struct {
 	ChShSj       time.Time
 }
 
+//完工入库
+type ShengChWgRkDt struct {
+	WgRkMxHh    string
+	WgRkDjh     string
+	WgRkLsh     string
+	WgRkHsRq    time.Time
+	WgRkHpId    int
+	WgRkDwId    int
+	WgRkHsl     float64
+	WgRkrFzJgId int
+	WgRkrCkId   int
+	WgRkJmSl    float64
+	WgRkCpCzDj  float64
+	WgRkJg      float64
+	WgRkZdrId   int
+	WgRkShSj    time.Time
+	WgRkBz      string
+}
+
 //==============================================================================================
 
 //集团通用货品设置A

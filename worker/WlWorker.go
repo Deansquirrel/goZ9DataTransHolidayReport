@@ -207,8 +207,60 @@ func (w *wlWorker) Z3SheZhXsCkt() {
 }
 
 //工厂完工入库shengchwgrkdt 和shengchwgrkt
-func (w *wlWorker) ShengChWgRkt() {
-	log.Debug("ShengChWgRkt")
+func (w *wlWorker) ShengChWgRkDt() {
+	id := goToolCommon.Guid()
+	log.Debug(fmt.Sprintf("ShengChWgRkDt %s start", id))
+	defer log.Debug(fmt.Sprintf("ShengChWgRkDt %s complete", id))
+	repWl := repository.NewRepWl()
+	repOnLine, err := repository.NewRepZxZc()
+	if err != nil {
+		errMsg := fmt.Sprintf("ShengChWgRkDt get rep online err: %s", err.Error())
+		log.Error(errMsg)
+		return
+	}
+	uCounter := 0
+	for {
+		rList, err := repWl.GetShengChWgRkDtSy()
+		if err != nil {
+			return
+		}
+		if rList == nil {
+			errMsg := fmt.Sprintf("ShengChWgRkDt get sy error: return list can not be nil")
+			log.Error(errMsg)
+			return
+		}
+		if len(rList) == 0 {
+			break
+		}
+		for _, id := range rList {
+			dList, err := repWl.GetShengChWgRkDt(id)
+			if err != nil {
+				return
+			}
+			if dList == nil {
+				errMsg := fmt.Sprintf("ShengChWgRkDt get data error: return list can not be nil")
+				log.Error(errMsg)
+				return
+			}
+			if len(dList) > 0 {
+				for _, d := range dList {
+					err := repOnLine.UpdateShengChWgRkDt(d)
+					if err != nil {
+						return
+					}
+				}
+				uCounter = uCounter + 1
+			}
+			err = repWl.DelShengChWgRkDtSy(id)
+			if err != nil {
+				return
+			}
+			log.Debug(fmt.Sprintf("gs ShengChWgRkDt[%s] Update", id))
+		}
+	}
+	if uCounter > 0 {
+		log.Info(fmt.Sprintf("gs ShengChWgRkDt Update %d", uCounter))
+	}
 }
 
 //工厂即时台账表xttz
