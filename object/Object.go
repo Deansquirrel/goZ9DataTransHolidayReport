@@ -296,6 +296,27 @@ type ShengChWgRkDt struct {
 	WgRkBz      string
 }
 
+//赊账销售出库
+type Z3SheZhXsHpMxt struct {
+	CkMxHh      string
+	CkDjh       string
+	CkLsh       string
+	CkHsRq      time.Time
+	CkCckFzJgId int
+	CkCckId     int
+	CkHpId      int
+	CkDwId      int
+	CkHsl       float64
+	CkJmDj      float64
+	CkJmSl      float64
+	CkCjJeXj    float64
+	CkJmLsj     float64
+	CkLsJeXj    float64
+	CkZdrId     int
+	CkShSj      time.Time
+	CkBz        string
+}
+
 //==============================================================================================
 
 //集团通用货品设置A
