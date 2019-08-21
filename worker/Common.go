@@ -143,7 +143,7 @@ func (c *common) StartService(sType object.RunMode) {
 		goServiceSupportHelper.SetOtherInfo(
 			repository.NewCommon().GetLocalDbConfig(),
 			1,
-			true)
+			goServiceSupportHelper.SVRV3)
 	}()
 
 	switch sType {
@@ -163,7 +163,7 @@ func (c *common) panicHandle(v interface{}) {
 	log.Error(fmt.Sprintf("panicHandle: %s", v))
 }
 
-func (c *common) addWorker(key string, cmd func()) {
+func (c *common) addWorker(key string, cmd func(id string)) {
 	err := goToolCron.AddFunc(
 		key,
 		global.SysConfig.Task.Cron,

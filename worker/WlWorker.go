@@ -15,7 +15,7 @@ func NewWlWorker() *wlWorker {
 }
 
 //配送出库&配送出库二级明细表
-func (w *wlWorker) Z3PsCkHpDt() {
+func (w *wlWorker) Z3PsCkHpDt(id string) {
 	id := goToolCommon.Guid()
 	log.Debug(fmt.Sprintf("Z3PsCkHpDt %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3PsCkHpDt %s complete", id))
@@ -88,8 +88,7 @@ func (w *wlWorker) Z3PsCkHpDt() {
 }
 
 //工厂配送修正 z3psxzt 和z3psxzdt
-func (w *wlWorker) Z3PsXzDt() {
-	id := goToolCommon.Guid()
+func (w *wlWorker) Z3PsXzDt(id string) {
 	log.Debug(fmt.Sprintf("Z3PsXzDt %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3PsXzDt %s complete", id))
 	repWl := repository.NewRepWl()
@@ -145,8 +144,7 @@ func (w *wlWorker) Z3PsXzDt() {
 }
 
 //工厂配送冲红z3mdpscht 和z3mdpschdt
-func (w *wlWorker) Z3MdPsChDt() {
-	id := goToolCommon.Guid()
+func (w *wlWorker) Z3MdPsChDt(id string) {
 	log.Debug(fmt.Sprintf("Z3MdPsChDt %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3MdPsChDt %s complete", id))
 	repWl := repository.NewRepWl()
@@ -202,7 +200,7 @@ func (w *wlWorker) Z3MdPsChDt() {
 }
 
 //工厂赊账销售出库z3shezhxsckt和z3shezhxshpmxt
-func (w *wlWorker) Z3SheZhXsHpMxt() {
+func (w *wlWorker) Z3SheZhXsHpMxt(id string) {
 	id := goToolCommon.Guid()
 	log.Debug(fmt.Sprintf("Z3SheZhXsHpMxt %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3SheZhXsHpMxt %s complete", id))
@@ -259,8 +257,7 @@ func (w *wlWorker) Z3SheZhXsHpMxt() {
 }
 
 //工厂完工入库shengchwgrkdt 和shengchwgrkt
-func (w *wlWorker) ShengChWgRkDt() {
-	id := goToolCommon.Guid()
+func (w *wlWorker) ShengChWgRkDt(id string) {
 	log.Debug(fmt.Sprintf("ShengChWgRkDt %s start", id))
 	defer log.Debug(fmt.Sprintf("ShengChWgRkDt %s complete", id))
 	repWl := repository.NewRepWl()

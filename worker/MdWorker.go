@@ -15,8 +15,7 @@ func NewMdWorker() *mdWorker {
 }
 
 //门店销售出库z3xsckt主表和z3xsckdt明细表
-func (w *mdWorker) Z3XsCkt() {
-	id := goToolCommon.Guid()
+func (w *mdWorker) Z3XsCkt(id string) {
 	log.Debug(fmt.Sprintf("Z3XsCkt %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3XsCkt %s complete", id))
 	repMd := repository.NewRepMd()
@@ -63,8 +62,7 @@ func (w *mdWorker) Z3XsCkt() {
 }
 
 //门店：门店销售退货z3xstht表和z3xsthhpdt明细表
-func (w *mdWorker) Z3XsTht() {
-	id := goToolCommon.Guid()
+func (w *mdWorker) Z3XsTht(id string) {
 	log.Debug(fmt.Sprintf("Z3XsTht %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3XsTht %s complete", id))
 	repMd := repository.NewRepMd()
@@ -111,8 +109,7 @@ func (w *mdWorker) Z3XsTht() {
 }
 
 //门店：门店调拨出库z3mddbckt和z3mddbckdt明细表
-func (w *mdWorker) Z3MdDbCkt() {
-	id := goToolCommon.Guid()
+func (w *mdWorker) Z3MdDbCkt(id string) {
 	log.Debug(fmt.Sprintf("Z3MdDbCkt %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3MdDbCkt %s complete", id))
 	repMd := repository.NewRepMd()
@@ -159,8 +156,7 @@ func (w *mdWorker) Z3MdDbCkt() {
 }
 
 //门店：门店调拨调整z3dbtzt和z3dbtzdt明细表
-func (w *mdWorker) Z3DbTzt() {
-	id := goToolCommon.Guid()
+func (w *mdWorker) Z3DbTzt(id string) {
 	log.Debug(fmt.Sprintf("Z3DbTzt %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3DbTzt %s complete", id))
 	repMd := repository.NewRepMd()
@@ -207,8 +203,7 @@ func (w *mdWorker) Z3DbTzt() {
 }
 
 //门店：门店其他出库z3hpckdjt和z3hpckdjdt明细表
-func (w *mdWorker) Z3HpCkDjt() {
-	id := goToolCommon.Guid()
+func (w *mdWorker) Z3HpCkDjt(id string) {
 	log.Debug(fmt.Sprintf("Z3HpCkDjt %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3HpCkDjt %s complete", id))
 	repMd := repository.NewRepMd()
@@ -255,8 +250,7 @@ func (w *mdWorker) Z3HpCkDjt() {
 }
 
 //门店：门店其它入库z3hprkdjt和z3hprkdjdt明细表
-func (w *mdWorker) Z3HpRkDjt() {
-	id := goToolCommon.Guid()
+func (w *mdWorker) Z3HpRkDjt(id string) {
 	log.Debug(fmt.Sprintf("Z3HpRkDjt %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3HpRkDjt %s complete", id))
 	repMd := repository.NewRepMd()
@@ -303,7 +297,7 @@ func (w *mdWorker) Z3HpRkDjt() {
 }
 
 //门店：门店盘亏登记z3pkdjt和z3pkdjdt明细表
-func (w *mdWorker) Z3PkDjt() {
+func (w *mdWorker) Z3PkDjt(id string) {
 	id := goToolCommon.Guid()
 	log.Debug(fmt.Sprintf("Z3PkDjt %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3PkDjt %s complete", id))
@@ -351,8 +345,7 @@ func (w *mdWorker) Z3PkDjt() {
 }
 
 //门店：门店配送收货调整z3pstzdt和z3pstzt
-func (w *mdWorker) Z3PsTzDt() {
-	id := goToolCommon.Guid()
+func (w *mdWorker) Z3PsTzDt(id string) {
 	log.Debug(fmt.Sprintf("Z3PsTzDt %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3PsTzDt %s complete", id))
 	repMd := repository.NewRepMd()
@@ -399,8 +392,7 @@ func (w *mdWorker) Z3PsTzDt() {
 }
 
 //门店：门店提货单z3xsddthdt
-func (w *mdWorker) Z3XsDdThDt() {
-	id := goToolCommon.Guid()
+func (w *mdWorker) Z3XsDdThDt(id string) {
 	log.Debug(fmt.Sprintf("Z3XsDdThDt %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3XsDdThDt %s complete", id))
 	repMd := repository.NewRepMd()

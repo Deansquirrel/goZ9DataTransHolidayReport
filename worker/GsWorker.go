@@ -2,7 +2,6 @@ package worker
 
 import (
 	"fmt"
-	"github.com/Deansquirrel/goToolCommon"
 	log "github.com/Deansquirrel/goToolLog"
 	"github.com/Deansquirrel/goZ9DataTransHolidayReport/repository"
 )
@@ -15,8 +14,7 @@ func NewGsWorker() *gsWorker {
 }
 
 //集团通用货品设置A
-func (w *gsWorker) Z3Hpa() {
-	id := goToolCommon.Guid()
+func (w *gsWorker) Z3Hpa(id string) {
 	log.Debug(fmt.Sprintf("Z3Hpa %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3Hpa %s complete", id))
 	repGs := repository.NewRepGs()
@@ -79,8 +77,7 @@ func (w *gsWorker) Z3Hpa() {
 }
 
 //货品计量单位附加表
-func (w *gsWorker) Z3HpDwFja() {
-	id := goToolCommon.Guid()
+func (w *gsWorker) Z3HpDwFja(id string) {
 	log.Debug(fmt.Sprintf("Z3HpDwFja %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3HpDwFja %s complete", id))
 	repGs := repository.NewRepGs()
@@ -143,8 +140,7 @@ func (w *gsWorker) Z3HpDwFja() {
 }
 
 //计量单位设置
-func (w *gsWorker) Z3JlDwa() {
-	id := goToolCommon.Guid()
+func (w *gsWorker) Z3JlDwa(id string) {
 	log.Debug(fmt.Sprintf("Z3JlDwa %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3JlDwa %s complete", id))
 	repGs := repository.NewRepGs()
@@ -207,8 +203,7 @@ func (w *gsWorker) Z3JlDwa() {
 }
 
 //货品二级分类
-func (w *gsWorker) Z3HpEjFlt() {
-	id := goToolCommon.Guid()
+func (w *gsWorker) Z3HpEjFlt(id string) {
 	log.Debug(fmt.Sprintf("Z3HpEjFlt %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3HpEjFlt %s complete", id))
 	repGs := repository.NewRepGs()
@@ -271,8 +266,7 @@ func (w *gsWorker) Z3HpEjFlt() {
 }
 
 //客户登记通用信息表
-func (w *gsWorker) Z3KhDja() {
-	id := goToolCommon.Guid()
+func (w *gsWorker) Z3KhDja(id string) {
 	log.Debug(fmt.Sprintf("Z3KhDja %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3KhDja %s complete", id))
 	repGs := repository.NewRepGs()
@@ -335,8 +329,7 @@ func (w *gsWorker) Z3KhDja() {
 }
 
 //节日电子券设置附加表
-func (w *gsWorker) Z3JrDzqSzFja() {
-	id := goToolCommon.Guid()
+func (w *gsWorker) Z3JrDzqSzFja(id string) {
 	log.Debug(fmt.Sprintf("Z3JrDzqSzFja %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3JrDzqSzFja %s complete", id))
 	repGs := repository.NewRepGs()
@@ -399,8 +392,7 @@ func (w *gsWorker) Z3JrDzqSzFja() {
 }
 
 //机构表V/A
-func (w *gsWorker) Z3FzJga() {
-	id := goToolCommon.Guid()
+func (w *gsWorker) Z3FzJga(id string) {
 	log.Debug(fmt.Sprintf("Z3FzJga %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3FzJga %s complete", id))
 	repGs := repository.NewRepGs()
@@ -463,8 +455,7 @@ func (w *gsWorker) Z3FzJga() {
 }
 
 //核心组织零售价
-func (w *gsWorker) Z3HxZzLsjt() {
-	id := goToolCommon.Guid()
+func (w *gsWorker) Z3HxZzLsjt(id string) {
 	log.Debug(fmt.Sprintf("Z3HxZzLsjt %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3HxZzLsjt %s complete", id))
 	repGs := repository.NewRepGs()
@@ -527,8 +518,7 @@ func (w *gsWorker) Z3HxZzLsjt() {
 }
 
 //电子券设置
-func (w *gsWorker) Z3DzqSza() {
-	id := goToolCommon.Guid()
+func (w *gsWorker) Z3DzqSza(id string) {
 	log.Debug(fmt.Sprintf("Z3DzqSza %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3DzqSza %s complete", id))
 	repGs := repository.NewRepGs()
@@ -591,8 +581,7 @@ func (w *gsWorker) Z3DzqSza() {
 }
 
 //货品品牌设置
-func (w *gsWorker) Z3Ppa() {
-	id := goToolCommon.Guid()
+func (w *gsWorker) Z3Ppa(id string) {
 	log.Debug(fmt.Sprintf("Z3Ppa %s start", id))
 	defer log.Debug(fmt.Sprintf("Z3Ppa %s complete", id))
 	repGs := repository.NewRepGs()
