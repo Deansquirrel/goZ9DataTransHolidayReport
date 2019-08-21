@@ -569,6 +569,32 @@ const (
 		"		INSERT INTO [xttz]([dptid],[brid],[gsid],[gsqty],[updatedate]) " +
 		"		VALUES (?,?,?,?,?) " +
 		"	END"
+
+	sqlUpdateOoDxV1DdShCkt = "" +
+		"IF EXISTS (SELECT * FROM [oodxv1ddshckt] WHERE [shmxhh]=?) " +
+		"	Begin " +
+		"		UPDATE [oodxv1ddshckt] " +
+		"		SET [shlsh]=?,[shmxhh]=?,[shhsr]=?,[shfzjgid]=?,[shckid]=?, " +
+		"			[shbmid]=?,[shxzid]=?,[shsendrid]=?,[shkhid]=?,[shdddjh]=?, " +
+		"			[shddlsh]=?,[shddmxhh]=?,[shphbj]=?,[shhpid]=?,[shjldwid]=?, " +
+		"			[shhsl]=?,[shddzxsl]=?,[shjhjmsl]=?,[shshjmsl]=?,[shshrid]=?, " +
+		"			[shshsj]=? " +
+		"		WHERE [shmxhh]=? " +
+		"	End " +
+		"ELSE " +
+		"	Begin " +
+		"		INSERT INTO [oodxv1ddshckt]([shlsh],[shmxhh],[shhsr],[shfzjgid],[shckid], " +
+		"			[shbmid],[shxzid],[shsendrid],[shkhid],[shdddjh], " +
+		"			[shddlsh],[shddmxhh],[shphbj],[shhpid],[shjldwid], " +
+		"			[shhsl],[shddzxsl],[shjhjmsl],[shshjmsl],[shshrid], " +
+		"			[shshsj]) " +
+		"		VALUES ( " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?) " +
+		"	End"
 )
 
 type repZxZc struct {
@@ -888,6 +914,28 @@ func (r *repZxZc) UpdateXtTz(d *object.XtTz) error {
 		d.GsQty, d.UpdateDate,
 		d.DptId, d.BrId, d.GsId,
 		d.DptId, d.BrId, d.GsId, d.GsQty, d.UpdateDate)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
+}
+
+//订单提货单
+func (r *repZxZc) UpdateOoDxV1DdShCkt(d *object.OoDxV1DdShCkt) error {
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateOoDxV1DdShCkt,
+		d.ShMxHh,
+		d.ShLsh, d.ShMxHh, d.ShHsr, d.ShFzJgId, d.ShCkId,
+		d.ShBmId, d.ShXzId, d.ShSendRid, d.ShKhId, d.ShDdDjh,
+		d.ShDdLsh, d.ShDdMxHh, d.ShPhBj, d.ShHpId, d.ShJlDwId,
+		d.ShHsl, d.ShDdZxSl, d.ShJhJmSl, d.ShShJmSl, d.ShShrId,
+		d.ShShSj,
+		d.ShMxHh,
+		d.ShLsh, d.ShMxHh, d.ShHsr, d.ShFzJgId, d.ShCkId,
+		d.ShBmId, d.ShXzId, d.ShSendRid, d.ShKhId, d.ShDdDjh,
+		d.ShDdLsh, d.ShDdMxHh, d.ShPhBj, d.ShHpId, d.ShJlDwId,
+		d.ShHsl, d.ShDdZxSl, d.ShJhJmSl, d.ShShJmSl, d.ShShrId,
+		d.ShShSj)
 	if err != nil {
 		log.Error(err.Error())
 		return err

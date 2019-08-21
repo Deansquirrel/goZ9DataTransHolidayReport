@@ -97,6 +97,21 @@ const (
 		"SELECT [dptid],[brid],[gsid],[gsqty],[updatedate] " +
 		"FROM [xttz] " +
 		"WHERE [updatedate] > ?"
+
+	sqlGetOoDxV1DdShCktSy = "" +
+		"SELECT TOP 1 [shmxhh] " +
+		"FROM [oodxv1ddshcksyt]"
+	sqlGetOoDxV1DdShCkt = "" +
+		"select shlsh,shmxhh,shhsr,shfzjgid,shckid, " +
+		"	shbmid,shxzid,shsendrid,shkhid,shdddjh, " +
+		"	shddlsh,shddmxhh,shphbj,shhpid,shjldwid, " +
+		"	shhsl,shddzxsl,shjhjmsl,ShShJmSl,shshrid, " +
+		"	shshsj " +
+		"from oodxv1ddshckt	" +
+		"where shmxhh = ?"
+	sqlDelOoDxV1DdShCktSy = "" +
+		"DELETE FROM [oodxv1ddshcksyt] " +
+		"WHERE [shmxhh]=?"
 )
 
 type repWl struct {
@@ -553,6 +568,76 @@ func (r *repWl) GetXtTz(lastUpdate time.Time) ([]*object.XtTz, error) {
 		return nil, errors.New(errMsg)
 	}
 	return rList, nil
+}
+
+//订单提货单
+func (r *repWl) GetOoDxV1DdShCktSy() ([]string, error) {
+	return r.getSyStr("GetOoDxV1DdShCktSy", sqlGetOoDxV1DdShCktSy)
+}
+func (r *repWl) GetOoDxV1DdShCkt(id string) ([]*object.OoDxV1DdShCkt, error) {
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetOoDxV1DdShCkt, id)
+	if err != nil {
+		log.Error(err.Error())
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	var shLsh, shMxHh, shDdDjh, shDdLsh, shDdMxHh string
+	var shHsr, shShSj time.Time
+	var shFzJgId, shCkId, shBmId, shXzId, shSendRid, shKhId, shPhBj, shHpId, shJlDwId, shShrId int
+	var shHsl, shDdZxSl, shJhJmSl, shShJmSl float64
+
+	rList := make([]*object.OoDxV1DdShCkt, 0)
+	for rows.Next() {
+		err := rows.Scan(&shLsh, &shMxHh, &shHsr, &shFzJgId, &shCkId,
+			&shBmId, &shXzId, &shSendRid, &shKhId, &shDdDjh,
+			&shDdLsh, &shDdMxHh, &shPhBj, &shHpId, &shJlDwId,
+			&shHsl, &shDdZxSl, &shJhJmSl, &shShJmSl, &shShrId,
+			&shShSj)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetOoDxV1DdShCkt", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.OoDxV1DdShCkt{
+			ShLsh:     shLsh,
+			ShMxHh:    shMxHh,
+			ShHsr:     shHsr,
+			ShFzJgId:  shFzJgId,
+			ShCkId:    shCkId,
+			ShBmId:    shBmId,
+			ShXzId:    shXzId,
+			ShSendRid: shSendRid,
+			ShKhId:    shKhId,
+			ShDdDjh:   shDdDjh,
+			ShDdLsh:   shDdLsh,
+			ShDdMxHh:  shDdMxHh,
+			ShPhBj:    shPhBj,
+			ShHpId:    shHpId,
+			ShJlDwId:  shJlDwId,
+			ShHsl:     shHsl,
+			ShDdZxSl:  shDdZxSl,
+			ShJhJmSl:  shJhJmSl,
+			ShShJmSl:  shShJmSl,
+			ShShrId:   shShrId,
+			ShShSj:    shShSj,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetOoDxV1DdShCkt", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+func (r *repWl) DelOoDxV1DdShCktSy(id string) error {
+	err := goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelOoDxV1DdShCktSy, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 func (r *repWl) getSyStr(key string, sqlStr string) ([]string, error) {

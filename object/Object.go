@@ -326,6 +326,31 @@ type XtTz struct {
 	UpdateDate time.Time
 }
 
+//订单提货单
+type OoDxV1DdShCkt struct {
+	ShLsh     string
+	ShMxHh    string
+	ShHsr     time.Time
+	ShFzJgId  int
+	ShCkId    int
+	ShBmId    int
+	ShXzId    int
+	ShSendRid int
+	ShKhId    int
+	ShDdDjh   string
+	ShDdLsh   string
+	ShDdMxHh  string
+	ShPhBj    int
+	ShHpId    int
+	ShJlDwId  int
+	ShHsl     float64
+	ShDdZxSl  float64
+	ShJhJmSl  float64
+	ShShJmSl  float64
+	ShShrId   int
+	ShShSj    time.Time
+}
+
 //==============================================================================================
 
 //集团通用货品设置A
