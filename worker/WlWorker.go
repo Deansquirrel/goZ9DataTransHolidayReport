@@ -2,10 +2,19 @@ package worker
 
 import (
 	"fmt"
+	"github.com/Deansquirrel/goServiceSupportHelper"
 	"github.com/Deansquirrel/goToolCommon"
 	log "github.com/Deansquirrel/goToolLog"
+	"github.com/Deansquirrel/goToolMSSqlHelper"
 	"github.com/Deansquirrel/goZ9DataTransHolidayReport/repository"
+	"time"
 )
+
+var xtTzLastUpdate time.Time
+
+func init() {
+	xtTzLastUpdate = goToolMSSqlHelper.GetDefaultOprTime()
+}
 
 type wlWorker struct {
 }
@@ -15,15 +24,15 @@ func NewWlWorker() *wlWorker {
 }
 
 //配送出库&配送出库二级明细表
-func (w *wlWorker) Z3PsCkHpDt(id string) {
-	id := goToolCommon.Guid()
-	log.Debug(fmt.Sprintf("Z3PsCkHpDt %s start", id))
-	defer log.Debug(fmt.Sprintf("Z3PsCkHpDt %s complete", id))
+func (w *wlWorker) Z3PsCkHpDt(jobId string) {
+	log.Debug(fmt.Sprintf("Z3PsCkHpDt %s start", jobId))
+	defer log.Debug(fmt.Sprintf("Z3PsCkHpDt %s complete", jobId))
 	repWl := repository.NewRepWl()
 	repOnLine, err := repository.NewRepZxZc()
 	if err != nil {
 		errMsg := fmt.Sprintf("Z3PsCkHpDt get rep online err: %s", err.Error())
 		log.Error(errMsg)
+		_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
 		return
 	}
 	uCounter := 0
@@ -31,11 +40,13 @@ func (w *wlWorker) Z3PsCkHpDt(id string) {
 	for {
 		rList, err := repWl.GetZ3PsCkHpDtSy()
 		if err != nil {
+			_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 			return
 		}
 		if rList == nil {
 			errMsg := fmt.Sprintf("Z3PsCkHpDt get sy error: return list can not be nil")
 			log.Error(errMsg)
+			_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
 			return
 		}
 		if len(rList) == 0 {
@@ -44,17 +55,20 @@ func (w *wlWorker) Z3PsCkHpDt(id string) {
 		for _, id := range rList {
 			dList, err := repWl.GetZ3PsCkHpDt(id)
 			if err != nil {
+				_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 				return
 			}
 			if dList == nil {
 				errMsg := fmt.Sprintf("Z3PsCkHpDt get data error: return list can not be nil")
 				log.Error(errMsg)
+				_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
 				return
 			}
 			if len(dList) > 0 {
 				for _, d := range dList {
 					err := repOnLine.UpdateZ3PsCkHpDt(d)
 					if err != nil {
+						_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 						return
 					}
 				}
@@ -64,12 +78,14 @@ func (w *wlWorker) Z3PsCkHpDt(id string) {
 			if ddList == nil {
 				errMsg := fmt.Sprintf("Z3PsCkHpFjDt get data error: return list can not be nil")
 				log.Error(errMsg)
+				_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
 				return
 			}
 			if len(ddList) > 0 {
 				for _, d := range ddList {
 					err := repOnLine.UpdateZ3PsCkHpFjDt(d)
 					if err != nil {
+						_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 						return
 					}
 				}
@@ -77,6 +93,7 @@ func (w *wlWorker) Z3PsCkHpDt(id string) {
 			}
 			err = repWl.DelZ3PsCkHpDtSy(id)
 			if err != nil {
+				_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 				return
 			}
 			log.Debug(fmt.Sprintf("wl Z3PsCkHpDt[%s] Update", id))
@@ -88,25 +105,28 @@ func (w *wlWorker) Z3PsCkHpDt(id string) {
 }
 
 //工厂配送修正 z3psxzt 和z3psxzdt
-func (w *wlWorker) Z3PsXzDt(id string) {
-	log.Debug(fmt.Sprintf("Z3PsXzDt %s start", id))
-	defer log.Debug(fmt.Sprintf("Z3PsXzDt %s complete", id))
+func (w *wlWorker) Z3PsXzDt(jobId string) {
+	log.Debug(fmt.Sprintf("Z3PsXzDt %s start", jobId))
+	defer log.Debug(fmt.Sprintf("Z3PsXzDt %s complete", jobId))
 	repWl := repository.NewRepWl()
 	repOnLine, err := repository.NewRepZxZc()
 	if err != nil {
 		errMsg := fmt.Sprintf("Z3PsXzDt get rep online err: %s", err.Error())
 		log.Error(errMsg)
+		_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
 		return
 	}
 	uCounter := 0
 	for {
 		rList, err := repWl.GetZ3PsXzDtSy()
 		if err != nil {
+			_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 			return
 		}
 		if rList == nil {
 			errMsg := fmt.Sprintf("Z3PsXzDt get sy error: return list can not be nil")
 			log.Error(errMsg)
+			_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
 			return
 		}
 		if len(rList) == 0 {
@@ -115,17 +135,20 @@ func (w *wlWorker) Z3PsXzDt(id string) {
 		for _, id := range rList {
 			dList, err := repWl.GetZ3PsXzDt(id)
 			if err != nil {
+				_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 				return
 			}
 			if dList == nil {
 				errMsg := fmt.Sprintf("Z3PsXzDt get data error: return list can not be nil")
 				log.Error(errMsg)
+				_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
 				return
 			}
 			if len(dList) > 0 {
 				for _, d := range dList {
 					err := repOnLine.UpdateZ3PsXzDt(d)
 					if err != nil {
+						_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 						return
 					}
 				}
@@ -133,36 +156,40 @@ func (w *wlWorker) Z3PsXzDt(id string) {
 			}
 			err = repWl.DelZ3PsXzDtSy(id)
 			if err != nil {
+				_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 				return
 			}
-			log.Debug(fmt.Sprintf("gs Z3PsXzDt[%s] Update", id))
+			log.Debug(fmt.Sprintf("wl Z3PsXzDt[%s] Update", id))
 		}
 	}
 	if uCounter > 0 {
-		log.Info(fmt.Sprintf("gs Z3PsXzDt Update %d", uCounter))
+		log.Info(fmt.Sprintf("wl Z3PsXzDt Update %d", uCounter))
 	}
 }
 
 //工厂配送冲红z3mdpscht 和z3mdpschdt
-func (w *wlWorker) Z3MdPsChDt(id string) {
-	log.Debug(fmt.Sprintf("Z3MdPsChDt %s start", id))
-	defer log.Debug(fmt.Sprintf("Z3MdPsChDt %s complete", id))
+func (w *wlWorker) Z3MdPsChDt(jobId string) {
+	log.Debug(fmt.Sprintf("Z3MdPsChDt %s start", jobId))
+	defer log.Debug(fmt.Sprintf("Z3MdPsChDt %s complete", jobId))
 	repWl := repository.NewRepWl()
 	repOnLine, err := repository.NewRepZxZc()
 	if err != nil {
 		errMsg := fmt.Sprintf("Z3MdPsChDt get rep online err: %s", err.Error())
 		log.Error(errMsg)
+		_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
 		return
 	}
 	uCounter := 0
 	for {
 		rList, err := repWl.GetZ3MdPsChDtSy()
 		if err != nil {
+			_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 			return
 		}
 		if rList == nil {
 			errMsg := fmt.Sprintf("Z3MdPsChDt get sy error: return list can not be nil")
 			log.Error(errMsg)
+			_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
 			return
 		}
 		if len(rList) == 0 {
@@ -171,17 +198,20 @@ func (w *wlWorker) Z3MdPsChDt(id string) {
 		for _, id := range rList {
 			dList, err := repWl.GetZ3MdPsChDt(id)
 			if err != nil {
+				_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 				return
 			}
 			if dList == nil {
 				errMsg := fmt.Sprintf("Z3MdPsChDt get data error: return list can not be nil")
 				log.Error(errMsg)
+				_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
 				return
 			}
 			if len(dList) > 0 {
 				for _, d := range dList {
 					err := repOnLine.UpdateZ3MdPsChDt(d)
 					if err != nil {
+						_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 						return
 					}
 				}
@@ -189,37 +219,40 @@ func (w *wlWorker) Z3MdPsChDt(id string) {
 			}
 			err = repWl.DelZ3MdPsChDtSy(id)
 			if err != nil {
+				_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 				return
 			}
-			log.Debug(fmt.Sprintf("gs Z3MdPsChDt[%s] Update", id))
+			log.Debug(fmt.Sprintf("wl Z3MdPsChDt[%s] Update", id))
 		}
 	}
 	if uCounter > 0 {
-		log.Info(fmt.Sprintf("gs Z3MdPsChDt Update %d", uCounter))
+		log.Info(fmt.Sprintf("wl Z3MdPsChDt Update %d", uCounter))
 	}
 }
 
 //工厂赊账销售出库z3shezhxsckt和z3shezhxshpmxt
-func (w *wlWorker) Z3SheZhXsHpMxt(id string) {
-	id := goToolCommon.Guid()
-	log.Debug(fmt.Sprintf("Z3SheZhXsHpMxt %s start", id))
-	defer log.Debug(fmt.Sprintf("Z3SheZhXsHpMxt %s complete", id))
+func (w *wlWorker) Z3SheZhXsHpMxt(jobId string) {
+	log.Debug(fmt.Sprintf("Z3SheZhXsHpMxt %s start", jobId))
+	defer log.Debug(fmt.Sprintf("Z3SheZhXsHpMxt %s complete", jobId))
 	repWl := repository.NewRepWl()
 	repOnLine, err := repository.NewRepZxZc()
 	if err != nil {
 		errMsg := fmt.Sprintf("Z3SheZhXsHpMxt get rep online err: %s", err.Error())
 		log.Error(errMsg)
+		_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
 		return
 	}
 	uCounter := 0
 	for {
 		rList, err := repWl.GetZ3SheZhXsHpMxtSy()
 		if err != nil {
+			_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 			return
 		}
 		if rList == nil {
 			errMsg := fmt.Sprintf("Z3SheZhXsHpMxt get sy error: return list can not be nil")
 			log.Error(errMsg)
+			_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
 			return
 		}
 		if len(rList) == 0 {
@@ -228,6 +261,7 @@ func (w *wlWorker) Z3SheZhXsHpMxt(id string) {
 		for _, id := range rList {
 			dList, err := repWl.GetZ3SheZhXsHpMxt(id)
 			if err != nil {
+				_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 				return
 			}
 			if dList == nil {
@@ -239,6 +273,7 @@ func (w *wlWorker) Z3SheZhXsHpMxt(id string) {
 				for _, d := range dList {
 					err := repOnLine.UpdateZ3SheZhXsHpMxt(d)
 					if err != nil {
+						_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 						return
 					}
 				}
@@ -246,36 +281,40 @@ func (w *wlWorker) Z3SheZhXsHpMxt(id string) {
 			}
 			err = repWl.DelZ3SheZhXsHpMxtSy(id)
 			if err != nil {
+				_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 				return
 			}
-			log.Debug(fmt.Sprintf("gs Z3SheZhXsHpMxt[%s] Update", id))
+			log.Debug(fmt.Sprintf("wl Z3SheZhXsHpMxt[%s] Update", id))
 		}
 	}
 	if uCounter > 0 {
-		log.Info(fmt.Sprintf("gs Z3SheZhXsHpMxt Update %d", uCounter))
+		log.Info(fmt.Sprintf("wl Z3SheZhXsHpMxt Update %d", uCounter))
 	}
 }
 
 //工厂完工入库shengchwgrkdt 和shengchwgrkt
-func (w *wlWorker) ShengChWgRkDt(id string) {
-	log.Debug(fmt.Sprintf("ShengChWgRkDt %s start", id))
-	defer log.Debug(fmt.Sprintf("ShengChWgRkDt %s complete", id))
+func (w *wlWorker) ShengChWgRkDt(jobId string) {
+	log.Debug(fmt.Sprintf("ShengChWgRkDt %s start", jobId))
+	defer log.Debug(fmt.Sprintf("ShengChWgRkDt %s complete", jobId))
 	repWl := repository.NewRepWl()
 	repOnLine, err := repository.NewRepZxZc()
 	if err != nil {
 		errMsg := fmt.Sprintf("ShengChWgRkDt get rep online err: %s", err.Error())
 		log.Error(errMsg)
+		_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
 		return
 	}
 	uCounter := 0
 	for {
 		rList, err := repWl.GetShengChWgRkDtSy()
 		if err != nil {
+			_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 			return
 		}
 		if rList == nil {
 			errMsg := fmt.Sprintf("ShengChWgRkDt get sy error: return list can not be nil")
 			log.Error(errMsg)
+			_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
 			return
 		}
 		if len(rList) == 0 {
@@ -284,17 +323,20 @@ func (w *wlWorker) ShengChWgRkDt(id string) {
 		for _, id := range rList {
 			dList, err := repWl.GetShengChWgRkDt(id)
 			if err != nil {
+				_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 				return
 			}
 			if dList == nil {
 				errMsg := fmt.Sprintf("ShengChWgRkDt get data error: return list can not be nil")
 				log.Error(errMsg)
+				_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
 				return
 			}
 			if len(dList) > 0 {
 				for _, d := range dList {
 					err := repOnLine.UpdateShengChWgRkDt(d)
 					if err != nil {
+						_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 						return
 					}
 				}
@@ -302,19 +344,62 @@ func (w *wlWorker) ShengChWgRkDt(id string) {
 			}
 			err = repWl.DelShengChWgRkDtSy(id)
 			if err != nil {
+				_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
 				return
 			}
-			log.Debug(fmt.Sprintf("gs ShengChWgRkDt[%s] Update", id))
+			log.Debug(fmt.Sprintf("wl ShengChWgRkDt[%s] Update", id))
 		}
 	}
 	if uCounter > 0 {
-		log.Info(fmt.Sprintf("gs ShengChWgRkDt Update %d", uCounter))
+		log.Info(fmt.Sprintf("wl ShengChWgRkDt Update %d", uCounter))
 	}
 }
 
 //工厂即时台账表xttz
-func (w *wlWorker) XtTz() {
-	log.Debug("XtTz")
+func (w *wlWorker) XtTz(jobId string) {
+	log.Debug(fmt.Sprintf("XtTz %s start", jobId))
+	defer log.Debug(fmt.Sprintf("XtTz %s complete", jobId))
+	repWl := repository.NewRepWl()
+	repOnLine, err := repository.NewRepZxZc()
+	if err != nil {
+		errMsg := fmt.Sprintf("XtTz get rep online err: %s", err.Error())
+		log.Error(errMsg)
+		_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
+		return
+	}
+	uCounter := 0
+	currTime := xtTzLastUpdate.Add(-time.Second)
+	lastTime := goToolMSSqlHelper.GetDefaultOprTime()
+	rList, err := repWl.GetXtTz(currTime)
+	if err != nil {
+		_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
+		return
+	}
+	if rList == nil {
+		errMsg := fmt.Sprintf("XtTz get data error: return list can not be nil")
+		log.Error(errMsg)
+		_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
+		return
+	}
+	for _, tx := range rList {
+		err := repOnLine.UpdateXtTz(tx)
+		if err != nil {
+			log.Error(err.Error())
+			_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
+			return
+		}
+		if goToolCommon.GetDateTimeStrWithMillisecond(tx.UpdateDate) > goToolCommon.GetDateTimeStrWithMillisecond(lastTime) {
+			lastTime = tx.UpdateDate
+		}
+		uCounter = uCounter + 1
+	}
+	if goToolCommon.GetDateTimeStrWithMillisecond(lastTime) > goToolCommon.GetDateTimeStrWithMillisecond(xtTzLastUpdate) {
+		xtTzLastUpdate = lastTime
+	}
+	if uCounter > 0 {
+		log.Info(fmt.Sprintf("wl XtTz Update %d, lastUpdateTime: %s",
+			uCounter, goToolCommon.GetDateTimeStrWithMillisecond(xtTzLastUpdate)))
+	}
 }
 
 //工厂代门店订货单z3mddhdt

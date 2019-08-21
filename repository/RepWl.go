@@ -3,6 +3,7 @@ package repository
 import (
 	"errors"
 	"fmt"
+	"github.com/Deansquirrel/goToolCommon"
 	"github.com/Deansquirrel/goToolMSSql2000"
 	"github.com/Deansquirrel/goToolMSSqlHelper"
 	"github.com/Deansquirrel/goZ9DataTransHolidayReport/object"
@@ -91,6 +92,11 @@ const (
 	sqlDelZ3SheZhXsHpMxtSy = "" +
 		"DELETE FROM [z3shezhxssyt] " +
 		"WHERE [cklsh]=?"
+
+	sqlGetXtTz = "" +
+		"SELECT [dptid],[brid],[gsid],[gsqty],[updatedate] " +
+		"FROM [xttz] " +
+		"WHERE [updatedate] > ?"
 )
 
 type repWl struct {
@@ -509,6 +515,44 @@ func (r *repWl) DelZ3SheZhXsHpMxtSy(id string) error {
 		return err
 	}
 	return nil
+}
+
+//工厂即时台帐表
+func (r *repWl) GetXtTz(lastUpdate time.Time) ([]*object.XtTz, error) {
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetXtTz,
+		goToolCommon.GetDateTimeStrWithMillisecond(lastUpdate))
+	if err != nil {
+		log.Error(err.Error())
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	var dptId, brId, gsId int
+	var gsQty float64
+	var updateDate time.Time
+	rList := make([]*object.XtTz, 0)
+	for rows.Next() {
+		err := rows.Scan(&dptId, &brId, &gsId, &gsQty, &updateDate)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetXtTz", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.XtTz{
+			DptId:      dptId,
+			BrId:       brId,
+			GsId:       gsId,
+			GsQty:      gsQty,
+			UpdateDate: updateDate,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetXtTz", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
 }
 
 func (r *repWl) getSyStr(key string, sqlStr string) ([]string, error) {

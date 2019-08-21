@@ -197,7 +197,7 @@ func (c *common) addWlWorker() {
 	c.addWorker("Z3MdPsChDt", worker.Z3MdPsChDt)
 	c.addWorker("ShengChWgRkDt", worker.ShengChWgRkDt)
 	c.addWorker("Z3SheZhXsHpMxt", worker.Z3SheZhXsHpMxt)
-	//c.addWorker("XtTz", worker.XtTz)
+	c.addWorker("XtTz", worker.XtTz)
 	//c.addWorker("Z3MdDhDt", worker.Z3MdDhDt)
 	//c.addWorker("Z3MdDhDtMd", worker.Z3MdDhDtMd)
 	//c.addWorker("OodXv1DdShCkt", worker.OodXv1DdShCkt)

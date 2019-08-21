@@ -317,6 +317,15 @@ type Z3SheZhXsHpMxt struct {
 	CkBz        string
 }
 
+//工厂即时台帐表
+type XtTz struct {
+	DptId      int
+	BrId       int
+	GsId       int
+	GsQty      float64
+	UpdateDate time.Time
+}
+
 //==============================================================================================
 
 //集团通用货品设置A

@@ -556,6 +556,19 @@ const (
 		"			?,?,?,?,?, " +
 		"			?,?) " +
 		"	End"
+
+	sqlUpdateXtTz = "" +
+		"IF EXISTS (SELECT * FROM [xttz] WHERE [dptid]=? AND [brid]=? AND [gsid]=?) " +
+		"	BEGIN " +
+		"		UPDATE [xttz] " +
+		"		SET [gsqty]=?,[updatedate]=? " +
+		"		WHERE [dptid]=? AND [brid]=? AND [gsid]=? " +
+		"	END " +
+		"ELSE " +
+		"	BEGIN " +
+		"		INSERT INTO [xttz]([dptid],[brid],[gsid],[gsqty],[updatedate]) " +
+		"		VALUES (?,?,?,?,?) " +
+		"	END"
 )
 
 type repZxZc struct {
@@ -861,6 +874,20 @@ func (r *repZxZc) UpdateZ3SheZhXsHpMxt(d *object.Z3SheZhXsHpMxt) error {
 		d.CkCckId, d.CkHpId, d.CkDwId, d.CkHsl, d.CkJmDj,
 		d.CkJmSl, d.CkCjJeXj, d.CkJmLsj, d.CkLsJeXj, d.CkZdrId,
 		d.CkShSj, d.CkBz)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
+}
+
+//工厂即时台帐表
+func (r *repZxZc) UpdateXtTz(d *object.XtTz) error {
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateXtTz,
+		d.DptId, d.BrId, d.GsId,
+		d.GsQty, d.UpdateDate,
+		d.DptId, d.BrId, d.GsId,
+		d.DptId, d.BrId, d.GsId, d.GsQty, d.UpdateDate)
 	if err != nil {
 		log.Error(err.Error())
 		return err
