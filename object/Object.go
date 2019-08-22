@@ -351,6 +351,20 @@ type OoDxV1DdShCkt struct {
 	ShShSj    time.Time
 }
 
+//门店订货代单
+type Z3MdDhDdDt struct {
+	DhdLsh       string
+	DhdHpId      int
+	DhDjh        string
+	DhXsRq       time.Time
+	DhdHwId      int
+	DhdHsl       float64
+	DhdJlJmSjDhs float64
+	DhdDhj       float64
+	DhdXdrId     int
+	DhdXdSj      time.Time
+}
+
 //==============================================================================================
 
 //集团通用货品设置A

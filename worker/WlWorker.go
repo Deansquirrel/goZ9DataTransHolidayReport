@@ -402,14 +402,9 @@ func (w *wlWorker) XtTz(jobId string) {
 	}
 }
 
-//工厂代门店订货单z3mddhdt
-func (w *wlWorker) Z3MdDhDt() {
-	log.Debug("Z3MdDhDt")
-}
-
-//工厂订货单修改z3mddhdt_md和z3mddht_md
-func (w *wlWorker) Z3MdDhDtMd() {
-	log.Debug("Z3MdDhDtMd")
+//门店订货单
+func (w *wlWorker) Z3MdDhdDt() {
+	log.Debug("Z3MdDhdDt")
 }
 
 //工厂订单提货单oodxv1ddshckt
@@ -472,5 +467,68 @@ func (w *wlWorker) OodXv1DdShCkt(jobId string) {
 	}
 	if uCounter > 0 {
 		log.Info(fmt.Sprintf("wl OodXv1DdShCkt Update %d", uCounter))
+	}
+}
+
+//门店订货代单
+func (w *wlWorker) Z3MdDhDdDt(jobId string) {
+	log.Debug(fmt.Sprintf("Z3MdDhDdDt %s start", jobId))
+	defer log.Debug(fmt.Sprintf("Z3MdDhDdDt %s complete", jobId))
+	repWl := repository.NewRepWl()
+	repOnLine, err := repository.NewRepZxZc()
+	if err != nil {
+		errMsg := fmt.Sprintf("Z3MdDhDdDt get rep online err: %s", err.Error())
+		log.Error(errMsg)
+		_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
+		return
+	}
+	uCounter := 0
+	for {
+		rList, err := repWl.GetZ3MdDhDdDtSy()
+		if err != nil {
+			_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
+			return
+		}
+		if rList == nil {
+			errMsg := fmt.Sprintf("Z3MdDhDdDt get sy error: return list can not be nil")
+			log.Error(errMsg)
+			_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
+			return
+		}
+		if len(rList) == 0 {
+			break
+		}
+		for _, id := range rList {
+			dList, err := repWl.GetZ3MdDhDdDt(id)
+			if err != nil {
+				_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
+				return
+			}
+			if dList == nil {
+				errMsg := fmt.Sprintf("Z3MdDhDdDt get data error: return list can not be nil")
+				log.Error(errMsg)
+				_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
+				return
+			}
+			if len(dList) > 0 {
+				for _, d := range dList {
+					err := repOnLine.UpdateZ3MdDhDdDt(d)
+					if err != nil {
+						_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
+						return
+					}
+				}
+				uCounter = uCounter + 1
+			}
+			err = repWl.DelZ3MdDhDdDtSy(id)
+			if err != nil {
+				_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
+				return
+			}
+			log.Debug(fmt.Sprintf("wl Z3MdDhDdDt[%s] Update", id))
+		}
+	}
+	if uCounter > 0 {
+		log.Info(fmt.Sprintf("wl Z3MdDhDdDt Update %d", uCounter))
 	}
 }

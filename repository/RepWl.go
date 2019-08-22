@@ -112,6 +112,19 @@ const (
 	sqlDelOoDxV1DdShCktSy = "" +
 		"DELETE FROM [oodxv1ddshcksyt] " +
 		"WHERE [shmxhh]=?"
+
+	sqlGetZ3MdDhDdDtSy = "" +
+		"SELECT TOP 1 [dhdlsh] " +
+		"FROM [z3mddhsyt]"
+	sqlGetZ3MdDhDdDt = "" +
+		"select dhdlsh,dhdhpid,dhdjh,dhxsrq,dhdhwid," +
+		"	dhdhsl,dhdjljmsjdhs,dhddhj,dhdxdrid,dhdxdsj " +
+		"from z3mddhdt b " +
+		"inner join z3mddht c on b.dhdlsh = c.dhlsh " +
+		"where b.dhdlsh = ?"
+	sqlDelZ3MdDhDdDtSy = "" +
+		"DELETE FROM [z3mddhsyt] " +
+		"WHERE [dhdlsh]=?"
 )
 
 type repWl struct {
@@ -633,6 +646,61 @@ func (r *repWl) GetOoDxV1DdShCkt(id string) ([]*object.OoDxV1DdShCkt, error) {
 }
 func (r *repWl) DelOoDxV1DdShCktSy(id string) error {
 	err := goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelOoDxV1DdShCktSy, id)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
+}
+
+//门店订货代单
+func (r *repWl) GetZ3MdDhDdDtSy() ([]string, error) {
+	return r.getSyStr("GetZ3MdDhDdDtSy", sqlGetZ3MdDhDdDtSy)
+}
+func (r *repWl) GetZ3MdDhDdDt(id string) ([]*object.Z3MdDhDdDt, error) {
+	rows, err := goToolMSSqlHelper.GetRowsBySQL2000(r.dbConfig, sqlGetZ3MdDhDdDt, id)
+	if err != nil {
+		log.Error(err.Error())
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+	var dhdLsh, dhDjh string
+	var dhdHpId, dhdHwId, dhdXdrId int
+	var dhXsRq, dhdXdSj time.Time
+	var dhdHsl, dhdJlJmSjDhs, dhdDhj float64
+	rList := make([]*object.Z3MdDhDdDt, 0)
+	for rows.Next() {
+		err := rows.Scan(&dhdLsh, &dhdHpId, &dhDjh, &dhXsRq, &dhdHwId,
+			&dhdHsl, &dhdJlJmSjDhs, &dhdDhj, &dhdXdrId, &dhdXdSj)
+		if err != nil {
+			errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3MdDhDdDt", err.Error())
+			log.Error(errMsg)
+			return nil, errors.New(errMsg)
+		}
+		rList = append(rList, &object.Z3MdDhDdDt{
+			DhdLsh:       dhdLsh,
+			DhdHpId:      dhdHpId,
+			DhDjh:        dhDjh,
+			DhXsRq:       dhXsRq,
+			DhdHwId:      dhdHwId,
+			DhdHsl:       dhdHsl,
+			DhdJlJmSjDhs: dhdJlJmSjDhs,
+			DhdDhj:       dhdDhj,
+			DhdXdrId:     dhdXdrId,
+			DhdXdSj:      dhdXdSj,
+		})
+	}
+	if rows.Err() != nil {
+		errMsg := fmt.Sprintf("%s read data err: %s", "GetZ3MdDhDdDt", rows.Err().Error())
+		log.Error(errMsg)
+		return nil, errors.New(errMsg)
+	}
+	return rList, nil
+}
+func (r *repWl) DelZ3MdDhDdDtSy(id string) error {
+	err := goToolMSSqlHelper.SetRowsBySQL2000(r.dbConfig, sqlDelZ3MdDhDdDtSy, id)
 	if err != nil {
 		log.Error(err.Error())
 		return err
