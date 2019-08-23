@@ -403,8 +403,66 @@ func (w *wlWorker) XtTz(jobId string) {
 }
 
 //门店订货单
-func (w *wlWorker) Z3MdDhdDt() {
-	log.Debug("Z3MdDhdDt")
+func (w *wlWorker) Z3MdDhDdt(jobId string) {
+	log.Debug(fmt.Sprintf("Z3MdDhDdt %s start", jobId))
+	defer log.Debug(fmt.Sprintf("Z3MdDhDdt %s complete", jobId))
+	repWl := repository.NewRepWl()
+	repOnLine, err := repository.NewRepZxZc()
+	if err != nil {
+		errMsg := fmt.Sprintf("Z3MdDhDdt get rep online err: %s", err.Error())
+		log.Error(errMsg)
+		_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
+		return
+	}
+	uCounter := 0
+	for {
+		rList, err := repWl.GetZ3MdDhDdtSy()
+		if err != nil {
+			_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
+			return
+		}
+		if rList == nil {
+			errMsg := fmt.Sprintf("Z3MdDhDdt get sy error: return list can not be nil")
+			log.Error(errMsg)
+			_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
+			return
+		}
+		if len(rList) == 0 {
+			break
+		}
+		for _, id := range rList {
+			dList, err := repWl.GetZ3MdDhDdt(id)
+			if err != nil {
+				_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
+				return
+			}
+			if dList == nil {
+				errMsg := fmt.Sprintf("Z3MdDhDdt get data error: return list can not be nil")
+				log.Error(errMsg)
+				_ = goServiceSupportHelper.JobErrRecord(jobId, errMsg)
+				return
+			}
+			if len(dList) > 0 {
+				for _, d := range dList {
+					err := repOnLine.UpdateZ3MdDhDdt(d)
+					if err != nil {
+						_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
+						return
+					}
+				}
+				uCounter = uCounter + 1
+			}
+			err = repWl.DelZ3MdDhDdtSy(id)
+			if err != nil {
+				_ = goServiceSupportHelper.JobErrRecord(jobId, err.Error())
+				return
+			}
+			log.Debug(fmt.Sprintf("wl Z3MdDhDdt[%s] Update", id))
+		}
+	}
+	if uCounter > 0 {
+		log.Info(fmt.Sprintf("wl Z3MdDhDdt Update %d", uCounter))
+	}
 }
 
 //工厂订单提货单oodxv1ddshckt

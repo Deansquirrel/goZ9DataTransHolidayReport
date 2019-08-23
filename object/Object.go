@@ -365,6 +365,23 @@ type Z3MdDhDdDt struct {
 	DhdXdSj      time.Time
 }
 
+//门店订货单
+type Z3MdDhDdt struct {
+	DhdMxHh    string
+	DhdDjh     string
+	DhdLsh     string
+	DhdYyRq    time.Time
+	DhdMdId    int
+	DhdHpId    int
+	DhdDwId    int
+	DhdHsl     float64
+	DhdJlJmDhs float64
+	DhdZxPsJg  float64
+	DhdBz      string
+	DhdShrId   int
+	DhdShSj    time.Time
+}
+
 //==============================================================================================
 
 //集团通用货品设置A

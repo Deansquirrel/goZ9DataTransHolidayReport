@@ -612,6 +612,26 @@ const (
 		"			?,?,?,?,?, " +
 		"			?,?,?,?,?) " +
 		"	End"
+
+	sqlUpdateZ3MdDhDdt = "" +
+		"IF EXISTS (SELECT * FROM [z3mddhddt] WHERE [dhdmxhh]=?) " +
+		"	Begin " +
+		"		UPDATE [z3mddhddt] " +
+		"		SET [dhdmxhh]=?,[dhddjh]=?,[dhdlsh]=?,[dhdyyrq]=?,[dhdmdid]=?, " +
+		"			[dhdhpid]=?,[dhddwid]=?,[dhdhsl]=?,[dhdjljmdhs]=?,[dhdzxpsjg]=?, " +
+		"			[dhdbz]=?,[dhdshrid]=?,[dhdshsj]=? " +
+		"		WHERE [dhdmxhh]=? " +
+		"	End " +
+		"ELSE " +
+		"	Begin " +
+		"		INSERT INTO [z3mddhddt]([dhdmxhh],[dhddjh],[dhdlsh],[dhdyyrq],[dhdmdid], " +
+		"			[dhdhpid],[dhddwid],[dhdhsl],[dhdjljmdhs],[dhdzxpsjg], " +
+		"			[dhdbz],[dhdshrid],[dhdshsj]) " +
+		"		VALUES ( " +
+		"			?,?,?,?,?, " +
+		"			?,?,?,?,?, " +
+		"			?,?,?) " +
+		"	End"
 )
 
 type repZxZc struct {
@@ -969,6 +989,24 @@ func (r *repZxZc) UpdateZ3MdDhDdDt(d *object.Z3MdDhDdDt) error {
 		d.DhdLsh, d.DhdHpId,
 		d.DhdLsh, d.DhdHpId, d.DhDjh, d.DhXsRq, d.DhdHwId,
 		d.DhdHsl, d.DhdJlJmSjDhs, d.DhdDhj, d.DhdXdrId, d.DhdXdSj)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	return nil
+}
+
+//门店订货单
+func (r *repZxZc) UpdateZ3MdDhDdt(d *object.Z3MdDhDdt) error {
+	err := goToolMSSqlHelper.SetRowsBySQL(r.dbConfig, sqlUpdateZ3MdDhDdt,
+		d.DhdMxHh,
+		d.DhdMxHh, d.DhdDjh, d.DhdLsh, d.DhdYyRq, d.DhdMdId,
+		d.DhdHpId, d.DhdDwId, d.DhdHsl, d.DhdJlJmDhs, d.DhdZxPsJg,
+		d.DhdBz, d.DhdShrId, d.DhdShSj,
+		d.DhdMxHh,
+		d.DhdMxHh, d.DhdDjh, d.DhdLsh, d.DhdYyRq, d.DhdMdId,
+		d.DhdHpId, d.DhdDwId, d.DhdHsl, d.DhdJlJmDhs, d.DhdZxPsJg,
+		d.DhdBz, d.DhdShrId, d.DhdShSj)
 	if err != nil {
 		log.Error(err.Error())
 		return err
